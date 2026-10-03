@@ -6,16 +6,34 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed:admin": "tsx data/scripts/seed-admin-user.ts"
   },
   "dependencies": {
+    "@supabase/auth-js": "^2.117.2",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.117.2",
+    "@tanstack/react-table": "^8.21.3",
+    "dotenv": "^18.0.5",
+    "kysely": "^0.29.6",
+    "lucide-react": "^1.50.0",
     "next": "16.3.8",
+    "pg": "^8.23.1",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "server-only": "^0.0.1",
+    "sharp": "^0.35.5",
+    "sonner": "^2.0.8",
+    "tailwind-merge": "^3.7.0",
+    "tsx": "^4.23.15",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

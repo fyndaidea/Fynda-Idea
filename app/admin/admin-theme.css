@@ -1,0 +1,197 @@
+/* Linear-inspired admin theme — scoped to [data-admin], independent of public site */
+
+[data-admin],
+[data-admin][data-admin-theme="dark"] {
+  color-scheme: dark;
+  color: var(--foreground);
+
+  --background: #09090b;
+  --background-warm: #0c0c0e;
+  --foreground: #ededf0;
+  --muted: #8b8b93;
+  --muted-2: #5c5c66;
+
+  --card: #101012;
+  --card-muted: #18181b;
+  --card-border: #27272a;
+  --card-shadow: none;
+
+  --accent: #5e6ad2;
+  --accent-hover: #707ce0;
+  --accent-muted: rgba(94, 106, 210, 0.14);
+  --accent-border: rgba(94, 106, 210, 0.35);
+  --accent-glow: transparent;
+  --ring: rgba(94, 106, 210, 0.45);
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-pill: 9999px;
+
+  --admin-sidebar-w: 220px;
+  --admin-sidebar-collapsed-w: 60px;
+  --admin-topbar-h: 48px;
+
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+[data-admin][data-admin-theme="light"] {
+  color-scheme: light;
+  color: var(--foreground);
+
+  --background: #f7f7f8;
+  --background-warm: #f0f0f2;
+  --foreground: #18181b;
+  --muted: #71717a;
+  --muted-2: #a1a1aa;
+
+  --card: #ffffff;
+  --card-muted: #f4f4f5;
+  --card-border: #e4e4e7;
+  --card-shadow: none;
+
+  --accent: #5e6ad2;
+  --accent-hover: #4f5bc4;
+  --accent-muted: rgba(94, 106, 210, 0.1);
+  --accent-border: rgba(94, 106, 210, 0.28);
+  --accent-glow: transparent;
+  --ring: rgba(94, 106, 210, 0.4);
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-pill: 9999px;
+
+  --admin-sidebar-w: 220px;
+  --admin-sidebar-collapsed-w: 60px;
+  --admin-topbar-h: 48px;
+
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+[data-admin] .admin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #27272a transparent;
+}
+
+[data-admin][data-admin-theme="light"] .admin-scrollbar {
+  scrollbar-color: #d4d4d8 transparent;
+}
+
+[data-admin] .admin-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+[data-admin] .admin-scrollbar::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 999px;
+}
+
+[data-admin][data-admin-theme="light"] .admin-scrollbar::-webkit-scrollbar-thumb {
+  background: #d4d4d8;
+}
+
+[data-admin] .admin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+[data-admin] .admin-scrollbar-hidden {
+  scrollbar-width: none;
+}
+
+[data-admin] .admin-scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+[data-admin] ::selection {
+  background: rgba(94, 106, 210, 0.35);
+}
+
+/* Normalize legacy public-site form classes inside admin */
+[data-admin] input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]),
+[data-admin] textarea,
+[data-admin] select {
+  border-radius: 6px !important;
+  font-size: 13px !important;
+}
+
+[data-admin] .rounded-xl,
+[data-admin] .rounded-2xl {
+  border-radius: 6px !important;
+}
+
+[data-admin] .rounded-full {
+  border-radius: 6px !important;
+}
+
+[data-admin] .shadow-\[var\(--card-shadow\)\],
+[data-admin] .shadow-sm,
+[data-admin] .shadow-xl {
+  box-shadow: none !important;
+}
+
+/* Admin alerts & form helpers */
+[data-admin] .admin-alert-error {
+  border-radius: 6px;
+  border: 1px solid rgb(239 68 68 / 0.3);
+  background: rgb(239 68 68 / 0.1);
+  color: #fca5a5;
+  font-size: 13px;
+}
+
+[data-admin][data-admin-theme="light"] .admin-alert-error {
+  color: #b91c1c;
+  border-color: rgb(239 68 68 / 0.35);
+  background: rgb(239 68 68 / 0.08);
+}
+
+[data-admin] .admin-alert-success {
+  border-radius: 6px;
+  border: 1px solid rgb(94 106 210 / 0.35);
+  background: rgb(94 106 210 / 0.12);
+  color: var(--foreground);
+  font-size: 13px;
+}
+
+/* Override legacy light-theme error/success blocks inside admin */
+[data-admin] .bg-red-50 {
+  background: rgb(239 68 68 / 0.1) !important;
+}
+
+[data-admin] .border-red-200 {
+  border-color: rgb(239 68 68 / 0.3) !important;
+}
+
+[data-admin] .text-red-700,
+[data-admin] .text-red-800 {
+  color: #fca5a5 !important;
+}
+
+[data-admin][data-admin-theme="light"] .text-red-700,
+[data-admin][data-admin-theme="light"] .text-red-800 {
+  color: #b91c1c !important;
+}
+
+[data-admin] .hover\:bg-red-50:hover {
+  background: rgb(239 68 68 / 0.12) !important;
+}
+
+[data-admin] .hover\:bg-red-100:hover {
+  background: rgb(239 68 68 / 0.18) !important;
+}
+
+[data-admin] .hover\:text-red-600:hover {
+  color: #f87171 !important;
+}
+
+[data-admin][data-admin-theme="light"] .hover\:text-red-600:hover {
+  color: #dc2626 !important;
+}
+
+[data-admin] .tool-field-error-highlight {
+  border-radius: 6px;
+  outline: 2px solid rgb(239 68 68 / 0.55);
+  outline-offset: 2px;
+  background: rgb(239 68 68 / 0.08);
+}

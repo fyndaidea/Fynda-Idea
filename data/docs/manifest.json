@@ -1,0 +1,102 @@
+{
+  "user": [
+    {
+      "slug": "",
+      "title": "Overview",
+      "description": "What Fynda Idea offers — curated ideas, collections, and submissions.",
+      "file": "user/overview.md"
+    },
+    {
+      "slug": "getting-started",
+      "title": "Getting started",
+      "description": "Browse ideas, save favorites, and submit your own.",
+      "file": "user/getting-started.md"
+    },
+    {
+      "slug": "collections",
+      "title": "Collections",
+      "description": "Browse curated groups of ideas by theme.",
+      "file": "user/collections.md"
+    },
+    {
+      "slug": "submit-an-idea",
+      "title": "Submit an idea",
+      "description": "Suggest an idea for the collection and learn how review works.",
+      "file": "user/submit-an-idea.md"
+    },
+    {
+      "slug": "dashboard",
+      "title": "Dashboard",
+      "description": "Favorites and preferences in your account dashboard.",
+      "file": "user/dashboard.md"
+    },
+    {
+      "slug": "feedback",
+      "title": "Feedback",
+      "description": "Vote on ideas and submit product requests.",
+      "file": "user/feedback.md"
+    },
+    {
+      "slug": "your-account",
+      "title": "Your account",
+      "description": "Sign in, password reset, profiles, and account settings.",
+      "file": "user/your-account.md"
+    }
+  ],
+  "admin": [
+    {
+      "slug": "",
+      "title": "Project overview",
+      "description": "Architecture, routes, and repository layout for Fynda Idea.",
+      "file": "admin/overview.md"
+    },
+    {
+      "slug": "environment",
+      "title": "Environment variables",
+      "description": "Supabase, database, and deployment checklist.",
+      "file": "admin/environment.md"
+    },
+    {
+      "slug": "authentication",
+      "title": "Authentication",
+      "description": "Supabase auth, roles, and route protection.",
+      "file": "admin/authentication.md"
+    },
+    {
+      "slug": "database",
+      "title": "Database",
+      "description": "Schema, SQL migrations, seeding, and admin promotion.",
+      "file": "admin/database.md"
+    },
+    {
+      "slug": "admin-ui",
+      "title": "Admin UI",
+      "description": "Navigation, CRUD workflows, and theme.",
+      "file": "admin/admin-ui.md"
+    },
+    {
+      "slug": "api-routes",
+      "title": "API routes",
+      "description": "Public and admin HTTP reference.",
+      "file": "admin/api-routes.md"
+    },
+    {
+      "slug": "proxy-session",
+      "title": "Proxy & sessions",
+      "description": "Session refresh, admin/dashboard redirects, and matcher rules.",
+      "file": "admin/proxy-session.md"
+    },
+    {
+      "slug": "vault-secrets",
+      "title": "Vault & secrets",
+      "description": "Supabase Vault setup for the server secret key.",
+      "file": "admin/vault-secrets.md"
+    },
+    {
+      "slug": "docs-site",
+      "title": "Documentation site",
+      "description": "How /docs works, manifest.json, and SHOW_ADMIN_DOCS.",
+      "file": "admin/docs-site.md"
+    }
+  ]
+}
