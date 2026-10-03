@@ -10,6 +10,7 @@ const SLUG_MAP: Record<string, string> = {
   "admin-ui": "/docs/admin/admin-ui",
   "api-routes": "/docs/admin/api-routes",
   "docs-site": "/docs/admin/docs-site",
+  mcp: "/docs/admin/mcp",
 };
 
 export default async function AdminDocRedirectPage({

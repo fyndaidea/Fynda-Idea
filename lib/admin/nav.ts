@@ -7,7 +7,8 @@ export type AdminNavIconName =
   | "submissions"
   | "feedback"
   | "roadmap"
-  | "releases";
+  | "releases"
+  | "utilities";
 
 export type AdminNavItem = {
   href: string;
@@ -50,7 +51,10 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
   },
   {
     label: "System",
-    items: [{ href: "/admin/users", label: "Users", icon: "users" }],
+    items: [
+      { href: "/admin/users", label: "Users", icon: "users" },
+      { href: "/admin/utilities", label: "Utilities", icon: "utilities" },
+    ],
   },
 ];
 

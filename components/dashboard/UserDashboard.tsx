@@ -1,14 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
-import { Bookmark, Lightbulb, Settings2, Sparkles } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  Bookmark,
+  Check,
+  Copy,
+  KeyRound,
+  Lightbulb,
+  Settings2,
+  Sparkles,
+} from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { isAdminRole } from "@/lib/auth/roles";
-import { PREFERENCES_DASHBOARD_QUERY } from "@/lib/auth/subscription-paths";
+import {
+  API_KEYS_DASHBOARD_QUERY,
+  PREFERENCES_DASHBOARD_QUERY,
+} from "@/lib/auth/subscription-paths";
 import type { FavoriteRow } from "@/lib/favorites/types";
 import { useDashboardData } from "@/components/dashboard/useDashboardData";
 import { ShimmerBlock } from "@/components/ui/Shimmer";
+import { btnPrimaryClass, btnSecondaryClass } from "@/lib/ui-classes";
 
 export function greetingTitle(name: string, date = new Date()) {
   const hour = date.getHours();
@@ -106,8 +118,17 @@ function OverviewContentSkeleton() {
 export function DashboardOverview() {
   const { user } = useAuth();
   const { favorites, loading, error } = useDashboardData();
+  const [mounted, setMounted] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const planLabel = isAdminRole(user?.role) ? "Admin" : "Member";
+  const mcpUrl = mounted && typeof window !== "undefined"
+    ? `${window.location.origin}/api/mcp/mcp`
+    : "";
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const recent = useMemo(
     () =>
@@ -116,6 +137,13 @@ export function DashboardOverview() {
       ),
     [favorites]
   );
+
+  const copyMcp = async () => {
+    if (!mcpUrl) return;
+    await navigator.clipboard.writeText(mcpUrl);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 2000);
+  };
 
   if (error) {
     return <p className="text-sm text-red-600">{error}</p>;
@@ -191,29 +219,72 @@ export function DashboardOverview() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card)] p-5 shadow-[var(--card-shadow)] sm:p-6">
-          <p className="dash-kicker">Shortcuts</p>
-          <div className="mt-4 grid gap-2">
-            <Link
-              href="/ideas"
-              className="flex items-center gap-2.5 rounded-xl border border-[color:var(--card-border)] bg-[color:var(--background)] px-3 py-3 text-sm font-semibold text-[color:var(--foreground)] transition hover:border-[color:var(--accent-border)]"
+        <div className="space-y-6">
+          <div className="rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card)] p-5 shadow-[var(--card-shadow)] sm:p-6">
+            <p className="dash-kicker">Shortcuts</p>
+            <div className="mt-4 grid gap-2">
+              <Link
+                href="/ideas"
+                className="flex items-center gap-2.5 rounded-xl border border-[color:var(--card-border)] bg-[color:var(--background)] px-3 py-3 text-sm font-semibold text-[color:var(--foreground)] transition hover:border-[color:var(--accent-border)]"
+              >
+                <Sparkles className="h-4 w-4 text-[color:var(--accent)]" strokeWidth={1.75} aria-hidden />
+                Browse ideas
+              </Link>
+              <Link
+                href="/submit"
+                className="flex items-center gap-2.5 rounded-xl border border-[color:var(--card-border)] bg-[color:var(--background)] px-3 py-3 text-sm font-semibold text-[color:var(--foreground)] transition hover:border-[color:var(--accent-border)]"
+              >
+                <Lightbulb className="h-4 w-4 text-[color:var(--muted)]" strokeWidth={1.75} aria-hidden />
+                Submit an idea
+              </Link>
+              <Link
+                href={`/dashboard?${PREFERENCES_DASHBOARD_QUERY}`}
+                className="flex items-center gap-2.5 rounded-xl border border-[color:var(--card-border)] bg-[color:var(--background)] px-3 py-3 text-sm font-semibold text-[color:var(--foreground)] transition hover:border-[color:var(--accent-border)]"
+              >
+                <Settings2 className="h-4 w-4 text-[color:var(--muted)]" strokeWidth={1.75} aria-hidden />
+                Preferences
+              </Link>
+              <Link
+                href={`/dashboard?${API_KEYS_DASHBOARD_QUERY}`}
+                className="flex items-center gap-2.5 rounded-xl border border-[color:var(--card-border)] bg-[color:var(--background)] px-3 py-3 text-sm font-semibold text-[color:var(--foreground)] transition hover:border-[color:var(--accent-border)]"
+              >
+                <KeyRound className="h-4 w-4 text-[color:var(--muted)]" strokeWidth={1.75} aria-hidden />
+                API keys
+              </Link>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card)] p-5 shadow-[var(--card-shadow)] sm:p-6">
+            <p className="dash-kicker">MCP</p>
+            <p className="mt-2 text-sm font-semibold text-[color:var(--foreground)]">Connector URL</p>
+            <p className="mt-1 text-xs leading-relaxed text-[color:var(--muted)]">
+              Paste into Claude or any MCP client after creating an API key.
+            </p>
+            <code className="mt-3 block break-all rounded-xl bg-[color:var(--background-warm)] px-3 py-2.5 font-mono text-[11px] leading-relaxed text-[color:var(--foreground)]">
+              {mcpUrl || "…"}
+            </code>
+            <button
+              type="button"
+              onClick={() => void copyMcp()}
+              className={`${btnPrimaryClass} mt-3 w-full gap-2`}
             >
-              <Sparkles className="h-4 w-4 text-[color:var(--accent)]" strokeWidth={1.75} aria-hidden />
-              Browse ideas
-            </Link>
+              {copied ? (
+                <>
+                  <Check className="h-4 w-4" strokeWidth={2} aria-hidden />
+                  Copied
+                </>
+              ) : (
+                <>
+                  <Copy className="h-4 w-4" strokeWidth={1.75} aria-hidden />
+                  Copy URL
+                </>
+              )}
+            </button>
             <Link
-              href="/submit"
-              className="flex items-center gap-2.5 rounded-xl border border-[color:var(--card-border)] bg-[color:var(--background)] px-3 py-3 text-sm font-semibold text-[color:var(--foreground)] transition hover:border-[color:var(--accent-border)]"
+              href={`/dashboard?${API_KEYS_DASHBOARD_QUERY}`}
+              className={`${btnSecondaryClass} mt-2 w-full`}
             >
-              <Lightbulb className="h-4 w-4 text-[color:var(--muted)]" strokeWidth={1.75} aria-hidden />
-              Submit an idea
-            </Link>
-            <Link
-              href={`/dashboard?${PREFERENCES_DASHBOARD_QUERY}`}
-              className="flex items-center gap-2.5 rounded-xl border border-[color:var(--card-border)] bg-[color:var(--background)] px-3 py-3 text-sm font-semibold text-[color:var(--foreground)] transition hover:border-[color:var(--accent-border)]"
-            >
-              <Settings2 className="h-4 w-4 text-[color:var(--muted)]" strokeWidth={1.75} aria-hidden />
-              Preferences
+              Manage keys
             </Link>
           </div>
         </div>

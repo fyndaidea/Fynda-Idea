@@ -107,6 +107,21 @@ export interface ReleaseNotes {
   updated_at: Generated<Date>;
 }
 
+export interface UserApiKeys {
+  id: Generated<string>;
+  user_id: string;
+  name: string;
+  key_prefix: string;
+  key_hash: string;
+  active: boolean;
+  /** Empty array = full MCP access. */
+  mcp_permissions: string[];
+  usage_count: number;
+  last_used_at: Date | null;
+  created_at: Generated<Date>;
+  updated_at: Generated<Date>;
+}
+
 export interface Database {
   profiles: Profiles;
   ideas: Ideas;
@@ -118,4 +133,5 @@ export interface Database {
   feedback_votes: FeedbackVotes;
   roadmap_items: RoadmapItems;
   release_notes: ReleaseNotes;
+  user_api_keys: UserApiKeys;
 }

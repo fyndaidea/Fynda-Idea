@@ -2,6 +2,7 @@
 
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import ApiKeysContent from "@/components/dashboard/ApiKeysContent";
 import PreferencesContent from "@/components/dashboard/PreferencesContent";
 import {
   DashboardMasthead,
@@ -26,12 +27,15 @@ function sectionCopy(active: DashboardSection): string | undefined {
       return "Ideas you’ve starred across the site.";
     case "preferences":
       return "Update your display name and profile.";
+    case "api":
+      return "Keys for MCP connectors and programmatic access.";
   }
 }
 
 function mastheadTitle(active: DashboardSection, name: string): string {
   if (active === "overview") return greetingTitle(name);
   if (active === "saved") return "Saved";
+  if (active === "api") return "API & MCP";
   return "Preferences";
 }
 
@@ -61,7 +65,9 @@ function DashboardBody() {
       />
 
       <div className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
-        {active === "preferences" ? (
+        {active === "api" ? (
+          <ApiKeysContent />
+        ) : active === "preferences" ? (
           <PreferencesContent />
         ) : active === "saved" ? (
           <DashboardSavedSection />

@@ -1,20 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import { PREFERENCES_DASHBOARD_QUERY } from "@/lib/auth/subscription-paths";
+import {
+  API_KEYS_DASHBOARD_QUERY,
+  PREFERENCES_DASHBOARD_QUERY,
+} from "@/lib/auth/subscription-paths";
 import { ShimmerBlock } from "@/components/ui/Shimmer";
 
-export type DashboardSection = "overview" | "saved" | "preferences";
+export type DashboardSection = "overview" | "saved" | "preferences" | "api";
 
 export function resolveDashboardSection(
   group: string | null,
   tab: string | null,
   section: string | null
 ): DashboardSection {
+  if (group === "settings" && tab === "api") return "api";
   if (group === "settings" && tab === "preferences") return "preferences";
   if (section === "saved") return "saved";
   if (section === "preferences") return "preferences";
+  if (section === "api") return "api";
   if (tab === "preferences") return "preferences";
+  if (tab === "api") return "api";
   return "overview";
 }
 
@@ -22,6 +28,7 @@ const NAV: Array<{ id: DashboardSection; href: string; label: string }> = [
   { id: "overview", href: "/dashboard", label: "Home" },
   { id: "saved", href: "/dashboard?section=saved", label: "Saved" },
   { id: "preferences", href: `/dashboard?${PREFERENCES_DASHBOARD_QUERY}`, label: "Preferences" },
+  { id: "api", href: `/dashboard?${API_KEYS_DASHBOARD_QUERY}`, label: "API & MCP" },
 ];
 
 /** Stacked masthead — Account, title, and tabs share one left edge. */
@@ -96,7 +103,7 @@ export function DashboardPageShimmer() {
           <ShimmerBlock className="h-3 w-16" />
           <ShimmerBlock className="mt-3 h-10 w-[min(100%,22rem)]" rounded="rounded-lg" />
           <div className="mt-8 flex gap-6 pb-3.5">
-            {Array.from({ length: 3 }).map((_, i) => (
+            {Array.from({ length: 4 }).map((_, i) => (
               <ShimmerBlock key={i} className="h-4 w-16" />
             ))}
           </div>

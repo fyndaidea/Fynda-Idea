@@ -27,8 +27,14 @@
     {
       "slug": "dashboard",
       "title": "Dashboard",
-      "description": "Favorites and preferences in your account dashboard.",
+      "description": "Favorites, preferences, and API & MCP keys in your account dashboard.",
       "file": "user/dashboard.md"
+    },
+    {
+      "slug": "mcp",
+      "title": "MCP & API keys",
+      "description": "Connect Claude or other MCP clients to the ideas catalog.",
+      "file": "user/mcp.md"
     },
     {
       "slug": "feedback",
@@ -79,6 +85,12 @@
       "title": "API routes",
       "description": "Public and admin HTTP reference.",
       "file": "admin/api-routes.md"
+    },
+    {
+      "slug": "mcp",
+      "title": "MCP server",
+      "description": "Model Context Protocol endpoints, auth, and Idea catalog tools.",
+      "file": "admin/mcp.md"
     },
     {
       "slug": "proxy-session",

@@ -16,6 +16,12 @@
 | `/api/auth/register` | POST |
 | `/api/auth/signout` | POST |
 | `/api/auth/sync-profile` | POST |
+| `/api/auth/token` | POST (email/password → Supabase tokens) |
+| `/api/auth/refresh` | POST (refresh_token → new tokens) |
+| `/api/settings/api-keys` | GET, POST |
+| `/api/settings/api-keys/[id]` | PATCH, DELETE |
+| `/api/mcp/[transport]` | GET, POST, DELETE (MCP) |
+| `/api/mcp/oauth/*` | OAuth authorize / token / register / discovery |
 
 ## Admin (`requireAdminApiResponse`)
 
@@ -39,3 +45,6 @@
 | `/api/admin/release-notes/[id]/publish` | POST |
 | `/api/admin/users` | GET |
 | `/api/admin/users/[id]` | PATCH |
+| `/api/admin/utilities/seed-admin` | POST |
+
+See also [MCP](/docs/admin/mcp).

@@ -8,6 +8,7 @@ Apply migrations in order (see `data/sql/00_README.md`):
 4. `04_categories.sql` (seeded categories)
 5. `05_collections.sql`
 6. `06_feedback_board.sql`
+7. `07_user_api_keys.sql` — MCP / programmatic API keys
 
 Promote an admin:
 

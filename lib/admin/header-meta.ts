@@ -54,6 +54,15 @@ export function getAdminHeaderMeta(pathname: string): {
   if (p === "/admin/users") {
     return { title: "Users", titleHref: "/admin/users" };
   }
+  if (p === "/admin/utilities") {
+    return { title: "Utilities", titleHref: "/admin/utilities" };
+  }
+  if (p === "/admin/login") {
+    return { title: "Admin login", titleHref: "/login" };
+  }
+  if (p === "/admin/register") {
+    return { title: "Admin register", titleHref: "/register" };
+  }
 
   return { title: "Admin", titleHref: "/admin" };
 }

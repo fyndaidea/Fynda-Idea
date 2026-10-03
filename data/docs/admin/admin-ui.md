@@ -15,7 +15,7 @@ Admin lives under `/admin` with:
 | Catalog | Ideas, Categories, Collections |
 | Community | Submissions, Feedback |
 | Product | Roadmap, Releases |
-| System | Users |
+| System | Users, Utilities |
 
 ## CRUD
 

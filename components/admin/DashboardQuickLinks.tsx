@@ -9,6 +9,7 @@ const links = [
   { href: "/admin/roadmap", label: "Roadmap", description: "Planned work" },
   { href: "/admin/releases", label: "Releases", description: "Changelog & publish" },
   { href: "/admin/users", label: "Users", description: "Accounts & roles" },
+  { href: "/admin/utilities", label: "Utilities", description: "Seed admin & ops" },
   { href: "/admin/docs", label: "Documentation", description: "Operator guides" },
 ] as const;
 

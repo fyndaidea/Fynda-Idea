@@ -9,6 +9,7 @@ import {
   MessageSquare,
   Map,
   Rocket,
+  Wrench,
 } from "lucide-react";
 
 const ICONS: Record<AdminNavIconName, typeof LayoutDashboard> = {
@@ -21,6 +22,7 @@ const ICONS: Record<AdminNavIconName, typeof LayoutDashboard> = {
   feedback: MessageSquare,
   roadmap: Map,
   releases: Rocket,
+  utilities: Wrench,
 };
 
 export function AdminNavIcon({

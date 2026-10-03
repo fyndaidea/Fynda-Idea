@@ -4,6 +4,8 @@
 |-----------|---------|-----|
 | Supabase session cookie | Browser pages + most `/api/*` | `createClient()` / `getApiUser` |
 | Bearer Supabase JWT | Some API clients | `Authorization: Bearer <access_token>` |
+| API key (`sk_live_…`) | MCP + programmatic APIs | `X-API-Key` or `Authorization: Bearer sk_live_…` via `resolveApiKeyUser` / `getApiUser` |
+| MCP OAuth tokens | Remote MCP connectors | Issued under `/api/mcp/oauth` (`MCP_OAUTH_SECRET`) |
 
 ## Roles
 
