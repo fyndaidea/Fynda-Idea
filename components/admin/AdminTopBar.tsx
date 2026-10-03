@@ -7,6 +7,7 @@ import { Menu, Moon, Sun } from "lucide-react";
 import { useAdminTheme } from "@/components/admin/admin-theme-context";
 import { getAdminHeaderMeta } from "@/lib/admin/header-meta";
 import { ADMIN_NAV_FLAT } from "@/lib/admin/nav";
+import { AdminSearch } from "./AdminSearch";
 import { AdminUserMenu } from "./AdminUserMenu";
 
 function AdminThemeSwitcher() {
@@ -69,7 +70,9 @@ export function AdminTopBar() {
           ) : null}
         </div>
 
-        <div className="flex min-w-0 flex-1 lg:w-full" />
+        <div className="flex min-w-0 flex-1 justify-center lg:w-full lg:justify-self-center">
+          <AdminSearch />
+        </div>
 
         <div className="flex shrink-0 items-center gap-1.5 lg:justify-self-end">
           <AdminThemeSwitcher />

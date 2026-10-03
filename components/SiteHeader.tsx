@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 import type { SiteNavVisibility } from "@/lib/site-nav-visibility";
 import SiteLogo from "@/components/brand/SiteLogo";
 import { HeaderPreferencesButton } from "@/components/HeaderPreferencesButton";
+import { SiteSearchTrigger } from "@/components/search/SiteSearch";
 import { cx } from "@/components/ui";
 import UserMenu from "./UserMenu";
 
@@ -95,7 +96,19 @@ export default function SiteHeader({ navVisibility }: { navVisibility: SiteNavVi
         <div className="flex-1" />
 
         <div className="relative z-10 flex shrink-0 items-center gap-1 sm:gap-2">
+          <SiteSearchTrigger />
           <HeaderPreferencesButton />
+          <Link
+            href="/feedback"
+            className={cx(
+              "hidden h-9 items-center px-2 text-sm font-medium transition-colors md:inline-flex",
+              pathname === "/feedback" || pathname.startsWith("/feedback/")
+                ? "text-[color:var(--foreground)]"
+                : "text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
+            )}
+          >
+            Feedback
+          </Link>
           <Link
             href="/submit"
             className="hidden h-9 items-center rounded-full bg-[color:var(--accent)] px-4 text-sm font-semibold text-white shadow-[0_1px_6px_var(--accent-glow)] transition hover:bg-[color:var(--accent-hover)] md:inline-flex"
@@ -148,6 +161,17 @@ export default function SiteHeader({ navVisibility }: { navVisibility: SiteNavVi
                 {entry.label}
               </Link>
             ))}
+            <Link
+              href="/feedback"
+              className={cx(
+                "rounded-lg px-3 py-2.5 text-sm font-medium",
+                pathname === "/feedback" || pathname.startsWith("/feedback/")
+                  ? "bg-[color:var(--accent-muted)] text-[color:var(--accent)]"
+                  : "text-[color:var(--foreground)] hover:bg-[color:var(--card-muted)]"
+              )}
+            >
+              Feedback
+            </Link>
           </div>
         </nav>
       ) : null}
