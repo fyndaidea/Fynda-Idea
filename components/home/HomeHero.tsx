@@ -1,48 +1,95 @@
-import Link from "next/link";
-import SiteLogo from "@/components/brand/SiteLogo";
-import { Container } from "@/components/ui";
-import { PRODUCT_TAGLINE, PRODUCT_WORDMARK } from "@/lib/brand/product";
+"use client";
 
-export default function HomeHero({ ideaCount }: { ideaCount: number }) {
+import type { Idea } from "@/lib/db/ideas-db";
+import { Button } from "@/components/ui";
+import HeroFeaturedSpotlight from "./HeroFeaturedSpotlight";
+
+type Props = {
+  ideaCount: number;
+  categoryCount?: number;
+  collectionCount?: number;
+  ideas: Idea[];
+};
+
+export default function HomeHero({
+  ideaCount,
+  categoryCount = 0,
+  collectionCount = 0,
+  ideas,
+}: Props) {
+  const hasSpotlight = ideas.length > 0;
+  const summaryParts: string[] = [];
+  if (ideaCount) summaryParts.push(`${ideaCount} idea${ideaCount === 1 ? "" : "s"}`);
+  if (categoryCount) summaryParts.push(`${categoryCount} categor${categoryCount === 1 ? "y" : "ies"}`);
+  if (collectionCount) {
+    summaryParts.push(`${collectionCount} collection${collectionCount === 1 ? "" : "s"}`);
+  }
+  const summary = summaryParts.join(" · ");
+
   return (
-    <section className="relative min-h-[min(100dvh,880px)] overflow-hidden">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_20%_-10%,color-mix(in_oklab,var(--accent)_22%,transparent),transparent_55%),radial-gradient(ellipse_90%_70%_at_90%_10%,color-mix(in_oklab,var(--accent)_12%,transparent),transparent_50%),linear-gradient(180deg,var(--background-warm)_0%,var(--background)_55%,var(--background)_100%)]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.35] [background-image:linear-gradient(color-mix(in_oklab,var(--foreground)_6%,transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in_oklab,var(--foreground)_6%,transparent)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_30%,black,transparent)]"
-      />
+    <section className="border-b border-[color:var(--card-border)] bg-[color:var(--card)]">
+      <div className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
+        <div
+          className={
+            hasSpotlight
+              ? "grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:gap-10"
+              : undefined
+          }
+        >
+          <div className="min-w-0 text-center lg:text-left">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[color:var(--card-border)] bg-[color:var(--background)] px-3.5 py-1.5 text-sm">
+              <span className="font-semibold text-[color:var(--accent)]">★★★★★</span>
+              <span className="text-[color:var(--muted)]">
+                Curated ideas ·{" "}
+                <strong className="text-[color:var(--foreground)]">
+                  {ideaCount} idea{ideaCount === 1 ? "" : "s"}
+                </strong>
+              </span>
+            </div>
 
-      <Container className="relative flex min-h-[min(100dvh,880px)] flex-col justify-center py-20 sm:py-28">
-        <div className="max-w-2xl animate-[fade-up_0.7s_ease_both]">
-          <SiteLogo size={48} wordmark="ynda" className="mb-8 gap-3 [&_span]:text-2xl sm:[&_span]:text-3xl" />
-          <h1 className="sr-only">{PRODUCT_WORDMARK}</h1>
-          <p className="max-w-xl text-xl font-medium leading-relaxed tracking-tight text-[color:var(--foreground)] sm:text-2xl">
-            {PRODUCT_TAGLINE}
-          </p>
-          <p className="mt-4 max-w-lg text-[15px] leading-relaxed text-[color:var(--muted)]">
-            {ideaCount > 0
-              ? `${ideaCount} curated idea${ideaCount === 1 ? "" : "s"} ready to explore.`
-              : "Browse the collection, save favorites, and submit your own."}
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Link
-              href="/ideas"
-              className="inline-flex h-12 items-center justify-center rounded-full bg-[color:var(--accent)] px-7 text-sm font-semibold text-white shadow-[0_2px_12px_var(--accent-glow)] transition hover:bg-[color:var(--accent-hover)]"
-            >
-              Browse ideas
-            </Link>
-            <Link
-              href="/submit"
-              className="inline-flex h-12 items-center justify-center rounded-full border border-[color:var(--card-border)] bg-[color:var(--card)] px-7 text-sm font-semibold text-[color:var(--foreground)] transition hover:bg-[color:var(--card-muted)]"
-            >
-              Submit an idea
-            </Link>
+            <h1 className="text-balance text-3xl font-bold leading-[1.1] tracking-tight text-[color:var(--foreground)] sm:text-4xl lg:text-[2.75rem]">
+              Discover <span className="text-[color:var(--accent)]">startup ideas</span> worth
+              building.
+            </h1>
+
+            <p className="mt-3 text-pretty text-base leading-relaxed text-[color:var(--muted)] sm:text-lg lg:max-w-lg">
+              One place to browse product ideas, markets, and curated lists — save favorites and
+              submit your own.
+            </p>
+
+            {summary ? (
+              <p className="mt-2 text-sm font-medium text-[color:var(--muted)]">{summary}</p>
+            ) : null}
+
+            <div className="mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row lg:justify-start">
+              <Button href="/ideas" variant="primary" className="min-w-[160px]">
+                Browse ideas
+              </Button>
+            </div>
+
+            <ul className="mt-5 flex flex-wrap items-center justify-center gap-2 lg:justify-start">
+              {["Product ideas", "Marketplaces", "Curated lists", "Press / to search"].map(
+                (label) => (
+                  <li key={label}>
+                    <span className="inline-flex items-center rounded-full border border-[color:var(--card-border)] bg-[color:var(--background)] px-2.5 py-1 text-xs font-medium text-[color:var(--muted)]">
+                      {label}
+                    </span>
+                  </li>
+                )
+              )}
+            </ul>
           </div>
+
+          {hasSpotlight ? (
+            <div className="w-full lg:max-w-[360px] lg:justify-self-end">
+              <p className="mb-2 hidden text-xs font-semibold uppercase tracking-[0.14em] text-[color:var(--muted)] lg:block">
+                Featured ideas
+              </p>
+              <HeroFeaturedSpotlight ideas={ideas} />
+            </div>
+          ) : null}
         </div>
-      </Container>
+      </div>
     </section>
   );
 }

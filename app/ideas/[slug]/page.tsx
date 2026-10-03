@@ -64,7 +64,7 @@ export default async function IdeaSlugPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(pageLd) }}
       />
-      <div className="mx-auto w-full max-w-6xl px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
+      <div className="mx-auto w-full max-w-[1280px] px-4 pb-10 pt-3 sm:pb-12 sm:pt-5">
         <IdeaDetailPage idea={idea} />
       </div>
     </main>

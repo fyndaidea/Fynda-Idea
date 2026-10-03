@@ -45,18 +45,20 @@ export default function IdeaDetailPage({ idea }: { idea: Idea }) {
           title={idea.title}
           tagline={idea.summary}
           highlights={idea.highlights}
-          actions={
-            <FavoriteButton
-              itemId={idea.slug}
-              itemTitle={idea.title}
-              itemSubtitle={idea.summary}
-            />
-          }
         />
       }
       rail={
         <>
           <DetailRailActions>
+            <div className="flex w-full items-center justify-between gap-3 rounded-xl border border-[color:var(--card-border)] bg-[color:var(--card)] px-3 py-2.5">
+              <span className="text-sm font-medium text-[color:var(--foreground)]">Save idea</span>
+              <FavoriteButton
+                itemId={idea.slug}
+                itemTitle={idea.title}
+                itemSubtitle={idea.summary}
+                className="h-9 w-9 rounded-lg"
+              />
+            </div>
             <Button href="/ideas" variant="secondary" className="w-full justify-center">
               Browse more ideas
             </Button>

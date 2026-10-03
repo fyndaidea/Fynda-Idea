@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
 import { notFound } from "next/navigation";
-import { IdeaCard } from "@/components/directory/IdeaCard";
+import { CategoryCard } from "@/components/content/CategoryCard";
+import { CollectionIdeaRow } from "@/components/content/CollectionIdeaRow";
 import { getCategoryWithIdeas, listCategorySummaries } from "@/lib/db/categories-db";
 import { absoluteUrl, breadcrumbJsonLd, collectionPageJsonLd } from "@/lib/seo/json-ld";
-import { pageDescClass, pageTitleClass } from "@/lib/ui-classes";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -41,7 +41,7 @@ export default async function CategoryDetailPage({ params }: Props) {
 
   const related = (await listCategorySummaries({ limit: 8 }).catch(() => []))
     .filter((c) => c.slug !== category.slug)
-    .slice(0, 4);
+    .slice(0, 3);
 
   const path = `/categories/${category.slug}`;
   const breadcrumb = breadcrumbJsonLd([
@@ -67,7 +67,7 @@ export default async function CategoryDetailPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collection) }}
       />
-      <div className="mx-auto w-full max-w-[1280px] px-4 pb-12 pt-6 sm:pt-8">
+      <div className="mx-auto w-full max-w-[1280px] px-4 pb-12 pt-3 sm:pt-5">
         <nav className="mb-4 text-[13px] text-[color:var(--muted)]">
           <Link href="/" className="hover:text-[color:var(--foreground)]">
             Home
@@ -80,39 +80,58 @@ export default async function CategoryDetailPage({ params }: Props) {
           <span className="text-[color:var(--foreground)]">{category.name}</span>
         </nav>
 
-        <h1 className={pageTitleClass}>{category.name}</h1>
-        <p className={`${pageDescClass} text-[15px]`}>
-          {category.description ||
-            `${ideas.length} curated idea${ideas.length === 1 ? "" : "s"} in this category.`}
-        </p>
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_280px]">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-[color:var(--foreground)] sm:text-3xl">
+              {category.name}
+            </h1>
+            <p className="mt-3 max-w-3xl text-[15px] leading-7 text-[color:var(--muted)]">
+              {category.description ||
+                `Ideas tagged with ${category.name.toLowerCase()}.`}
+            </p>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {ideas.map((idea) => (
-            <IdeaCard key={idea.slug} idea={idea} />
-          ))}
+            <p className="mt-6 text-sm text-[color:var(--muted)]">
+              {ideas.length} {ideas.length === 1 ? "idea" : "ideas"}
+            </p>
+
+            {ideas.length > 0 ? (
+              <ul className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                {ideas.map((idea) => (
+                  <li key={idea.slug}>
+                    <CollectionIdeaRow
+                      idea={{
+                        slug: idea.slug,
+                        title: idea.title,
+                        summary: idea.summary,
+                        categories: idea.categories,
+                        featured: idea.featured,
+                      }}
+                    />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-6 rounded-xl border border-[color:var(--card-border)] bg-[color:var(--card)] px-5 py-8 text-center text-sm text-[color:var(--muted)]">
+                No published ideas in this category yet.
+              </p>
+            )}
+          </div>
+
+          <aside className="space-y-8">
+            {related.length > 0 ? (
+              <div>
+                <h2 className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[color:var(--muted-2)]">
+                  Other categories
+                </h2>
+                <div className="mt-4 space-y-3">
+                  {related.map((item) => (
+                    <CategoryCard key={item.id} category={item} />
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </aside>
         </div>
-
-        {!ideas.length ? (
-          <p className="mt-12 text-[color:var(--muted)]">No published ideas in this category yet.</p>
-        ) : null}
-
-        {related.length ? (
-          <section className="mt-14 border-t border-[color:var(--card-border)] pt-10">
-            <h2 className="text-lg font-semibold tracking-tight">More categories</h2>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {related.map((c) => (
-                <li key={c.slug}>
-                  <Link
-                    href={`/categories/${c.slug}`}
-                    className="inline-flex rounded-full border border-[color:var(--card-border)] bg-[color:var(--card)] px-3 py-1.5 text-sm font-medium transition hover:border-[color:var(--accent-border)]"
-                  >
-                    {c.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
       </div>
     </main>
   );
