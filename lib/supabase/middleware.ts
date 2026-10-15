@@ -1,3 +1,5 @@
+import { canUseAuthSession } from "@/lib/auth/social-login";
+import { SOCIAL_LOGIN_ADMIN_ERROR } from "@/lib/auth/social-login-policy";
 import { createServerClient } from "@supabase/ssr";
 import type { User } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
@@ -29,14 +31,17 @@ export async function updateSession(request: NextRequest): Promise<{
     },
   });
 
-  // Use getSession() here, not getUser(). getUser() validates with Supabase Auth over the
-  // network on every request and can hit 10s connect timeouts (undici) under load or slow
-  // networks — blocking proxy.ts for the whole route. Session is read from cookies; admin
-  // routes still enforce access in server components / API handlers.
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  const user = session?.user ?? null;
-  return { response: supabaseResponse, user };
+  // Verify the identity with Supabase Auth before the global admin gate trusts it.
+  const { data: { user }, error } = await supabase.auth.getUser();
+  if (user && !(await canUseAuthSession(supabase, user))) {
+    await supabase.auth.signOut({ scope: "local" });
+    const response = request.nextUrl.pathname.startsWith("/api/")
+      ? NextResponse.json({ error: SOCIAL_LOGIN_ADMIN_ERROR }, { status: 403 })
+      : NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(SOCIAL_LOGIN_ADMIN_ERROR)}`, request.url));
+    supabaseResponse.cookies.getAll().forEach((cookie) => response.cookies.set(cookie));
+    response.headers.set("Cache-Control", "private, no-store");
+    return { response, user: null };
+  }
+  return { response: supabaseResponse, user: error ? null : user };
 }
 

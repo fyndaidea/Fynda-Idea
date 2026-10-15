@@ -1,3 +1,4 @@
+import { userCanAccessMcp } from "@/lib/mcp/admin-access";
 import { resolveApiKeyUser, isApiKeyToken } from "@/lib/auth/resolve-api-key";
 import { ensureProfile } from "@/lib/db/profile";
 import {
@@ -189,7 +190,7 @@ export async function POST(req: Request) {
   }
 
   const resolved = await resolveApiKeyUser(apiKey);
-  if (!resolved || !(await ensureProfile(resolved.userId))) {
+  if (!resolved || !(await userCanAccessMcp(resolved.userId)) || !(await ensureProfile(resolved.userId))) {
     return new Response(
       authorizeHtml(
         "Invalid API key.",

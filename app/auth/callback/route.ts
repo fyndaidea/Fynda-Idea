@@ -1,3 +1,5 @@
+import { canUseAuthSession } from "@/lib/auth/social-login";
+import { SOCIAL_LOGIN_ADMIN_ERROR } from "@/lib/auth/social-login-policy";
 import { NextResponse } from "next/server";
 import { resolvePostAuthRedirect } from "@/lib/auth/resolve-post-auth-redirect";
 import { resolvePostLoginPath } from "@/lib/auth/post-login-path";
@@ -38,6 +40,11 @@ export async function GET(request: Request) {
   } = await supabase.auth.getUser();
   if (!user) {
     return NextResponse.redirect(`${origin}/login?error=auth`);
+  }
+
+  if (!(await canUseAuthSession(supabase, user))) {
+    await supabase.auth.signOut({ scope: "local" });
+    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(SOCIAL_LOGIN_ADMIN_ERROR)}`);
   }
 
   try {

@@ -1,4 +1,5 @@
 "use client";
+import { canUseMcp, visibleMcpSection } from "@/lib/mcp/access-policy";
 
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
@@ -46,7 +47,7 @@ function DashboardBody() {
   const group = searchParams.get("group");
   const tab = searchParams.get("tab");
   const sectionParam = searchParams.get("section");
-  const active = resolveDashboardSection(group, tab, sectionParam);
+  const active = visibleMcpSection(resolveDashboardSection(group, tab, sectionParam), user?.role, "overview");
 
   if (authLoading) {
     return <DashboardPageShimmer />;
@@ -58,6 +59,7 @@ function DashboardBody() {
   return (
     <div className="min-h-[70vh] bg-[color:var(--background)]">
       <DashboardMasthead
+        canUseMcp={canUseMcp(user?.role)}
         active={active}
         title={mastheadTitle(active, name)}
         planLabel={planLabel}

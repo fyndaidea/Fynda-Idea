@@ -23,6 +23,7 @@ export type AdminNavGroup = {
 };
 
 export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
+  { label: "Store", items: [{ href: "/admin/store", label: "Digital store", icon: "collections" }] },
   {
     label: "Overview",
     items: [{ href: "/admin", label: "Dashboard", icon: "dashboard" }],

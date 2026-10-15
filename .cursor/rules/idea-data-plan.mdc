@@ -1,0 +1,16 @@
+---
+description: Update the Fynda Idea data plan after every catalog write
+alwaysApply: true
+---
+
+# Update the Fynda Idea data plan after every catalog write
+
+Canvas: `~/.cursor/projects/Users-nikeshhvijayabaskaran-Desktop-Projects-Fynda-Fynda-Idea-fynda-idea/canvases/idea-data-plan.canvas.tsx`
+
+After **any** Fynda Idea catalog change (via MCP, admin REST, or SQL) — ideas, categories, or collections — update the canvas **in the same turn**:
+
+- Add, remove, or edit the matching rows.
+- Bump the `updated` date.
+- Keep headline stats computed from array lengths, never hard-coded.
+
+A catalog pass is not done until the data plan matches Fynda Idea. Also log the pass in Mina `mina_aiagent/MEMORY.md`.

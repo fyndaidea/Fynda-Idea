@@ -1,11 +1,10 @@
 "use client";
+import { useAuthCaptcha } from "@/lib/auth/use-auth-captcha";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "@/lib/toast";
-import { AuthDivider } from "@/components/auth/AuthDivider";
-import { OAuthButtons } from "@/components/auth/OAuthButtons";
 import { useAuth } from "@/lib/auth-context";
 import { resolveClientPostLoginPath } from "@/lib/auth/resolve-client-post-login";
 
@@ -26,6 +25,7 @@ export function RegisterForm({
 }) {
   const router = useRouter();
   const { register, user, loading } = useAuth();
+  const captcha = useAuthCaptcha();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,6 +43,7 @@ export function RegisterForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!captcha.ready) return;
     if (!name.trim() || !email.trim() || !password) {
       toast.error("Fill in name, email, and password.");
       return;
@@ -52,9 +53,9 @@ export function RegisterForm({
       return;
     }
     setBusy(true);
-    const { error, needsEmailConfirm } = await register(email.trim(), password, name.trim(), {
+    const { error, needsEmailConfirm } = await captcha.run(() => register(email.trim(), password, name.trim(), { captchaToken: captcha.token, 
       confirmNext: redirectNext,
-    });
+    }));
     if (error) {
       setBusy(false);
       toast.error(error);
@@ -83,15 +84,12 @@ export function RegisterForm({
             Create account
           </h1>
           <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
-            Register with Google or email.
+            Register with your email address.
           </p>
         </>
       ) : null}
 
-      <div className={compact ? "space-y-0" : "mt-8"}>
-        <OAuthButtons next={redirectNext} disabled={busy || loading} />
-        <AuthDivider />
-      </div>
+
 
       <form className="space-y-4" onSubmit={handleSubmit}>
         <label className="space-y-1 block">
@@ -136,9 +134,10 @@ export function RegisterForm({
             className="h-11 w-full rounded-xl border border-[color:var(--card-border)] bg-[color:var(--background)] px-4 text-sm text-[color:var(--foreground)] outline-none transition focus:border-[color:var(--accent-border)] focus:ring-2 focus:ring-[color:var(--ring)]"
           />
         </label>
+        {captcha.element}
         <button
           type="submit"
-          disabled={busy || loading}
+          disabled={busy || loading || !captcha.ready}
           className="inline-flex h-11 w-full items-center justify-center rounded-full bg-[color:var(--accent)] px-5 text-sm font-semibold text-white shadow-[0_2px_8px_var(--accent-glow)] transition hover:bg-[color:var(--accent-hover)] disabled:opacity-60"
         >
           {busy ? "Creating account…" : "Create account with email"}

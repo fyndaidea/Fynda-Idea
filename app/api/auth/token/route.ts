@@ -1,3 +1,5 @@
+import { consumeCaptcha } from "@/lib/auth/captcha-server";
+import { captchaFailure } from "@/lib/auth/captcha-handlers";
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAuthClient } from "@/lib/supabase/auth-client";
 
@@ -16,6 +18,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "email and password are required" }, { status: 400 });
     }
 
+    await consumeCaptcha(request, body.altcha);
     const supabase = getSupabaseAuthClient();
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
@@ -34,9 +37,6 @@ export async function POST(request: NextRequest) {
       expires_in: session.expires_in ?? 3600,
       token_type: "bearer",
     });
-  } catch (e) {
-    console.error("[api/auth/token]", e);
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
-  }
+  } catch (e) { return captchaFailure(e); }
 }
 

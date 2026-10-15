@@ -1,3 +1,4 @@
+import { canUseAuthSession } from "@/lib/auth/social-login";
 import { NextResponse } from "next/server";
 import { upsertProfileFromUser } from "@/lib/auth/sync-profile";
 import { createClient } from "@/lib/supabase/server";
@@ -7,7 +8,7 @@ export async function POST() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) {
+  if (!user || !(await canUseAuthSession(supabase, user))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {

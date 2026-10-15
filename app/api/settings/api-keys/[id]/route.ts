@@ -1,3 +1,4 @@
+import { userCanAccessMcp } from "@/lib/mcp/admin-access";
 import { NextRequest, NextResponse } from "next/server";
 import type { Updateable } from "kysely";
 import { getApiUser } from "@/lib/auth/get-api-user";
@@ -12,6 +13,9 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     const auth = await getApiUser(request);
     if (!auth?.userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (!(await userCanAccessMcp(auth.userId))) {
+      return NextResponse.json({ error: "MCP requires admin access." }, { status: 403 });
     }
 
     const { id } = await context.params;
@@ -84,6 +88,9 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
     const auth = await getApiUser(request);
     if (!auth?.userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (!(await userCanAccessMcp(auth.userId))) {
+      return NextResponse.json({ error: "MCP requires admin access." }, { status: 403 });
     }
 
     const { id } = await context.params;

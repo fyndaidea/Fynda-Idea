@@ -1,4 +1,6 @@
 "use client";
+import { useAuthCaptcha } from "@/lib/auth/use-auth-captcha";
+import { isAdminLoginPath } from "@/lib/auth/social-login-policy";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -43,6 +45,7 @@ export function LoginForm({
 }) {
   const router = useRouter();
   const { login, user, loading } = useAuth();
+  const captcha = useAuthCaptcha();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -88,12 +91,13 @@ export function LoginForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!captcha.ready) return;
     if (!email.trim() || !password) {
       toast.error("Enter email and password.");
       return;
     }
     setBusy(true);
-    const { error } = await login(email.trim(), password);
+    const { error } = await captcha.run(() => login(email.trim(), password, captcha.token));
     if (error) {
       setBusy(false);
       toast.error(error);
@@ -124,10 +128,12 @@ export function LoginForm({
         </>
       ) : null}
 
-      <div className={compact ? "space-y-0" : "mt-8"}>
-        <OAuthButtons next={redirectNext} disabled={busy || loading} />
-        <AuthDivider />
-      </div>
+      {isAdminLoginPath(redirectNext) ? (
+        <div className={compact ? "space-y-0" : "mt-8"}>
+          <OAuthButtons next={redirectNext} disabled={busy || loading} />
+          <AuthDivider />
+        </div>
+      ) : null}
 
       <form className="space-y-4" onSubmit={handleSubmit}>
         <label className="space-y-1 block">
@@ -158,9 +164,10 @@ export function LoginForm({
             className="h-11 w-full rounded-xl border border-[color:var(--card-border)] bg-[color:var(--background)] px-4 text-sm text-[color:var(--foreground)] outline-none transition focus:border-[color:var(--accent-border)] focus:ring-2 focus:ring-[color:var(--ring)]"
           />
         </label>
+        {captcha.element}
         <button
           type="submit"
-          disabled={busy || loading}
+          disabled={busy || loading || !captcha.ready}
           className="inline-flex h-11 w-full items-center justify-center rounded-full bg-[color:var(--accent)] px-5 text-sm font-semibold text-white shadow-[0_2px_8px_var(--accent-glow)] transition hover:bg-[color:var(--accent-hover)] disabled:opacity-60"
         >
           {busy ? "Signing in…" : "Continue with email"}

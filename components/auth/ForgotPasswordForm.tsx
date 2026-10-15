@@ -1,4 +1,5 @@
 "use client";
+import { useAuthCaptcha } from "@/lib/auth/use-auth-captcha";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -9,17 +10,19 @@ import { useAuth } from "@/lib/auth-context";
 
 export function ForgotPasswordForm() {
   const { resetPasswordForEmail } = useAuth();
+  const captcha = useAuthCaptcha();
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!captcha.ready) return;
     if (!email.trim()) {
       toast.error("Enter your email.");
       return;
     }
     setBusy(true);
-    const { error } = await resetPasswordForEmail(email.trim());
+    const { error } = await captcha.run(() => resetPasswordForEmail(email.trim(), captcha.token));
     setBusy(false);
     if (error) {
       toast.error(error);
@@ -83,9 +86,10 @@ export function ForgotPasswordForm() {
                     className="mt-2 h-11 w-full rounded-2xl border border-white/10 bg-black/20 px-4 text-sm text-white outline-none transition focus:border-indigo-400/60 focus:ring-2 focus:ring-indigo-400/25"
                   />
                 </div>
+                {captcha.element}
                 <button
                   type="submit"
-                  disabled={busy}
+                  disabled={busy || !captcha.ready}
                   className="inline-flex h-11 w-full items-center justify-center rounded-2xl bg-white px-5 text-sm font-semibold text-zinc-900 transition hover:bg-zinc-100 disabled:opacity-60"
                 >
                   {busy ? "Sending…" : "Send reset link"}

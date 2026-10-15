@@ -1,10 +1,12 @@
 "use client";
+import { isAdminLoginPath } from "@/lib/auth/social-login-policy";
 
 import { createClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { resolvePostLoginPath } from "@/lib/auth/post-login-path";
 
 async function signInWithGoogle(next: string) {
+  if (!isAdminLoginPath(next)) return;
   const supabase = createClient();
   const origin = window.location.origin;
   const nextPath = next.startsWith("/") ? next : `/${next}`;
@@ -33,6 +35,8 @@ export function OAuthButtons({
   const ready = isSupabaseConfigured();
   const off = disabled || !ready;
   const nextPath = next ?? resolvePostLoginPath({});
+
+  if (!isAdminLoginPath(nextPath)) return null;
 
   return (
     <div className="space-y-2.5">

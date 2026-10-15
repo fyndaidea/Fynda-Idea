@@ -1,4 +1,6 @@
 "use client";
+import { useAuth } from "@/lib/auth-context";
+import { canUseMcp } from "@/lib/mcp/access-policy";
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
@@ -124,6 +126,11 @@ function McpPermissionsEditor({
 }
 
 export default function ApiKeysContent() {
+  const { user } = useAuth();
+  return canUseMcp(user?.role) ? <AdminApiKeysContent /> : null;
+}
+
+function AdminApiKeysContent() {
   const [apiKeys, setApiKeys] = useState<ApiKeyRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

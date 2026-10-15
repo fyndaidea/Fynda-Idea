@@ -1,4 +1,6 @@
 "use client";
+import { getAuthCaptchaError } from "@/lib/auth/auth-captcha";
+import { createCaptchaAuth } from "@/lib/auth/captcha-client";
 
 import React, {
   createContext,
@@ -23,15 +25,15 @@ export type User = {
 type AuthContextValue = {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<{ error: string | null }>;
+  login: (email: string, password: string, captchaToken?: string) => Promise<{ error: string | null }>;
   register: (
     email: string,
     password: string,
     name: string,
-    options?: { confirmNext?: string }
+    options?: { confirmNext?: string; captchaToken?: string }
   ) => Promise<{ error: string | null; needsEmailConfirm?: boolean }>;
-  signInWithMagicLink: (email: string) => Promise<{ error: string | null }>;
-  resetPasswordForEmail: (email: string) => Promise<{ error: string | null }>;
+  signInWithMagicLink: (email: string, captchaToken?: string) => Promise<{ error: string | null }>;
+  resetPasswordForEmail: (email: string, captchaToken?: string) => Promise<{ error: string | null }>;
   logout: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 };
@@ -123,8 +125,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [supabase, mergeProfile]);
 
   const login = useCallback(
-    async (email: string, password: string) => {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+    async (email: string, password: string, captchaToken?: string) => {
+      const captchaError = getAuthCaptchaError(captchaToken);
+      if (captchaError) return { error: captchaError };
+      const { error } = await createCaptchaAuth(supabase, captchaToken).signInWithPassword({ options: { captchaToken: captchaToken },  email, password });
       return { error: error?.message ?? null };
     },
     [supabase]
@@ -135,13 +139,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       email: string,
       password: string,
       name: string,
-      options?: { confirmNext?: string }
+      options?: { confirmNext?: string; captchaToken?: string }
     ) => {
+      const captchaError = getAuthCaptchaError(options?.captchaToken);
+      if (captchaError) return { error: captchaError };
       const confirmNext = options?.confirmNext ?? "/dashboard";
-      const { data, error } = await supabase.auth.signUp({
+      const { data, error } = await createCaptchaAuth(supabase, options?.captchaToken).signUp({
         email,
         password,
-        options: {
+        options: { captchaToken: options?.captchaToken, 
           data: { full_name: name },
           emailRedirectTo: authCallbackUrl(confirmNext),
         },
@@ -179,10 +185,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 
   const signInWithMagicLink = useCallback(
-    async (email: string) => {
-      const { error } = await supabase.auth.signInWithOtp({
+    async (email: string, captchaToken?: string) => {
+      const captchaError = getAuthCaptchaError(captchaToken);
+      if (captchaError) return { error: captchaError };
+      const { error } = await createCaptchaAuth(supabase, captchaToken).signInWithOtp({
         email,
-        options: { emailRedirectTo: authCallbackUrl("/dashboard") },
+        options: { captchaToken: captchaToken,  emailRedirectTo: authCallbackUrl("/dashboard") },
       });
       return { error: error?.message ?? null };
     },
@@ -190,8 +198,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 
   const resetPasswordForEmail = useCallback(
-    async (email: string) => {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    async (email: string, captchaToken?: string) => {
+      const captchaError = getAuthCaptchaError(captchaToken);
+      if (captchaError) return { error: captchaError };
+      const { error } = await createCaptchaAuth(supabase, captchaToken).resetPasswordForEmail(email, { captchaToken: captchaToken, 
         redirectTo: authCallbackUrl("/reset-password"),
       });
       return { error: error?.message ?? null };

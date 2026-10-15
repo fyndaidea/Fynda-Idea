@@ -1,3 +1,4 @@
+import { userCanAccessMcp } from "@/lib/mcp/admin-access";
 import {
   issueMcpAccessToken,
   issueMcpRefreshToken,
@@ -34,7 +35,10 @@ function resourceMatches(body: Record<string, string>): boolean {
   return resource === mcpResourceUrl();
 }
 
-function tokenResponse(userId: string, mcpPermissions: string[] = []) {
+async function tokenResponse(userId: string, mcpPermissions: string[] = []) {
+  if (!(await userCanAccessMcp(userId))) {
+    return oauthJsonResponse({ error: "access_denied", error_description: "MCP requires admin access." }, { status: 403 });
+  }
   const accessToken = issueMcpAccessToken(userId, mcpPermissions);
   const refreshToken = issueMcpRefreshToken(userId, mcpPermissions);
   return oauthJsonResponse({

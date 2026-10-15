@@ -1,3 +1,4 @@
+import { userCanAccessMcp } from "@/lib/mcp/admin-access";
 import { NextRequest, NextResponse } from "next/server";
 import { getApiUser } from "@/lib/auth/get-api-user";
 import { getDb } from "@/lib/db";
@@ -40,6 +41,9 @@ export async function GET(request: NextRequest) {
     if (!auth?.userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    if (!(await userCanAccessMcp(auth.userId))) {
+      return NextResponse.json({ error: "MCP requires admin access." }, { status: 403 });
+    }
 
     const rows = await getDb()
       .selectFrom("user_api_keys")
@@ -65,6 +69,9 @@ export async function POST(request: NextRequest) {
     const auth = await getApiUser(request);
     if (!auth?.userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (!(await userCanAccessMcp(auth.userId))) {
+      return NextResponse.json({ error: "MCP requires admin access." }, { status: 403 });
     }
 
     const body = (await request.json().catch(() => ({}))) as {

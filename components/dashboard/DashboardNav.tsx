@@ -37,11 +37,13 @@ export function DashboardMasthead({
   title,
   planLabel,
   meta,
+  canUseMcp = false,
 }: {
   active: DashboardSection;
   title: string;
   planLabel: string;
   meta?: string;
+  canUseMcp?: boolean;
 }) {
   return (
     <header className="dash-masthead relative overflow-hidden border-b border-[color:var(--card-border)]">
@@ -63,7 +65,7 @@ export function DashboardMasthead({
         </div>
 
         <nav className="-mx-3.5 mt-8 flex gap-1 overflow-x-auto pb-px" aria-label="Dashboard sections">
-          {NAV.map((item) => {
+          {NAV.filter((item) => item.id !== "api" || canUseMcp).map((item) => {
             const isActive = item.id === active;
             return (
               <Link
@@ -88,7 +90,8 @@ export function DashboardMasthead({
               </Link>
             );
           })}
-        </nav>
+        <Link href="/store/purchases" className="dash-nav-link shrink-0 px-3.5 pb-3.5 pt-1 text-sm font-semibold">My purchases</Link>
+    </nav>
       </div>
     </header>
   );

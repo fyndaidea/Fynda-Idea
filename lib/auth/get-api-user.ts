@@ -1,3 +1,4 @@
+import { canUseAuthSession } from "@/lib/auth/social-login";
 import { createClient } from "@/lib/supabase/server";
 import { getSupabaseAuthClient } from "@/lib/supabase/auth-client";
 import { isApiKeyToken, resolveApiKeyUser } from "@/lib/auth/resolve-api-key";
@@ -29,6 +30,7 @@ export async function getApiUser(request: Request): Promise<GetApiUserResult> {
         error,
       } = await supabase.auth.getUser(token);
       if (error || !user?.id) return null;
+      if (!(await canUseAuthSession(supabase, user, token))) return null;
       return { userId: user.id, email: user.email ?? undefined };
     } catch {
       return null;
@@ -40,5 +42,6 @@ export async function getApiUser(request: Request): Promise<GetApiUserResult> {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user?.id) return null;
+  if (!(await canUseAuthSession(supabase, user))) return null;
   return { userId: user.id, email: user.email ?? undefined };
 }

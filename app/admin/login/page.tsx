@@ -8,7 +8,7 @@ export default async function AdminLoginPage({
   const { next, error, reason } = await searchParams;
 
   const url = new URL("/login", "http://n");
-  if (next) url.searchParams.set("next", next);
+  url.searchParams.set("next", next || "/admin");
   if (error) url.searchParams.set("error", error);
   if (reason) url.searchParams.set("reason", reason);
   redirect(url.pathname + (url.search ? url.search : ""));

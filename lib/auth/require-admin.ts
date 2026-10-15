@@ -1,3 +1,4 @@
+import { canUseAuthSession } from "@/lib/auth/social-login";
 import { redirect } from "next/navigation";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
@@ -17,7 +18,7 @@ export async function requireAdmin(): Promise<{ userId: string; isAdmin: boolean
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user?.id) {
+  if (!user?.id || !(await canUseAuthSession(supabase, user))) {
     redirect("/login?next=/admin");
   }
 

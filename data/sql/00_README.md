@@ -39,3 +39,8 @@ See **`data/scripts/README.md`** — `seed:admin`, etc.
 ```sql
 UPDATE public.profiles SET role = 'admin' WHERE id = '...';
 ```
+
+
+### Launch waitlist
+
+Apply `data/sql/36_waitlist.sql` to this product database before accepting waitlist signups. Launch emails are stored in `waitlist_entries`, separately from newsletter consent.

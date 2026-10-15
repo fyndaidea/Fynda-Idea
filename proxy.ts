@@ -1,66 +1,60 @@
+import { isCaptchaPublicPath } from "@/lib/auth/auth-captcha";
+import { isStorePublicPath } from "@/lib/store/access";
 import { NextResponse, type NextRequest } from "next/server";
-import { resolvePostLoginPath } from "@/lib/auth/post-login-path";
 import { getProfileById } from "@/lib/db/profile";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
+import { getSupabaseAuthClient } from "@/lib/supabase/auth-client";
 import { updateSession } from "@/lib/supabase/middleware";
+import { isApiKeyToken, resolveApiKeyUser } from "@/lib/auth/resolve-api-key";
+import { ADMIN_GATE_HEADERS, getCookingHtml, isAdminGatePublicPath, isGateAdmin } from "@/lib/access/admin-only";
 
-function copyCookies(from: NextResponse, to: NextResponse) {
-  from.cookies.getAll().forEach((c) => {
-    to.cookies.set(c.name, c.value);
-  });
-}
-
-export async function proxy(request: NextRequest) {
-  const path = request.nextUrl.pathname;
-
-  if (path.startsWith("/admin") && !isSupabaseConfigured()) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    url.searchParams.set("next", path);
-    url.searchParams.set("reason", "configure");
-    return NextResponse.redirect(url);
-  }
-
-  const { response, user } = await updateSession(request);
-
-  if (!isSupabaseConfigured()) {
-    return response;
-  }
-
-  const isAdminArea = path.startsWith("/admin");
-  const isDashboard = path === "/dashboard" || path.startsWith("/dashboard/");
-  const isAuthRoute = path === "/login" || path === "/register";
-
-  if ((isAdminArea || isDashboard) && !user) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    url.searchParams.set("next", path);
-    const redirectResponse = NextResponse.redirect(url);
-    copyCookies(response, redirectResponse);
-    return redirectResponse;
-  }
-
-  if (isAuthRoute && user) {
-    const nextParam = request.nextUrl.searchParams.get("next");
-    let role: string | null = null;
-    try {
-      const profile = await getProfileById(user.id);
-      role = profile?.role ?? null;
-    } catch {
-      /* use default redirect */
-    }
-    const dest = resolvePostLoginPath({ nextPath: nextParam, role });
-    const redirectResponse = NextResponse.redirect(new URL(dest, request.url));
-    copyCookies(response, redirectResponse);
-    return redirectResponse;
-  }
-
+function restrict(request: NextRequest, sessionResponse?: NextResponse, signedIn = false) {
+  const response = request.nextUrl.pathname.startsWith("/api/")
+    ? NextResponse.json({ error: "Something is cooking. Admin access only." }, { status: 403, headers: ADMIN_GATE_HEADERS })
+    : new NextResponse(getCookingHtml(signedIn), {
+        status: 503,
+        headers: { ...ADMIN_GATE_HEADERS, "Content-Type": "text/html; charset=utf-8", "Retry-After": "3600" },
+      });
+  sessionResponse?.cookies.getAll().forEach((cookie) => response.cookies.set(cookie));
   return response;
 }
 
-export const config = {
-  matcher: [
-    // Skip API routes and /auth/* (OAuth callback at /auth/callback).
-    "/((?!_next/static|_next/image|favicon.ico|api/|auth/|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-  ],
-};
+export async function proxy(request: NextRequest) {
+  if (isCaptchaPublicPath(request.nextUrl.pathname, request.method)) return NextResponse.next();
+  if (isStorePublicPath(request.nextUrl.pathname, request.method)) {
+    if (!isSupabaseConfigured()) return NextResponse.next();
+    return (await updateSession(request)).response;
+  }
+  const path = request.nextUrl.pathname;
+  // These protocol handlers validate token owners and admin roles themselves.
+  if (/^\/api\/mcp\/[^/]+$/.test(path) || path === "/api/mcp/oauth/token" || path === "/api/mcp/oauth/register") return NextResponse.next();
+  if (isAdminGatePublicPath(path, request.method)) return NextResponse.next();
+  // A deployment without auth configuration remains closed to the public.
+  if (!isSupabaseConfigured()) return restrict(request);
+
+  const { response, user } = await updateSession(request);
+  let userId = user?.id;
+  // API clients must prove their identity as well; bearer credentials take precedence.
+  const authorization = request.headers.get("Authorization");
+  if (authorization) {
+    userId = undefined;
+    if (authorization.startsWith("Bearer ")) {
+      const token = authorization.slice(7).trim();
+      if (isApiKeyToken(token)) {
+        userId = (await resolveApiKeyUser(token))?.userId;
+      } else if (token) {
+        const { data, error } = await getSupabaseAuthClient().auth.getUser(token);
+        if (!error) userId = data.user?.id;
+      }
+    }
+  }
+  if (!userId) return restrict(request, response, Boolean(user));
+  const profile = await getProfileById(userId);
+  if (!isGateAdmin(profile?.role)) return restrict(request, response, Boolean(user));
+
+  Object.entries(ADMIN_GATE_HEADERS).forEach(([name, value]) => response.headers.set(name, value));
+  return response;
+}
+
+// Includes APIs, metadata, optimized images and public files; no extension-based bypass.
+export const config = { matcher: ["/((?!_next/static/|_next/webpack-hmr).*)"] };

@@ -244,17 +244,17 @@ export function DashboardOverview() {
                 <Settings2 className="h-4 w-4 text-[color:var(--muted)]" strokeWidth={1.75} aria-hidden />
                 Preferences
               </Link>
-              <Link
+              {isAdminRole(user?.role) ? (<Link
                 href={`/dashboard?${API_KEYS_DASHBOARD_QUERY}`}
                 className="flex items-center gap-2.5 rounded-xl border border-[color:var(--card-border)] bg-[color:var(--background)] px-3 py-3 text-sm font-semibold text-[color:var(--foreground)] transition hover:border-[color:var(--accent-border)]"
               >
                 <KeyRound className="h-4 w-4 text-[color:var(--muted)]" strokeWidth={1.75} aria-hidden />
                 API keys
-              </Link>
+              </Link>) : null}
             </div>
           </div>
 
-          <div className="rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card)] p-5 shadow-[var(--card-shadow)] sm:p-6">
+          {isAdminRole(user?.role) ? (<div className="rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card)] p-5 shadow-[var(--card-shadow)] sm:p-6">
             <p className="dash-kicker">MCP</p>
             <p className="mt-2 text-sm font-semibold text-[color:var(--foreground)]">Connector URL</p>
             <p className="mt-1 text-xs leading-relaxed text-[color:var(--muted)]">
@@ -286,7 +286,7 @@ export function DashboardOverview() {
             >
               Manage keys
             </Link>
-          </div>
+          </div>) : null}
         </div>
       </section>
     </div>

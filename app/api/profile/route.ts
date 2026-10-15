@@ -1,3 +1,4 @@
+import { canUseAuthSession } from "@/lib/auth/social-login";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getProfileById, updateProfile } from "@/lib/db/profile";
@@ -10,7 +11,7 @@ export async function GET() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user?.id) {
+  if (!user?.id || !(await canUseAuthSession(supabase, user))) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
@@ -28,7 +29,7 @@ export async function PATCH(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user?.id) {
+  if (!user?.id || !(await canUseAuthSession(supabase, user))) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 

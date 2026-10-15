@@ -1,4 +1,5 @@
 import "server-only";
+import { userCanAccessMcp } from "@/lib/mcp/admin-access";
 
 import { createHmac, randomBytes, timingSafeEqual } from "crypto";
 import type { AuthInfo } from "@modelcontextprotocol/sdk/server/auth/types.js";
@@ -23,6 +24,7 @@ async function authInfoForUserId(
   clientId: string,
   mcpPermissions: string[] = []
 ): Promise<AuthInfo | undefined> {
+  if (!(await userCanAccessMcp(userId))) return undefined;
   const profile = await ensureProfile(userId);
   if (!profile) return undefined;
   return {

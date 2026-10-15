@@ -14,7 +14,7 @@ import UserMenu from "./UserMenu";
 type NavLeaf = { href: string; label: string; match: (path: string) => boolean };
 
 function buildNav(v: SiteNavVisibility): NavLeaf[] {
-  const entries: NavLeaf[] = [];
+  const entries: NavLeaf[] = [{ href: "/store", label: "Store", match: (p) => p === "/store" || p.startsWith("/store/") }];
 
   if (v.showIdeas) {
     entries.push({
