@@ -63,6 +63,13 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Shopify subscriptions and recommendation quizzes (2026-10-16)
+
+- Published **Shopify product subscriptions app — Appstle / Recharge alternative** and **Shopify product recommendation quiz app — Quiz Kit / Quizell alternative** after checking both surfaces for duplicates.
+- Preserved all four Shopify App Store reference URLs in the two capture bodies. No fabricated pricing, traction, differentiation or conviction.
+- Both Idea Vault records are **To Review** and link to their published listings; each listing links back. **After:** Idea Vault/Fynda Idea **1,344 / 1,344**.
+- Mapping: [Shopify app captures](./captures/2026-10-16-shopify-apps.md).
+
 ### Drama/distribution and women-focused app follow-up (2026-10-16)
 
 - Appended “build both the AI drama/reels/TV production tool and distribution” to the existing drama keeper on both surfaces.
