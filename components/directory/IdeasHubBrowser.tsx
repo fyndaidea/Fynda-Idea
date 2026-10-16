@@ -1,7 +1,8 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
+import { useFavoritesContext } from "@/components/favorites/FavoritesProvider";
 import { IdeaCard, IdeaCardSkeleton } from "@/components/directory/IdeaCard";
 import type { Idea } from "@/lib/db/ideas-db";
 
@@ -24,46 +25,50 @@ export function IdeasHubBrowser({
   const [total, setTotal] = useState(initialTotal);
   const [isPending, startTransition] = useTransition();
   const [fetching, setFetching] = useState(false);
-  const skipFirstFetch = useRef(true);
+  const { ready, isFavorite } = useFavoritesContext();
   const pageSize = PAGE_SIZE;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const safePage = Math.min(page, totalPages);
 
   useEffect(() => {
-    if (page > totalPages) setPage(totalPages);
-  }, [page, totalPages]);
-
-  useEffect(() => {
-    if (skipFirstFetch.current) {
-      skipFirstFetch.current = false;
-      return;
-    }
+    if (!ready) return;
+    const controller = new AbortController();
 
     const handle = window.setTimeout(async () => {
       setFetching(true);
       try {
         const params = new URLSearchParams();
         if (query.trim()) params.set("q", query.trim());
-        params.set("page", String(Math.max(1, page)));
+        params.set("page", String(safePage));
         params.set("pageSize", String(pageSize));
-        const res = await fetch(`/api/ideas?${params.toString()}`, { credentials: "include" });
+        params.set("favoritesFirst", "1");
+        const res = await fetch(`/api/ideas?${params.toString()}`, {
+          credentials: "include",
+          signal: controller.signal,
+          cache: "no-store",
+        });
         const data = res.ok ? await res.json() : { ideas: [], total: 0 };
+        if (controller.signal.aborted) return;
         startTransition(() => {
           setIdeas(Array.isArray(data.ideas) ? data.ideas : []);
           setTotal(typeof data.total === "number" ? data.total : 0);
         });
       } catch {
+        if (controller.signal.aborted) return;
         startTransition(() => {
           setIdeas([]);
           setTotal(0);
         });
       } finally {
-        setFetching(false);
+        if (!controller.signal.aborted) setFetching(false);
       }
     }, 200);
 
-    return () => window.clearTimeout(handle);
-  }, [page, pageSize, query]);
+    return () => {
+      window.clearTimeout(handle);
+      controller.abort();
+    };
+  }, [safePage, pageSize, query, ready, isFavorite]);
 
   const busy = fetching || isPending;
 
@@ -113,7 +118,7 @@ export function IdeasHubBrowser({
             <button
               type="button"
               disabled={safePage <= 1 || busy}
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              onClick={() => setPage(Math.max(1, safePage - 1))}
               className="inline-flex h-10 items-center justify-center rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card)] px-4 text-sm font-semibold disabled:opacity-50"
             >
               Prev
@@ -121,7 +126,7 @@ export function IdeasHubBrowser({
             <button
               type="button"
               disabled={safePage >= totalPages || busy}
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              onClick={() => setPage(Math.min(totalPages, safePage + 1))}
               className="inline-flex h-10 items-center justify-center rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card)] px-4 text-sm font-semibold disabled:opacity-50"
             >
               Next

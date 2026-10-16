@@ -91,6 +91,7 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 | When | Change |
 |---|---|
+| 2026-10-15 | Requested favorites first in the Fynda Idea directory. Implemented personal favorite ordering before pagination/search results, with refresh after toggles. Local verification passed; Nik authorized sync, commit, and push using this project's local Git credentials. |
 | 2026-08-29 | **Mina** created — Idea Steward; Product Vault Ideas; Capture → Classify → Dedupe → Curate → Queue. Boundaries vs Ron (research) and Vera (pick) locked. |
 | 2026-08-29 | System of record → **Idea Vault**. Migrated **1183/1183** Product Vault Ideas → Idea Vault; archived all sources. Script: `scripts/migrate_ideas_to_idea_vault.py`. |
 | 2026-10-03 | **Ivy** removed — Fynda Idea Superhero folded into **Mina**. Mina owns Idea Vault + live Fynda Idea (`fynda-idea-prod.vercel.app`). |
