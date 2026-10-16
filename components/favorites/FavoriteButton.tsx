@@ -3,6 +3,7 @@
 import { Star } from "lucide-react";
 import { toast } from "@/lib/toast";
 import { useFavoritesContext } from "@/components/favorites/FavoritesProvider";
+import { ShimmerBlock } from "@/components/ui/Shimmer";
 
 type Props = {
   itemId: string;
@@ -12,8 +13,10 @@ type Props = {
 };
 
 export default function FavoriteButton({ itemId, itemTitle, itemSubtitle, className = "" }: Props) {
-  const { ready, isFavorite, toggleFavorite } = useFavoritesContext();
+  const { ready, isFavorite, isPending, toggleFavorite } = useFavoritesContext();
   const favorited = isFavorite(itemId);
+
+  if (!ready) return <ShimmerBlock className="h-8 w-8 shrink-0" rounded="rounded-full" label="Loading favorite" />;
 
   const onClick = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -21,7 +24,7 @@ export default function FavoriteButton({ itemId, itemTitle, itemSubtitle, classN
 
     const result = await toggleFavorite({ itemId, itemTitle, itemSubtitle });
     if (!result.ok) {
-      if (!favorited) return;
+      if (result.needsLogin) return;
       toast.error("Could not update favorite.");
       return;
     }
@@ -32,7 +35,8 @@ export default function FavoriteButton({ itemId, itemTitle, itemSubtitle, classN
     <button
       type="button"
       onClick={onClick}
-      disabled={!ready}
+      disabled={!ready || isPending(itemId)}
+      aria-busy={!ready || isPending(itemId)}
       aria-pressed={favorited}
       aria-label={favorited ? "Remove from favorites" : "Add to favorites"}
       title={favorited ? "Remove from favorites" : "Save to favorites"}

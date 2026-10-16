@@ -4,6 +4,7 @@ import { pageDescClass, pageTitleClass } from "@/lib/ui-classes";
 import { headers } from "next/headers";
 import { getApiUser } from "@/lib/auth/get-api-user";
 import { getProfileFavorites } from "@/lib/favorites/store";
+import { FavoritesProvider } from "@/components/favorites/FavoritesProvider";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -42,12 +43,15 @@ export default async function IdeasPage({
           </p>
         </div>
 
-        <IdeasHubBrowser
-          initialIdeas={ideas}
-          initialTotal={total}
-          initialPage={page}
-          initialQuery={q}
-        />
+        <FavoritesProvider itemType="idea" initial={{ userId: auth?.userId ?? null, slugs: favoriteSlugs }}>
+          <IdeasHubBrowser
+            initialIdeas={ideas}
+            initialTotal={total}
+            initialPage={page}
+            initialQuery={q}
+            initialUserId={auth?.userId ?? null}
+          />
+        </FavoritesProvider>
       </div>
     </main>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useFavoritesContext } from "@/components/favorites/FavoritesProvider";
 import { IdeaCard, IdeaCardSkeleton } from "@/components/directory/IdeaCard";
 import type { Idea } from "@/lib/db/ideas-db";
@@ -13,11 +13,13 @@ export function IdeasHubBrowser({
   initialTotal,
   initialPage = 1,
   initialQuery = "",
+  initialUserId = null,
 }: {
   initialIdeas: Idea[];
   initialTotal: number;
   initialPage?: number;
   initialQuery?: string;
+  initialUserId?: string | null;
 }) {
   const [query, setQuery] = useState(initialQuery);
   const [page, setPage] = useState(initialPage);
@@ -25,17 +27,53 @@ export function IdeasHubBrowser({
   const [total, setTotal] = useState(initialTotal);
   const [isPending, startTransition] = useTransition();
   const [fetching, setFetching] = useState(false);
-  const { ready, isFavorite } = useFavoritesContext();
+  const { ready, isFavorite, revision, userId } = useFavoritesContext();
+  const [error, setError] = useState<string | null>(null);
+  const [retry, setRetry] = useState(0);
+  const [loadedKey, setLoadedKey] = useState(() => JSON.stringify([initialQuery, initialPage, initialUserId]));
+  const loadedRevision = useRef(0);
   const pageSize = PAGE_SIZE;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const safePage = Math.min(page, totalPages);
+  const requestKey = JSON.stringify([query, safePage, userId]);
+  const navigationPending = requestKey !== loadedKey;
+  const gridRef = useRef<HTMLDivElement>(null);
+  const positions = useRef(new Map<string, { x: number; y: number }>());
+  const visibleIdeas = useMemo(() => [...ideas].sort((a, b) =>
+    Number(isFavorite(b.slug)) - Number(isFavorite(a.slug)) ||
+    b.score - a.score || new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime() ||
+    a.id.localeCompare(b.id)
+  ), [ideas, isFavorite]);
+
+  useLayoutEffect(() => {
+    const nodes = gridRef.current?.querySelectorAll<HTMLElement>("[data-idea-id]");
+    const next = new Map<string, { x: number; y: number }>();
+    nodes?.forEach((node) => {
+      const id = node.dataset.ideaId!;
+      const position = { x: node.offsetLeft, y: node.offsetTop };
+      const previous = positions.current.get(id);
+      next.set(id, position);
+      if (previous && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        const dx = previous.x - position.x;
+        const dy = previous.y - position.y;
+        if (dx || dy) {
+          node.getAnimations().forEach((animation) => animation.cancel());
+          node.animate([
+            { transform: `translate(${dx}px, ${dy}px)` },
+            { transform: "translate(0, 0)" },
+          ], { duration: 300, easing: "cubic-bezier(0.2, 0, 0, 1)" });
+        }
+      }
+    });
+    positions.current = next;
+  }, [visibleIdeas, navigationPending]);
 
   useEffect(() => {
-    if (!ready) return;
+    if (!ready || (requestKey === loadedKey && revision === loadedRevision.current && retry === 0)) return;
     const controller = new AbortController();
-
     const handle = window.setTimeout(async () => {
       setFetching(true);
+      setError(null);
       try {
         const params = new URLSearchParams();
         if (query.trim()) params.set("q", query.trim());
@@ -43,34 +81,29 @@ export function IdeasHubBrowser({
         params.set("pageSize", String(pageSize));
         params.set("favoritesFirst", "1");
         const res = await fetch(`/api/ideas?${params.toString()}`, {
-          credentials: "include",
-          signal: controller.signal,
-          cache: "no-store",
+          credentials: "include", signal: controller.signal, cache: "no-store",
         });
-        const data = res.ok ? await res.json() : { ideas: [], total: 0 };
+        if (!res.ok) throw new Error("Could not load ideas");
+        const data = await res.json();
         if (controller.signal.aborted) return;
+        loadedRevision.current = revision;
         startTransition(() => {
           setIdeas(Array.isArray(data.ideas) ? data.ideas : []);
           setTotal(typeof data.total === "number" ? data.total : 0);
+          setLoadedKey(requestKey);
+          setRetry(0);
         });
       } catch {
-        if (controller.signal.aborted) return;
-        startTransition(() => {
-          setIdeas([]);
-          setTotal(0);
-        });
+        if (!controller.signal.aborted) setError("Could not load ideas. Please try again.");
       } finally {
         if (!controller.signal.aborted) setFetching(false);
       }
-    }, 200);
+    }, navigationPending && query !== initialQuery ? 200 : 0);
+    return () => { window.clearTimeout(handle); controller.abort(); };
+  }, [safePage, query, pageSize, ready, revision, userId, requestKey, loadedKey, retry, navigationPending, initialQuery]);
 
-    return () => {
-      window.clearTimeout(handle);
-      controller.abort();
-    };
-  }, [safePage, pageSize, query, ready, isFavorite]);
-
-  const busy = fetching || isPending;
+  const busy = fetching || isPending || (navigationPending && !error);
+  const showSkeleton = navigationPending && !error;
 
   return (
     <div>
@@ -95,13 +128,20 @@ export function IdeasHubBrowser({
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {busy && ideas.length === 0
+      <div ref={gridRef} aria-busy={busy} aria-label="Ideas" className="relative grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {showSkeleton
           ? Array.from({ length: 6 }).map((_, i) => <IdeaCardSkeleton key={`sk-${i}`} />)
-          : ideas.map((idea) => <IdeaCard key={idea.id} idea={idea} />)}
+          : visibleIdeas.map((idea) => <div key={idea.id} data-idea-id={idea.id}><IdeaCard idea={idea} /></div>)}
       </div>
 
-      {!busy && ideas.length === 0 ? (
+      {error ? (
+        <div role="alert" className="mt-4 flex items-center justify-between gap-3 text-sm">
+          <p>{error}</p>
+          <button type="button" onClick={() => setRetry((value) => value + 1)} className="font-semibold text-[color:var(--accent)]">Try again</button>
+        </div>
+      ) : null}
+      <p role="status" className="sr-only">{busy ? "Updating ideas" : "Ideas loaded"}</p>
+      {!busy && !error && ideas.length === 0 ? (
         <div className="mt-6 rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card)] px-6 py-12 text-center">
           <p className="text-base font-semibold text-[color:var(--foreground)]">No ideas match</p>
           <p className="mt-2 text-sm text-[color:var(--muted)]">Try a different search.</p>

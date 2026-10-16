@@ -91,6 +91,7 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 | When | Change |
 |---|---|
+| 2026-10-15 | Loading/favorites review: fixed collapsed shared shimmer fills and reduced-motion CSS precedence; added matching Ideas/auth/store skeletons and a layout loading boundary; removed the forced home splash delay. Seeded the Ideas favorite state from its server response, added optimistic animated reordering with rollback, serialized saves, and refreshed shared favorite state for subsequent navigation. Checked nine skeleton variants at desktop/mobile sizes and slow-auth, save/unsave, refresh, pagination, retry, and failed-save flows in an isolated component fixture; the real Ideas route remains behind its admin gate. |
 | 2026-10-15 | Requested favorites first in the Fynda Idea directory. Implemented personal favorite ordering before pagination/search results, with refresh after toggles. Local verification passed; Nik authorized sync, commit, and push using this project's local Git credentials. |
 | 2026-08-29 | **Mina** created — Idea Steward; Product Vault Ideas; Capture → Classify → Dedupe → Curate → Queue. Boundaries vs Ron (research) and Vera (pick) locked. |
 | 2026-08-29 | System of record → **Idea Vault**. Migrated **1183/1183** Product Vault Ideas → Idea Vault; archived all sources. Script: `scripts/migrate_ideas_to_idea_vault.py`. |

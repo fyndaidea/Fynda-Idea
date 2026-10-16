@@ -7,6 +7,8 @@ import "./globals.css";
 import "./marketing.css";
 import ScrollToTop from "@/components/ScrollToTop";
 import SiteChrome from "@/components/SiteChrome";
+import { Suspense } from "react";
+import { AppLoading } from "@/components/loading/AppLoading";
 import { PRODUCT_NAME, PRODUCT_TAGLINE, PRODUCT_WORDMARK } from "@/lib/brand/product";
 import { websiteJsonLd } from "@/lib/seo/json-ld";
 
@@ -77,7 +79,9 @@ export default function RootLayout({
         />
         <Providers>
           <ScrollToTop />
-          <SiteChrome>{children}</SiteChrome>
+          <Suspense fallback={<AppLoading />}>
+            <SiteChrome>{children}</SiteChrome>
+          </Suspense>
           <AppToaster />
         </Providers>
       </body>

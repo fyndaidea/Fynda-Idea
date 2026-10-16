@@ -1,4 +1,3 @@
-import HomeBrandLoader from "@/components/brand/HomeBrandLoader";
 import HomeCategoriesStrip from "@/components/home/HomeCategoriesStrip";
 import HomeCollectionsStrip from "@/components/home/HomeCollectionsStrip";
 import HomeHero from "@/components/home/HomeHero";
@@ -18,18 +17,16 @@ export default async function Home() {
   ]);
 
   return (
-    <HomeBrandLoader>
-      <main className="relative">
-        <HomeHero
-          ideaCount={ideaCount}
-          categoryCount={categoryCount}
-          collectionCount={collectionCount}
-          ideas={heroIdeas}
-        />
-        <HomeCollectionsStrip />
-        <HomeCategoriesStrip />
-        <HomeTopIdeasStrip />
-      </main>
-    </HomeBrandLoader>
+    <main className="relative">
+      <HomeHero
+        ideaCount={ideaCount}
+        categoryCount={categoryCount}
+        collectionCount={collectionCount}
+        ideas={heroIdeas}
+      />
+      <HomeCollectionsStrip />
+      <HomeCategoriesStrip />
+      <HomeTopIdeasStrip />
+    </main>
   );
 }

@@ -274,35 +274,38 @@ button:disabled,
     width: 100%;
   }
 
-  .media-shimmer__sweep {
-    animation: none;
-    opacity: 0.4;
-    transform: none;
-    width: 100%;
-  }
 }
 
 .media-shimmer {
-  position: relative;
+  position: absolute;
   overflow: hidden;
-  background-color: color-mix(in srgb, var(--card-muted) 88%, var(--card-border));
+  background-color: color-mix(in srgb, var(--foreground) 8%, var(--card));
 }
 
 .media-shimmer__sweep {
   position: absolute;
   inset: 0;
-  width: 200%;
+  width: 100%;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    color-mix(in srgb, var(--foreground) 0%, transparent) 28%,
-    color-mix(in srgb, var(--foreground) 8%, transparent) 42%,
-    color-mix(in srgb, var(--foreground) 16%, transparent) 50%,
-    color-mix(in srgb, var(--foreground) 8%, transparent) 58%,
-    color-mix(in srgb, var(--foreground) 0%, transparent) 72%,
+    color-mix(in srgb, var(--card) 0%, transparent) 28%,
+    color-mix(in srgb, var(--card) 35%, transparent) 42%,
+    color-mix(in srgb, var(--card) 70%, transparent) 50%,
+    color-mix(in srgb, var(--card) 35%, transparent) 58%,
+    color-mix(in srgb, var(--card) 0%, transparent) 72%,
     transparent 100%
   );
   animation: shimmer-sweep 1.25s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media-shimmer__sweep {
+    animation: none;
+    transform: none;
+    width: 100%;
+    opacity: 0.4;
+  }
 }
 
 .tool-detail-header-actions {

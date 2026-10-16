@@ -1,10 +1,11 @@
+import { IdeaCardSkeleton } from "@/components/directory/IdeaCard";
 import { ShimmerBlock } from "@/components/ui/Shimmer";
 
-type Variant = "home" | "grid" | "detail" | "feed" | "list" | "admin";
+type Variant = "home" | "grid" | "detail" | "feed" | "list" | "admin" | "ideas" | "form" | "store";
 
 function CardSkeleton() {
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card)] p-5">
+    <div className="flex h-full min-h-[12rem] flex-col rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card)] p-5">
       <div className="mb-4 flex gap-1.5">
         <ShimmerBlock className="h-7 w-7" rounded="rounded-md" />
         <ShimmerBlock className="h-7 w-7" rounded="rounded-md" />
@@ -60,15 +61,62 @@ export function PageShimmer({
       aria-busy="true"
       aria-label={label}
     >
+      <span role="status" className="sr-only">{label}</span>
       {variant === "home" ? (
-        <div
-          className="home-loader--bounce flex min-h-[calc(100dvh-var(--site-header-h,56px))] items-center justify-center bg-[color:var(--background)]"
-          aria-hidden
-        >
-          <div className="home-loader__stage">
-            <span className="home-loader__dot home-loader__dot--a" />
-            <span className="home-loader__dot home-loader__dot--b" />
-            <span className="home-loader__dot home-loader__dot--c" />
+        <div className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10 lg:px-10" aria-hidden>
+          <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
+            <div>
+              <ShimmerBlock className="h-8 w-64" rounded="rounded-full" />
+              <ShimmerBlock className="mt-5 h-12 w-full max-w-lg" />
+              <ShimmerBlock className="mt-3 h-12 w-3/4" />
+              <ShimmerBlock className="mt-5 h-4 w-full max-w-lg" />
+              <ShimmerBlock className="mt-2 h-4 w-2/3" />
+              <ShimmerBlock className="mt-6 h-11 w-40" rounded="rounded-xl" />
+            </div>
+            <ShimmerBlock className="h-80 w-full" rounded="rounded-2xl" />
+          </div>
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 3 }, (_, i) => <IdeaCardSkeleton key={i} />)}
+          </div>
+        </div>
+      ) : null}
+      {variant === "ideas" ? (
+        <div className="mx-auto w-full max-w-[1280px] px-4 pb-12 pt-6 sm:pt-8" aria-hidden>
+          <ShimmerBlock className="h-9 w-28" />
+          <ShimmerBlock className="mt-3 h-5 w-full max-w-2xl" />
+          <div className="mb-5 mt-8 flex items-center justify-between gap-3">
+            <ShimmerBlock className="h-11 w-full sm:max-w-md" rounded="rounded-xl" />
+            <ShimmerBlock className="h-4 w-20 shrink-0" />
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }, (_, i) => <IdeaCardSkeleton key={i} />)}
+          </div>
+        </div>
+      ) : null}
+      {variant === "form" ? (
+        <div className="mx-auto flex min-h-[80dvh] w-full max-w-md flex-col justify-center gap-5 px-5 py-12" aria-hidden>
+          <ShimmerBlock className="h-9 w-28" />
+          <ShimmerBlock className="mt-4 h-8 w-3/4" />
+          <ShimmerBlock className="h-4 w-full" />
+          <ShimmerBlock className="mt-4 h-12 w-full" rounded="rounded-lg" />
+          <ShimmerBlock className="h-12 w-full" rounded="rounded-lg" />
+          <ShimmerBlock className="h-12 w-full" rounded="rounded-lg" />
+        </div>
+      ) : null}
+      {variant === "store" ? (
+        <div className="store-main" aria-hidden>
+          <div className="store-hero">
+            <div>
+              <ShimmerBlock className="h-4 w-40" />
+              <ShimmerBlock className="mt-5 h-16 w-full" />
+              <ShimmerBlock className="mt-3 h-16 w-3/4" />
+              <ShimmerBlock className="mt-6 h-4 w-full" />
+            </div>
+            <ShimmerBlock className="h-80 w-full" rounded="rounded-xl" />
+          </div>
+          <ShimmerBlock className="my-8 h-12 w-full" />
+          <div className="store-grid">
+            {Array.from({ length: 3 }, (_, i) => <ShimmerBlock key={i} className="h-80 w-full" rounded="rounded-xl" />)}
           </div>
         </div>
       ) : null}

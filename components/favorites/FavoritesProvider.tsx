@@ -2,17 +2,21 @@
 
 import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
 import LoginRequiredDialog from "@/components/auth/LoginRequiredDialog";
-import { useFavorites } from "@/lib/favorites/use-favorites";
+import { useFavorites, type InitialFavorites } from "@/lib/favorites/use-favorites";
 import type { FavoriteItemType } from "@/lib/favorites/types";
 
 type FavoritesContextValue = {
   ready: boolean;
+  revision: number;
+  userId: string | null;
+  refreshFavorites: () => void;
+  isPending: (itemId: string) => boolean;
   isFavorite: (itemId: string) => boolean;
   toggleFavorite: (payload: {
     itemId: string;
     itemTitle: string;
     itemSubtitle?: string;
-  }) => Promise<{ ok: boolean; favorited?: boolean }>;
+  }) => Promise<{ ok: boolean; favorited?: boolean; needsLogin?: boolean }>;
 };
 
 const FavoritesContext = createContext<FavoritesContextValue | null>(null);
@@ -20,11 +24,15 @@ const FavoritesContext = createContext<FavoritesContextValue | null>(null);
 export function FavoritesProvider({
   itemType,
   children,
+  initial,
 }: {
   itemType: FavoriteItemType;
   children: ReactNode;
+  initial?: InitialFavorites;
 }) {
-  const { ready, isFavorite, toggleFavorite: baseToggle } = useFavorites(itemType);
+  const parent = useContext(FavoritesContext);
+  const refreshParent = parent?.refreshFavorites;
+  const { ready, isFavorite, isPending, revision, userId, refreshFavorites, toggleFavorite: baseToggle } = useFavorites(itemType, initial);
   const [loginOpen, setLoginOpen] = useState(false);
 
   const toggleFavorite = useCallback(
@@ -32,16 +40,17 @@ export function FavoritesProvider({
       const result = await baseToggle(payload);
       if (result.needsLogin) {
         setLoginOpen(true);
-        return { ok: false };
+        return { ok: false, needsLogin: true };
       }
       if (!result.ok) return { ok: false };
+      refreshParent?.();
       return { ok: true, favorited: result.favorited };
     },
-    [baseToggle]
+    [baseToggle, refreshParent]
   );
 
   return (
-    <FavoritesContext.Provider value={{ ready, isFavorite, toggleFavorite }}>
+    <FavoritesContext.Provider value={{ ready, isFavorite, isPending, revision, userId, refreshFavorites, toggleFavorite }}>
       {children}
       <LoginRequiredDialog open={loginOpen} onClose={() => setLoginOpen(false)} />
     </FavoritesContext.Provider>
