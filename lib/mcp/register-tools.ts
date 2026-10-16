@@ -94,7 +94,7 @@ export function registerFyndaMcpTools(server: McpServer) {
     "list_ideas",
     {
       title: "List ideas",
-      description: "List ideas from the catalog, sorted by score.",
+      description: "List ideas from the catalog, sorted by most recent update first.",
       inputSchema: {
         limit: z.number().int().min(1).max(100).optional(),
         featured_only: z.boolean().optional(),
@@ -107,7 +107,7 @@ export function registerFyndaMcpTools(server: McpServer) {
         const userId = getMcpUserId();
         await requireMcpSubscription(userId);
 
-        let withDrafts = include_drafts === true;
+        const withDrafts = include_drafts === true;
         if (withDrafts) {
           await requireMcpAdmin(userId);
         }
@@ -164,7 +164,7 @@ export function registerFyndaMcpTools(server: McpServer) {
         const userId = getMcpUserId();
         await requireMcpSubscription(userId);
 
-        let withDrafts = include_drafts === true;
+        const withDrafts = include_drafts === true;
         if (withDrafts) {
           await requireMcpAdmin(userId);
         }

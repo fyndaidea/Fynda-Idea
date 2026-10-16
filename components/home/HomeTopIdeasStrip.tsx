@@ -3,7 +3,7 @@ import { CollectionIdeaRow } from "@/components/content/CollectionIdeaRow";
 import { listIdeas } from "@/lib/db/ideas-db";
 
 export default async function HomeTopIdeasStrip() {
-  const ideas = await listIdeas({ limit: 10 }).catch(() => []);
+  const ideas = await listIdeas({ limit: 10, sortBy: "score" }).catch(() => []);
   if (ideas.length === 0) return null;
 
   return (

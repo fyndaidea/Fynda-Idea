@@ -41,7 +41,7 @@ export function IdeasHubBrowser({
   const positions = useRef(new Map<string, { x: number; y: number }>());
   const visibleIdeas = useMemo(() => [...ideas].sort((a, b) =>
     Number(isFavorite(b.slug)) - Number(isFavorite(a.slug)) ||
-    b.score - a.score || new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime() ||
+    new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime() ||
     a.id.localeCompare(b.id)
   ), [ideas, isFavorite]);
 

@@ -128,7 +128,8 @@ export async function getCategoryWithIdeas(slug: string, options?: { includeUnpu
     .selectAll()
     .where(categoryIdSqlMatch(String(category.id)))
     .where("status", "=", "published")
-    .orderBy("score", "desc")
+    .orderBy("updated_at", "desc")
+    .orderBy("id", "asc")
     .execute();
 
   const map = await categoryNameMap(

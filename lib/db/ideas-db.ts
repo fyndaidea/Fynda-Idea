@@ -98,6 +98,7 @@ export async function listIdeas(options?: {
   tag?: string;
   search?: string;
   favoriteSlugs?: string[];
+  sortBy?: "updated" | "score";
 }) {
   const limit = options?.limit ?? 100;
   const offset = options?.offset ?? 0;
@@ -110,7 +111,8 @@ export async function listIdeas(options?: {
   if (options?.favoriteSlugs?.length) {
     q = q.orderBy(sql<number>`case when slug in (${sql.join(options.favoriteSlugs)}) then 0 else 1 end`);
   }
-  q = q.orderBy("score", "desc").orderBy("updated_at", "desc").orderBy("id", "asc");
+  if (options?.sortBy === "score") q = q.orderBy("score", "desc");
+  q = q.orderBy("updated_at", "desc").orderBy("id", "asc");
 
   if (!options?.includeDrafts) {
     q = q.where("status", "=", "published");

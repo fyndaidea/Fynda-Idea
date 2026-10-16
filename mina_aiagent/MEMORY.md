@@ -102,6 +102,7 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 | When | Change |
 |---|---|
+| 2026-10-16 | Sort the Ideas directory by updated time descending, with favorites still first. Server pagination, client reordering, category idea lists, and MCP listings use newest updates first. The home page's explicitly highest-scored section retains score ordering. |
 | 2026-10-16 | Captured Nik's 24 nonblank inputs as 15 new ideas + 8 enriched existing ideas on both surfaces; #13 attached to #10, #25 omitted. Standing instruction: always publish captures and keep Idea Vault in sync. |
 | 2026-10-15 | Loading/favorites review: fixed collapsed shared shimmer fills and reduced-motion CSS precedence; added matching Ideas/auth/store skeletons and a layout loading boundary; removed the forced home splash delay. Seeded the Ideas favorite state from its server response, added optimistic animated reordering with rollback, serialized saves, and refreshed shared favorite state for subsequent navigation. Checked nine skeleton variants at desktop/mobile sizes and slow-auth, save/unsave, refresh, pagination, retry, and failed-save flows in an isolated component fixture; the real Ideas route remains behind its admin gate. |
 | 2026-10-15 | Requested favorites first in the Fynda Idea directory. Implemented personal favorite ordering before pagination/search results, with refresh after toggles. Local verification passed; Nik authorized sync, commit, and push using this project's local Git credentials. |
