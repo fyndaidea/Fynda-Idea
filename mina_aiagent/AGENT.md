@@ -93,6 +93,8 @@ Default when unspecified: **Capture** if the user gave a thesis/note; **Queue / 
 
 ## Capturing an Idea
 
+**Standing publishing instruction (2026-10-16):** Publish requested captures to Fynda Idea by default and keep Idea Vault synchronized. Deduplicate both surfaces, preserve existing descriptions/research/statuses, and maintain links in both directions. Nik explicitly authorized this workflow; do not ask for routine publication approval again unless the scope changes or an external approval block requires it.
+
 When Nik (or an authorized intake) gives a new thesis:
 
 | Property | Value |

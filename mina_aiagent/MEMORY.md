@@ -18,6 +18,7 @@ Update this file when the user gives a lasting preference or when a major captur
 8. **Git: before starting any operation, `git pull` (or `git fetch` + `git pull`) on the current branch so the workspace matches GitHub.** Do **not** start durable work on a stale clone. Prefer GitHub as source of truth when local and remote diverge.
 9. **Git: when the work is done, commit and push to `main` (or `master`) immediately.** Do **not** leave durable work uncommitted on the machine. Do **not** wait until later. Do **not** create feature branches or pull requests unless the user explicitly asks.
 10. **Never set Notion Status = Reviewed** unless Nik explicitly asks. Write research / dual-write / tags / links as usual; leave Status alone (usually `To Review` / `Under Review` / whatever it already is). Applies fleet-wide to every vault.
+11. **Publish captures by default and keep Idea Vault synchronized.** Nik explicitly confirmed on 2026-10-16: “always publish it. make sure idea vault in notion is in sync.” For requested additions, dedupe first, create published Fynda Idea listings, capture/link their Idea Vault records, and append new notes to existing keepers while preserving descriptions, research and statuses. Do not ask for publication permission again unless scope changes or an external approval block requires it.
 
 ---
 
@@ -62,6 +63,16 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Nik's idea intake (2026-10-16)
+
+- **24 nonblank inputs → 23 ideas:** 15 new published listings plus appended notes on 8 existing keepers, synchronized with Idea Vault.
+- Item **13** is a reference for the existing website/automation idea (**10**); item **25** was blank.
+- All **23** vault records remain **To Review**. Existing descriptions, research, statuses and catalog ranking scores were preserved. No archive/delete.
+- Inaccessible Reddit/Facebook references remain in titles as requested; “charge for calls setup” is preserved without guessing the service.
+- **After:** Idea Vault **1,341**; Fynda Idea **1,341 published**. Each affected vault Link points to its live listing, and each listing links back to its vault record.
+- Nik's standing instruction: **always publish captures and keep Idea Vault synchronized**. Initial private drafts were published after explicit approval.
+- Full mapping: [2026-10-16 intake](./captures/2026-10-16-intake.md).
+
 ### Idea Vault → Fynda Idea full sync (2026-10-15)
 
 | Field | Value |
@@ -91,6 +102,7 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 | When | Change |
 |---|---|
+| 2026-10-16 | Captured Nik's 24 nonblank inputs as 15 new ideas + 8 enriched existing ideas on both surfaces; #13 attached to #10, #25 omitted. Standing instruction: always publish captures and keep Idea Vault in sync. |
 | 2026-10-15 | Loading/favorites review: fixed collapsed shared shimmer fills and reduced-motion CSS precedence; added matching Ideas/auth/store skeletons and a layout loading boundary; removed the forced home splash delay. Seeded the Ideas favorite state from its server response, added optimistic animated reordering with rollback, serialized saves, and refreshed shared favorite state for subsequent navigation. Checked nine skeleton variants at desktop/mobile sizes and slow-auth, save/unsave, refresh, pagination, retry, and failed-save flows in an isolated component fixture; the real Ideas route remains behind its admin gate. |
 | 2026-10-15 | Requested favorites first in the Fynda Idea directory. Implemented personal favorite ordering before pagination/search results, with refresh after toggles. Local verification passed; Nik authorized sync, commit, and push using this project's local Git credentials. |
 | 2026-08-29 | **Mina** created — Idea Steward; Product Vault Ideas; Capture → Classify → Dedupe → Curate → Queue. Boundaries vs Ron (research) and Vera (pick) locked. |
