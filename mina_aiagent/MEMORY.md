@@ -63,6 +63,14 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Drama/distribution and women-focused app follow-up (2026-10-16)
+
+- Appended “build both the AI drama/reels/TV production tool and distribution” to the existing drama keeper on both surfaces.
+- Published **Women-focused versions of proven apps + AI influencer distribution**, using X post `2111121464187597007` (author/content recovered from the public FxTwitter mirror) plus Nik’s AI woman influencer promotion angle.
+- Related broad Women apps/Women niches records remain intact. Existing descriptions/research preserved; both affected Notion records remain **To Review**, with matched live links and vault backlinks.
+- **After:** Idea Vault and Fynda Idea each contain **1,342** ideas.
+- Mapping: [follow-up captures](./captures/2026-10-16-follow-up.md).
+
 ### Nik's idea intake (2026-10-16)
 
 - **24 nonblank inputs → 23 ideas:** 15 new published listings plus appended notes on 8 existing keepers, synchronized with Idea Vault.
