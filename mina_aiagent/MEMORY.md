@@ -123,6 +123,7 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 | When | Change |
 |---|---|
+| 2026-10-17 | Nik rejected the initial three individual-page styles. Replaced them with Brief (compact product overview), Canvas (dark header and numbered highlights), and Workspace (document with real section links). Kept the comparison switcher, admin edit/sync actions and old layout URL compatibility. Checked desktop/mobile down to 320px, section targets, refresh selection, favorites, types/lint and production build. No final layout selected yet. |
 | 2026-10-17 | Added list-card details previews and Editorial / Dossier / Focus individual-page variations with URL-persisted selection. Added verified-admin editing, return to the selected layout, and a durable revision queue for requested Notion syncs. Checked production build, lint/types, desktop/mobile component interactions, anonymous endpoint denials, and rollback-only database integration tests. |
 | 2026-10-16 | Sort the Ideas directory by updated time descending, with favorites still first. Server pagination, client reordering, category idea lists, and MCP listings use newest updates first. The home page's explicitly highest-scored section retains score ordering. |
 | 2026-10-16 | Captured Nik's 24 nonblank inputs as 15 new ideas + 8 enriched existing ideas on both surfaces; #13 attached to #10, #25 omitted. Standing instruction: always publish captures and keep Idea Vault in sync. |

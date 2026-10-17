@@ -31,7 +31,7 @@ type Props = {
   categories: Array<{ id: string; name: string }>;
 };
 
-export default function IdeaEditorClient({ mode, idea, categories, returnToIdea = false, ideaLayout = "editorial" }: Props) {
+export default function IdeaEditorClient({ mode, idea, categories, returnToIdea = false, ideaLayout = "brief" }: Props) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [title, setTitle] = useState(idea?.title ?? "");

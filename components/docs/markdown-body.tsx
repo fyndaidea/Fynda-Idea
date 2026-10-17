@@ -19,14 +19,20 @@ const markdownClass =
 
 type MarkdownBodyProps = {
   markdown: string;
+  headingAnchorPrefix?: string;
 };
 
-export function MarkdownBody({ markdown }: MarkdownBodyProps) {
+export function MarkdownBody({ markdown, headingAnchorPrefix }: MarkdownBodyProps) {
   return (
     <div className={markdownClass}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
+          ...(headingAnchorPrefix ? {
+            h2({ node, children }) {
+              return <h2 id={`${headingAnchorPrefix}-${node?.position?.start.line}`}>{children}</h2>;
+            },
+          } : {}),
           a({ href, children, ...props }) {
             if (href?.startsWith("/")) {
               return (
