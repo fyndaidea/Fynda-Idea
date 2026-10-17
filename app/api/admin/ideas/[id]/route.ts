@@ -26,6 +26,7 @@ export async function PATCH(
   try {
     const { id } = await params;
     const body = (await request.json()) as Record<string, unknown>;
+    if (typeof body.title === "string" && !body.title.trim()) return NextResponse.json({ error: "title required" }, { status: 400 });
     const row = await updateIdea(id, {
       title: typeof body.title === "string" ? body.title : undefined,
       slug: typeof body.slug === "string" ? body.slug : undefined,

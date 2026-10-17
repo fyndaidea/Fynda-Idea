@@ -3,6 +3,7 @@ import "server-only";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import {
+  acknowledgeIdeaNotionSync,
   getIdeaBySlug,
   listIdeas,
   searchIdeas,
@@ -75,6 +76,10 @@ function toolError(error: unknown) {
 
 function serializeIdeaSummary(idea: Idea) {
   return {
+    contentRevision: idea.contentRevision,
+    notionSyncedRevision: idea.notionSyncedRevision,
+    notionSyncedAt: idea.notionSyncedAt,
+    updatedAt: idea.updatedAt,
     id: idea.id,
     slug: idea.slug,
     title: idea.title,
@@ -98,22 +103,26 @@ export function registerFyndaMcpTools(server: McpServer) {
       inputSchema: {
         limit: z.number().int().min(1).max(100).optional(),
         featured_only: z.boolean().optional(),
+        notion_sync_pending: z.boolean().optional().describe("Admin-only: ideas awaiting Notion sync"),
+        offset: z.number().int().min(0).optional(),
         include_drafts: z.boolean().optional().describe("Admin-only drafts when true"),
       },
     },
-    async ({ limit, featured_only, include_drafts }) => {
+    async ({ limit, featured_only, include_drafts, notion_sync_pending, offset }) => {
       try {
         requireMcpToolAccess("list_ideas");
         const userId = getMcpUserId();
         await requireMcpSubscription(userId);
 
         const withDrafts = include_drafts === true;
-        if (withDrafts) {
+        if (withDrafts || notion_sync_pending) {
           await requireMcpAdmin(userId);
         }
 
         const ideas = await listIdeas({
           limit: limit ?? 50,
+          offset,
+          notionSyncPending: notion_sync_pending,
           featuredOnly: featured_only ?? false,
           includeDrafts: withDrafts,
         });
@@ -121,6 +130,26 @@ export function registerFyndaMcpTools(server: McpServer) {
       } catch (e) {
         return toolError(e);
       }
+    }
+  );
+
+  server.registerTool(
+    "acknowledge_idea_notion_sync",
+    {
+      title: "Record successful Notion sync",
+      description: "Admin-only. Call only after verifying this exact content revision was copied to Idea Vault. Concurrent edits remain pending.",
+      inputSchema: { id: z.string().uuid(), revision: z.number().int().min(0) },
+    },
+    async ({ id, revision }) => {
+      try {
+        requireMcpToolAccess("acknowledge_idea_notion_sync");
+        const userId = getMcpUserId();
+        await requireMcpSubscription(userId);
+        await requireMcpAdmin(userId);
+        const row = await acknowledgeIdeaNotionSync(id, revision);
+        if (!row) throw new Error("Idea changed or no longer exists. Read and sync the latest revision.");
+        return jsonText({ ok: true, id, revision });
+      } catch (e) { return toolError(e); }
     }
   );
 

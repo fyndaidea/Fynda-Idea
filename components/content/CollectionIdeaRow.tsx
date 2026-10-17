@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { IdeaPreviewLink } from "@/components/directory/IdeaPreviewLink";
 
 export type CollectionIdeaRowData = {
   slug: string;
@@ -18,8 +18,8 @@ export function CollectionIdeaRow({ idea }: { idea: CollectionIdeaRowData }) {
     .toUpperCase();
 
   return (
-    <Link
-      href={`/ideas/${idea.slug}`}
+    <IdeaPreviewLink
+      idea={idea}
       className="group flex items-start gap-3 rounded-xl border border-[color:var(--card-border)] bg-[color:var(--card)] p-4 transition hover:border-[color:var(--foreground)]/15"
     >
       <div
@@ -44,6 +44,6 @@ export function CollectionIdeaRow({ idea }: { idea: CollectionIdeaRowData }) {
           </p>
         ) : null}
       </div>
-    </Link>
+    </IdeaPreviewLink>
   );
 }

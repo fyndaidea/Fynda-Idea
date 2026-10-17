@@ -1,17 +1,11 @@
 "use client";
 
-import Link from "next/link";
+import { IdeaPreviewLink } from "./IdeaPreviewLink";
+import type { IdeaPreviewModel } from "./idea-preview-model";
 import FavoriteButton from "@/components/favorites/FavoriteButton";
 
 /** Minimal fields for directory cards (full Idea or hub partials). */
-export type IdeaCardModel = {
-  slug: string;
-  title: string;
-  summary: string;
-  featured?: boolean;
-  categories?: string[];
-  highlights?: string[];
-};
+export type IdeaCardModel = IdeaPreviewModel;
 
 export function IdeaCard({ idea }: { idea: IdeaCardModel }) {
   const categories = idea.categories ?? [];
@@ -24,8 +18,8 @@ export function IdeaCard({ idea }: { idea: IdeaCardModel }) {
         "hover:border-[color:var(--accent-border)] hover:shadow-[var(--card-shadow)]",
       ].join(" ")}
     >
-      <Link
-        href={`/ideas/${idea.slug}`}
+      <IdeaPreviewLink
+        idea={idea}
         className="absolute inset-0 z-0 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)]"
         aria-label={`View ${idea.title} details`}
       />
@@ -79,12 +73,12 @@ export function IdeaCard({ idea }: { idea: IdeaCardModel }) {
         ) : null}
 
         <div className="mt-5 border-t border-[color:var(--card-border)] pt-4">
-          <Link
-            href={`/ideas/${idea.slug}`}
+          <IdeaPreviewLink
+            idea={idea}
             className="pointer-events-auto relative z-10 text-sm font-semibold text-[color:var(--accent)] transition hover:text-[color:var(--accent-hover)]"
           >
             View details
-          </Link>
+          </IdeaPreviewLink>
         </div>
       </div>
     </article>

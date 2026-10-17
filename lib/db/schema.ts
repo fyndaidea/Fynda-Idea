@@ -12,6 +12,9 @@ export interface Profiles {
 }
 
 export interface Ideas {
+  content_revision: Generated<number>;
+  notion_synced_revision: Generated<number>;
+  notion_synced_at: Date | null;
   id: Generated<string>;
   title: string;
   slug: string;

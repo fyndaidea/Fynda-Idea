@@ -113,10 +113,17 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ---
 
+## App editing and Notion sync (2026-10-17)
+
+- Individual idea pages have an admin-only edit action returning to the selected page layout. Content saves update the timestamp and show **Updated — pending Notion sync**.
+- On Nik’s request to sync, inspect the pending revision queue and reconcile app edits into Idea Vault, preserving existing research and newer Notion changes. Acknowledge only the verified revision after successful copying; concurrent edits must remain pending. See `docs/idea-notion-sync.md`. Manual app edits wait for a sync request; the standing capture-and-publish workflow remains synchronized as before.
+- Migration `43_idea_notion_sync.sql` was explicitly approved and applied to Fynda Idea’s configured database; 1,344 existing ideas start at revision 0 with no content modifications.
+
 ## Preference changelog
 
 | When | Change |
 |---|---|
+| 2026-10-17 | Added list-card details previews and Editorial / Dossier / Focus individual-page variations with URL-persisted selection. Added verified-admin editing, return to the selected layout, and a durable revision queue for requested Notion syncs. Checked production build, lint/types, desktop/mobile component interactions, anonymous endpoint denials, and rollback-only database integration tests. |
 | 2026-10-16 | Sort the Ideas directory by updated time descending, with favorites still first. Server pagination, client reordering, category idea lists, and MCP listings use newest updates first. The home page's explicitly highest-scored section retains score ordering. |
 | 2026-10-16 | Captured Nik's 24 nonblank inputs as 15 new ideas + 8 enriched existing ideas on both surfaces; #13 attached to #10, #25 omitted. Standing instruction: always publish captures and keep Idea Vault in sync. |
 | 2026-10-15 | Loading/favorites review: fixed collapsed shared shimmer fills and reduced-motion CSS precedence; added matching Ideas/auth/store skeletons and a layout loading boundary; removed the forced home splash delay. Seeded the Ideas favorite state from its server response, added optimistic animated reordering with rollback, serialized saves, and refreshed shared favorite state for subsequent navigation. Checked nine skeleton variants at desktop/mobile sizes and slow-auth, save/unsave, refresh, pagination, retry, and failed-save flows in an isolated component fixture; the real Ideas route remains behind its admin gate. |

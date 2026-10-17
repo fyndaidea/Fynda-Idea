@@ -7,6 +7,9 @@ import { resolveSlug } from "@/lib/slugify";
 export type IdeaStatus = "draft" | "published";
 
 export type IdeaRow = {
+  content_revision: number;
+  notion_synced_revision: number;
+  notion_synced_at: Date | null;
   id: string;
   title: string;
   slug: string;
@@ -24,6 +27,9 @@ export type IdeaRow = {
 };
 
 export type Idea = {
+  contentRevision: number;
+  notionSyncedRevision: number;
+  notionSyncedAt: Date | null;
   id: string;
   title: string;
   slug: string;
@@ -42,6 +48,9 @@ export type Idea = {
 };
 
 const ideaSelect = [
+  "content_revision",
+  "notion_synced_revision",
+  "notion_synced_at",
   "id",
   "title",
   "slug",
@@ -64,6 +73,9 @@ export function rowToIdea(row: IdeaRow, categoryMap?: Map<string, string>): Idea
     ? categoryIds.map((id) => categoryMap.get(id)).filter((n): n is string => Boolean(n))
     : [];
   return {
+    contentRevision: row.content_revision,
+    notionSyncedRevision: row.notion_synced_revision,
+    notionSyncedAt: row.notion_synced_at,
     id: String(row.id),
     title: row.title,
     slug: row.slug,
@@ -99,6 +111,7 @@ export async function listIdeas(options?: {
   search?: string;
   favoriteSlugs?: string[];
   sortBy?: "updated" | "score";
+  notionSyncPending?: boolean;
 }) {
   const limit = options?.limit ?? 100;
   const offset = options?.offset ?? 0;
@@ -107,6 +120,8 @@ export async function listIdeas(options?: {
     .select(ideaSelect)
     .limit(limit)
     .offset(offset);
+
+  if (options?.notionSyncPending) q = q.whereRef("content_revision", ">", "notion_synced_revision");
 
   if (options?.favoriteSlugs?.length) {
     q = q.orderBy(sql<number>`case when slug in (${sql.join(options.favoriteSlugs)}) then 0 else 1 end`);
@@ -277,4 +292,12 @@ export async function updateIdea(
 
 export async function deleteIdea(id: string) {
   return getDb().deleteFrom("ideas").where("id", "=", id).executeTakeFirst();
+}
+
+/** Acknowledge exactly the snapshot that was copied. Concurrent edits stay pending. */
+export async function acknowledgeIdeaNotionSync(id: string, revision: number) {
+  return getDb().updateTable("ideas")
+    .set({ notion_synced_revision: revision, notion_synced_at: new Date() })
+    .where("id", "=", id).where("content_revision", "=", revision)
+    .returning("id").executeTakeFirst();
 }

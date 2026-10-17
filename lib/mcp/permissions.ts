@@ -17,6 +17,7 @@ export const MCP_TOOL_PERMISSIONS: Record<string, McpPermission> = {
   list_collections: "ideas:read",
   create_idea: "ideas:write",
   update_idea: "ideas:write",
+  acknowledge_idea_notion_sync: "ideas:write",
   delete_idea: "ideas:write",
   create_category: "ideas:write",
   update_category: "ideas:write",

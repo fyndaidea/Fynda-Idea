@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { headers } from "next/headers";
+import { getApiUser } from "@/lib/auth/get-api-user";
+import { getProfileById } from "@/lib/db/profile";
 import { notFound } from "next/navigation";
 import IdeaDetailPage from "@/components/directory/IdeaDetailPage";
+import { parseIdeaLayout } from "@/components/directory/idea-layouts";
 import { getIdeaBySlug } from "@/lib/db/ideas-db";
 import { absoluteUrl, breadcrumbJsonLd, collectionPageJsonLd } from "@/lib/seo/json-ld";
 import { buildIdeaMetaDescription } from "@/lib/seo/metadata";
@@ -9,7 +13,7 @@ import { buildIdeaMetaDescription } from "@/lib/seo/metadata";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ layout?: string | string[] }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -35,10 +39,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function IdeaSlugPage({ params }: Props) {
-  const { slug } = await params;
+export default async function IdeaSlugPage({ params, searchParams }: Props) {
+  const [{ slug }, sp] = await Promise.all([params, searchParams]);
   const idea = await getIdeaBySlug(slug).catch(() => null);
   if (!idea) notFound();
+
+  const auth = await getApiUser(new Request("http://localhost/ideas", { headers: await headers() }));
+  const profile = auth ? await getProfileById(auth.userId) : null;
+  const canEdit = profile?.role === "admin";
 
   const path = `/ideas/${idea.slug}`;
   const breadcrumb = breadcrumbJsonLd([
@@ -65,7 +73,7 @@ export default async function IdeaSlugPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(pageLd) }}
       />
       <div className="mx-auto w-full max-w-[1280px] px-4 pb-10 pt-3 sm:pb-12 sm:pt-5">
-        <IdeaDetailPage idea={idea} />
+        <IdeaDetailPage key={idea.slug} idea={idea} canEdit={canEdit} initialLayout={parseIdeaLayout(sp.layout)} />
       </div>
     </main>
   );

@@ -44,3 +44,7 @@ UPDATE public.profiles SET role = 'admin' WHERE id = '...';
 ### Launch waitlist
 
 Apply `data/sql/36_waitlist.sql` to this product database before accepting waitlist signups. Launch emails are stored in `waitlist_entries`, separately from newsletter consent.
+
+### Idea editing and Notion sync
+
+Apply `43_idea_notion_sync.sql` before deploying idea sync tracking. See [the sync workflow](../../docs/idea-notion-sync.md). Existing records start at the synchronized baseline; future changes are queued.

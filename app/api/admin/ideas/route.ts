@@ -9,7 +9,8 @@ export async function GET(request: NextRequest) {
   const denied = await requireAdminApiResponse(request);
   if (denied) return denied;
   try {
-    const ideas = await listIdeas({ includeDrafts: true, limit: 500 });
+    const offset = Math.max(0, Number(request.nextUrl.searchParams.get("offset")) || 0);
+    const ideas = await listIdeas({ includeDrafts: true, limit: 500, offset, notionSyncPending: request.nextUrl.searchParams.get("notion_sync") === "pending" });
     return NextResponse.json({ ideas });
   } catch (e) {
     console.error("[admin/ideas GET]", e);

@@ -12,6 +12,8 @@ import { toast } from "@/lib/toast";
 
 type Props = {
   mode: "create" | "edit";
+  returnToIdea?: boolean;
+  ideaLayout?: string;
   idea?: {
     id: string;
     title: string;
@@ -29,7 +31,7 @@ type Props = {
   categories: Array<{ id: string; name: string }>;
 };
 
-export default function IdeaEditorClient({ mode, idea, categories }: Props) {
+export default function IdeaEditorClient({ mode, idea, categories, returnToIdea = false, ideaLayout = "editorial" }: Props) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [title, setTitle] = useState(idea?.title ?? "");
@@ -54,7 +56,7 @@ export default function IdeaEditorClient({ mode, idea, categories }: Props) {
       body,
       status,
       featured,
-      score: Number(score) || 50,
+      score: Number.isFinite(Number(score)) ? Number(score) : 50,
       author_name: authorName || null,
       tags: tags
         .split(",")
@@ -79,8 +81,9 @@ export default function IdeaEditorClient({ mode, idea, categories }: Props) {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Save failed");
       }
-      toast.success("Saved");
-      router.push("/admin/ideas");
+      const data = await res.json();
+      toast.success(data.idea.content_revision > data.idea.notion_synced_revision ? "Saved — pending Notion sync" : "Saved");
+      router.push(returnToIdea && data.idea.status === "published" ? `/ideas/${encodeURIComponent(data.idea.slug)}?layout=${ideaLayout}` : "/admin/ideas");
       router.refresh();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Save failed");
@@ -217,6 +220,8 @@ export default function IdeaEditorClient({ mode, idea, categories }: Props) {
         </div>
       </fieldset>
 
+      <p className="text-xs text-[color:var(--muted)]">Content changes are marked as updated and queued for Notion. Ask Mina to sync when you’re ready.</p>
+      {returnToIdea ? <a className="mr-4 text-sm underline" href={`/ideas/${idea!.slug}?layout=${ideaLayout}`}>Cancel</a> : null}
       <button type="submit" disabled={busy} className={adminBtnPrimaryClass}>
         {busy ? "Saving…" : "Save"}
       </button>
