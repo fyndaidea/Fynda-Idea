@@ -1,5 +1,6 @@
 /** Shared list/preview shape; full directory results already include the body. */
 export type IdeaPreviewModel = {
+  id?: string;
   slug: string;
   title: string;
   summary: string;

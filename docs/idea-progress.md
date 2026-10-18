@@ -14,6 +14,12 @@ The options match the Idea Vault Status schema, verified on 2026-10-17 from data
 
 No stage is chosen automatically. Listing publication (`draft` / `published`) stays separate. Personal stages do not update Notion or another user's stage. A future explicit request to sync personal stages must use the requesting account's data and reconcile it with the intended Notion page; never collapse multiple users' stages into one global status automatically.
 
+Idea cards and preview footers also show **My status**. Admins can change their own stage directly there; other accounts see a read-only label on these surfaces and can continue using their personal tracker and full idea page. Nik confirmed these controls use the existing personal stage rather than a shared listing stage. Selectors and favorites are separate from the card's preview link.
+
+Cards, previews, and full-page selectors share an account-scoped client store. Visible cards load all tracked stages in one request, and successful saves update every mounted selector for the same idea. Reads revalidate on mount; failed saves retain the saved stage. Responses identify their authenticated owner, and saves include an expected account precondition so an account switch cannot silently apply an old view's change to a different account.
+
+The preview footer places the listing's saved update date (UTC) and credited `authorName` on the left, with the personal stage on the right. **By** uses the existing author field; the database does not currently record a separate last-editor identity. Missing metadata displays **Not recorded**; partial previews show a loading placeholder until fetched.
+
 `GET /api/idea-progress` returns only the authenticated account's tracked published ideas. Optional `ideaId` filters one idea. `PATCH` accepts `{ ideaId, status }`, with `null` clearing a stage. The owner always comes from verified session/API authentication; client-supplied user IDs are ignored. Responses are private and uncached.
 
 Apply `data/sql/44_user_idea_progress.sql` before deployment. The `user_idea_progress` table uses a composite `(user_id, idea_id)` key, foreign keys, a status constraint, and owner-only row-level security. Renaming an idea preserves its tracked stages; dashboard links use the current slug. The existing app access gate is preserved.

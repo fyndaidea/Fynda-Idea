@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
   const ideaId = request.nextUrl.searchParams.get("ideaId") ?? undefined;
   if (ideaId && !idSchema.safeParse(ideaId).success) return NextResponse.json({ error: "Invalid idea" }, { status: 400, headers });
   try {
-    return NextResponse.json({ progress: await listIdeaProgress(auth.userId, ideaId) }, { headers });
+    return NextResponse.json({ userId: auth.userId, progress: await listIdeaProgress(auth.userId, ideaId) }, { headers });
   } catch (error) {
     console.error("[idea-progress GET]", error);
     return NextResponse.json({ error: "Could not load your idea statuses" }, { status: 500, headers });
@@ -26,6 +26,9 @@ export async function PATCH(request: NextRequest) {
   const auth = await getApiUser(request);
   if (!auth) return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers });
   const body = await request.json().catch(() => null);
+  if (body?.expectedUserId !== undefined && body.expectedUserId !== auth.userId) {
+    return NextResponse.json({ error: "Your account changed. Reload before updating this status." }, { status: 409, headers });
+  }
   if (!body || !idSchema.safeParse(body.ideaId).success || (body.status !== null && !isIdeaProgressStatus(body.status))) {
     return NextResponse.json({ error: "Valid idea and status required" }, { status: 400, headers });
   }

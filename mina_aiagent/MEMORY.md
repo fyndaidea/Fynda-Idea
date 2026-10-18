@@ -115,6 +115,7 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Canvas and personal idea workflow (2026-10-17)
 
+- Cards and preview footers now show the existing personal stage (Nik explicitly confirmed this ownership model). Admins can change their own stage directly there; other users see a label. Shared account-scoped client state keeps card/preview selectors consistent, batches reads, and preserves saved values on failures. The popup footer shows update date and the existing credited author; no separate last-editor identity is recorded by the current schema.
 - Nik selected **Canvas**. It is now the fixed page design; compare only the lower area using **Split**, **Panels**, and **Reading** (`body` URL parameter). No lower variation selected yet.
 - **My status** is private to each authenticated account and stable idea ID. Options match Idea Vault’s verified 13 Status names, including `🔥Ready for build`. Untracked is the default. The dashboard has **My ideas** with stage filters and editing, plus a tracker preview on Home. These personal stages do not change catalog publication or other users’ stages, and are not automatically written to Notion.
 - Admin edits open inline in the overview, key points, metadata, full details, and individual Markdown sections. Listing saves stay on the page, check revisions, preserve neighboring source, and enter the existing Notion sync queue. Failed drafts remain editable.

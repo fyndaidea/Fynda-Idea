@@ -41,6 +41,10 @@
 .idea-preview-error button{margin-top:12px}
 .idea-preview-footer{border-top:1px solid var(--card-border);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-shrink:0;padding:14px 24px;background:var(--background)}
 .idea-preview-footer p{font-size:11px;color:var(--muted)}
+.idea-updated-meta { min-width: 0; display: grid; gap: 5px; }
+.idea-updated-meta p { display: flex; flex-wrap: wrap; gap: 4px 8px; margin: 0; line-height: 1.5; }
+.idea-updated-meta p > :first-child { color: var(--muted-2); }
+.idea-updated-meta p > :last-child { color: var(--foreground); overflow-wrap: anywhere; }
 @keyframes idea-preview-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 /* Second design round: compact product typography and three different structures. */
@@ -118,6 +122,12 @@
 .idea-personal-status > p { flex-basis: 100%; font-size: 11px; color: #bc2525; }
 .idea-personal-status > p button { text-decoration: underline; margin-left: 8px; }
 .idea-personal-status-login { color: var(--accent); font-size: 12px; }
+.idea-personal-status--compact { gap: 6px; max-width: 100%; }
+.idea-personal-status--compact > label { font-size: 10px; }
+.idea-personal-status--compact select { min-width: 0; width: 155px; max-width: 100%; font-size: 11px; padding: 7px 22px 7px 9px; }
+.idea-personal-status--compact .idea-personal-status-hint:empty { display: none; }
+.idea-stage-badge { display: inline-flex; border: 1px solid var(--card-border); border-radius: 7px; padding: 6px 9px; font-size: 11px; color: var(--muted); background: var(--card); }
+.idea-preview-footer > .idea-personal-status { margin-left: auto; justify-content: flex-end; }
 .idea-body-switcher { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin: 26px 0 22px; }
 .idea-body-switcher h2 { font-size: 17px; font-weight: 550; letter-spacing: -.025em; margin-top: 5px; }
 .idea-section-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
@@ -203,8 +213,8 @@
   .idea-preview-scroll { padding: 24px 20px; }
   .idea-preview-title-row { gap: 12px; }
   .idea-preview-title-row h2 { font-size: 28px; }
-  .idea-preview-footer { padding: 12px 16px; }
-  .idea-preview-footer p { max-width: 150px; line-height: 1.6; }
+  .idea-preview-footer { padding: 12px 16px; align-items: flex-start; flex-wrap: wrap; }
+  .idea-preview-footer p { line-height: 1.6; }
   .idea-preview-tools .idea-text-link { font-size: 11px; }
 }
 @media (prefers-reduced-motion: reduce) { .idea-preview-dialog[open] { animation: none; } }

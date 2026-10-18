@@ -3,6 +3,7 @@
 import { IdeaPreviewLink } from "./IdeaPreviewLink";
 import type { IdeaPreviewModel } from "./idea-preview-model";
 import FavoriteButton from "@/components/favorites/FavoriteButton";
+import { IdeaStatusControl } from "./IdeaStatusControl";
 
 /** Minimal fields for directory cards (full Idea or hub partials). */
 export type IdeaCardModel = IdeaPreviewModel;
@@ -27,7 +28,7 @@ export function IdeaCard({ idea }: { idea: IdeaCardModel }) {
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-              <h3 className="text-base font-semibold tracking-tight text-[color:var(--foreground)]">
+              <h3 className="text-base font-semibold tracking-tight text-[color:var(--foreground)] [overflow-wrap:anywhere]">
                 {idea.title}
               </h3>
               {idea.featured ? (
@@ -72,13 +73,14 @@ export function IdeaCard({ idea }: { idea: IdeaCardModel }) {
           </ul>
         ) : null}
 
-        <div className="mt-5 border-t border-[color:var(--card-border)] pt-4">
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--card-border)] pt-4">
           <IdeaPreviewLink
             idea={idea}
             className="pointer-events-auto relative z-10 text-sm font-semibold text-[color:var(--accent)] transition hover:text-[color:var(--accent-hover)]"
           >
             View details
           </IdeaPreviewLink>
+          {idea.id ? <div className="pointer-events-auto relative z-10 min-w-0"><IdeaStatusControl ideaId={idea.id} compact adminOnly /></div> : null}
         </div>
       </div>
     </article>
@@ -109,6 +111,10 @@ export function IdeaCardSkeleton() {
             <span className="media-shimmer__sweep" />
           </div>
         </div>
+      </div>
+      <div className="mt-5 flex items-center justify-between gap-3 border-t border-[color:var(--card-border)] pt-4" aria-hidden="true">
+        <div className="media-shimmer relative h-4 w-20 overflow-hidden rounded"><span className="media-shimmer__sweep" /></div>
+        <div className="media-shimmer relative h-8 w-36 overflow-hidden rounded-lg"><span className="media-shimmer__sweep" /></div>
       </div>
     </div>
   );

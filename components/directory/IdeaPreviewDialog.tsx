@@ -8,6 +8,8 @@ import { MarkdownBody } from "@/components/docs/markdown-body";
 import FavoriteButton from "@/components/favorites/FavoriteButton";
 import { ShimmerBlock } from "@/components/ui/Shimmer";
 import type { IdeaPreviewModel } from "./idea-preview-model";
+import { IdeaUpdatedMeta } from "./IdeaUpdatedMeta";
+import { IdeaStatusControl } from "./IdeaStatusControl";
 import "./idea-detail.css";
 
 export function IdeaPreviewDialog({ idea, onClose }: { idea: IdeaPreviewModel; onClose: () => void }) {
@@ -95,7 +97,10 @@ export function IdeaPreviewDialog({ idea, onClose }: { idea: IdeaPreviewModel; o
         </section>
         {current.tags?.length ? <ul className="idea-tags" aria-label="Tags">{current.tags.map((tag) => <li key={tag}>{tag}</li>)}</ul> : null}
       </div>
-      <footer className="idea-preview-footer"><p>Explore without leaving your list.</p><button type="button" className="idea-secondary-button" onClick={onClose}>Back to ideas</button></footer>
+      <footer className="idea-preview-footer">
+        {!details && !error && !current.updatedAt ? <ShimmerBlock className="h-10 w-40" label="Loading idea metadata" /> : <IdeaUpdatedMeta idea={current} />}
+        {current.id ? <IdeaStatusControl ideaId={current.id} compact adminOnly /> : <span className="idea-muted">{error ? "Status unavailable" : "Loading status…"}</span>}
+      </footer>
     </dialog>, document.body
   );
 }
