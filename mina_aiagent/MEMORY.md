@@ -63,6 +63,13 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Growth and business intake (2026-10-18)
+
+- Captured **6 inputs** as **4 new published ideas + notes on 2 existing keepers**, synchronized with Idea Vault. New: Similarweb alternative, Shopify store revenue tracker, Fitness and coaching business, HRT and peptides company. Newsletter business and GoHighLevel agency were enriched without twinning.
+- Preserved all twelve newsletter references and both agency-first/product-first routes. Added the explicitly requested primary-source agency service research to both agency bodies; independent platform ownership is distinguished from white-label HighLevel resale. No business launch, client onboarding or treatment claims were made.
+- Verified all six captures, preserved prior content/metadata/statuses, checked reciprocal links and acknowledged only matching revisions. All six vault records remain **To Review**. No archive/delete.
+- **After:** Fynda Idea / Idea Vault **1,366 / 1,366**, all app listings published; every slug has one unique vault Link. [Capture mapping](./captures/2026-10-18-growth-business-intake.md) · [Agency research](./captures/2026-10-18-gohighlevel-agency-research.md).
+
 ### Creator, learning and community intake (2026-10-17)
 
 - **10 notes → 4 new published ideas + 6 existing keepers updated**, synchronized with Idea Vault. New: YouTube games; Streaming and streamer tools; Creator tools — revenue tracking and analytics; Content creation and analytics tools.
