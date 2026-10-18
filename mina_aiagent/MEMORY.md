@@ -63,6 +63,13 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### AI idea intake (2026-10-17)
+
+- Captured **46 supplied entries as 37 distinct records**: **14 new published ideas** and appended notes on **23 existing keepers**, on both Fynda Idea and Idea Vault. Repeated SEO, cofounder, marketing and shopping notes were consolidated; personal/business intelligence, commerce/Shopify replacement, and inbound/outbound voice notes use their existing keepers. Existing records were not merged or archived.
+- All 37 affected vault records remain **To Review**. Preserved existing descriptions, research, scores, categories, tags, author credits and statuses. Verified each appended note and both directions of links, then acknowledged only its matching app revision; no earlier pending app changes were cleared.
+- The inaccessible Facebook reel URL remains in its title under Nik's standing preference. **Naked nature** and **Frontier Tower** remain reference captures with their intended concepts open; no inferred product/brand details were added. New scientific AI, gut-health tracking, aging, live shopping, service-company, consultant-tool and acne-workflow captures remain distinct from narrower or neighboring existing concepts.
+- **After:** Fynda Idea / Idea Vault **1,358 / 1,358**, all published in the app. Mapping and original notes: [AI intake](./captures/2026-10-17-ai-intake.md).
+
 ### Shopify subscriptions and recommendation quizzes (2026-10-16)
 
 - Published **Shopify product subscriptions app — Appstle / Recharge alternative** and **Shopify product recommendation quiz app — Quiz Kit / Quizell alternative** after checking both surfaces for duplicates.
