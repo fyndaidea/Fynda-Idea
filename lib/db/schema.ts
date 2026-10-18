@@ -125,7 +125,15 @@ export interface UserApiKeys {
   updated_at: Generated<Date>;
 }
 
+export interface UserIdeaProgress {
+  user_id: string;
+  idea_id: string;
+  status: string;
+  updated_at: Generated<Date>;
+}
+
 export interface Database {
+  user_idea_progress: UserIdeaProgress;
   profiles: Profiles;
   ideas: Ideas;
   idea_submissions: IdeaSubmissions;

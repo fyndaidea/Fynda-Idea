@@ -2,7 +2,7 @@
 
 Apply `data/sql/43_idea_notion_sync.sql` before deploying the editor UI. It preserves the existing catalog as the baseline (revision 0); new records and actual content changes enter the queue. A database trigger tracks changes from the admin editor, MCP, and direct database writes. Sync acknowledgements do not change the idea's updated timestamp or reorder the list.
 
-Verified admins see **Edit idea** on every individual idea page. This opens the existing admin editor and returns to the same idea and layout after saving. The page shows **Updated — pending Notion sync** until the saved revision has been copied to Idea Vault. Saving does not automatically publish to Notion.
+Verified admins edit the overview, key points, metadata, and individual Markdown sections directly on each idea page. Saves stay in place and check the content revision before writing, so an older draft cannot overwrite newer changes. The page shows **Updated — pending Notion sync** until the saved revision has been copied to Idea Vault. Saving does not automatically publish to Notion.
 
 ## On a request to sync
 
@@ -17,3 +17,5 @@ Both admin API operations require verified authentication and the database-backe
 ## Verification
 
 `TEST_DATABASE_URL` must explicitly point at a database with migration 43 applied. Run `node --conditions=react-server --import tsx --test tests/idea-notion-sync.test.ts`; integration fixtures always roll back. Without that variable, the database test is skipped.
+
+Personal workflow stages are stored per account and use the verified Idea Vault status names. They do not change the global listing or its Notion sync revision. See [personal idea tracking](idea-progress.md).

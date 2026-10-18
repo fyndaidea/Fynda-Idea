@@ -48,3 +48,7 @@ Apply `data/sql/36_waitlist.sql` to this product database before accepting waitl
 ### Idea editing and Notion sync
 
 Apply `43_idea_notion_sync.sql` before deploying idea sync tracking. See [the sync workflow](../../docs/idea-notion-sync.md). Existing records start at the synchronized baseline; future changes are queued.
+
+### Personal idea workflow
+
+Apply `44_user_idea_progress.sql` for private per-user idea stages and the dashboard tracker. It adds a separate table with owner-only RLS. See [personal tracking](../../docs/idea-progress.md).

@@ -3,6 +3,7 @@ import { canUseMcp, visibleMcpSection } from "@/lib/mcp/access-policy";
 
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { IdeaTracker } from "@/components/dashboard/IdeaTracker";
 import ApiKeysContent from "@/components/dashboard/ApiKeysContent";
 import PreferencesContent from "@/components/dashboard/PreferencesContent";
 import {
@@ -24,6 +25,8 @@ function sectionCopy(active: DashboardSection): string | undefined {
   switch (active) {
     case "overview":
       return "Here’s what’s live on your account.";
+    case "ideas":
+      return "Track your ideas from review through build and launch.";
     case "saved":
       return "Ideas you’ve starred across the site.";
     case "preferences":
@@ -35,6 +38,7 @@ function sectionCopy(active: DashboardSection): string | undefined {
 
 function mastheadTitle(active: DashboardSection, name: string): string {
   if (active === "overview") return greetingTitle(name);
+  if (active === "ideas") return "My ideas";
   if (active === "saved") return "Saved";
   if (active === "api") return "API & MCP";
   return "Preferences";
@@ -71,6 +75,8 @@ function DashboardBody() {
           <ApiKeysContent />
         ) : active === "preferences" ? (
           <PreferencesContent />
+        ) : active === "ideas" ? (
+          <IdeaTracker />
         ) : active === "saved" ? (
           <DashboardSavedSection />
         ) : (

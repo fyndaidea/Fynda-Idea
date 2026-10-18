@@ -1,95 +1,85 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight, ArrowRight, Pencil, LayoutTemplate, PanelsTopLeft, PanelLeft, FileText, Sparkles, CalendarDays, Check, CornerDownRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Pencil, Columns2, PanelsTopLeft, AlignLeft, Sparkles, Check } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import FavoriteButton from "@/components/favorites/FavoriteButton";
 import { MarkdownBody } from "@/components/docs/markdown-body";
 import type { Idea } from "@/lib/db/ideas-db";
-import { IDEA_LAYOUTS, parseIdeaLayout, type IdeaLayout } from "./idea-layouts";
-import { ideaOutline } from "./idea-outline";
+import type { IdeaProgressStatus } from "@/lib/ideas/progress";
+import type { IdeaSectionEdit } from "@/lib/ideas/section-edit";
+import { IDEA_BODY_LAYOUTS, parseIdeaBodyLayout, type IdeaBodyLayout } from "./idea-layouts";
+import { ideaBodySections, replaceIdeaBodySection } from "./idea-outline";
+import { IdeaSectionEditor, type IdeaCategoryOption } from "./IdeaSectionEditor";
+import { IdeaStatusControl } from "./IdeaStatusControl";
 import "./idea-detail.css";
 
 function updatedDate(idea: Idea) {
   return new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }).format(new Date(idea.updatedAt));
 }
-
 function Labels({ idea }: { idea: Idea }) {
   return <div className="idea-labels"><span>Idea</span>{idea.featured ? <span>Featured</span> : null}{idea.categories.map((category) => <span key={category}>{category}</span>)}</div>;
 }
-
 function Facts({ idea }: { idea: Idea }) {
   return <dl className="idea-facts"><div><dt>Last updated</dt><dd>{updatedDate(idea)}</dd></div>{idea.authorName ? <div><dt>Added by</dt><dd>{idea.authorName}</dd></div> : null}<div><dt>Category</dt><dd>{idea.categories.join(" / ") || "Uncategorized"}</dd></div></dl>;
 }
-
 function Tags({ idea }: { idea: Idea }) {
   return idea.tags.length ? <ul className="idea-tags" aria-label="Tags">{idea.tags.map((tag) => <li key={tag}>{tag}</li>)}</ul> : null;
 }
-
 function Highlights({ idea }: { idea: Idea }) {
-  return idea.highlights.length ? <ul className="idea-key-points">{idea.highlights.map((item, index) => <li key={`${index}-${item}`}><span aria-hidden>{String(index + 1).padStart(2, "0")}</span><p>{item}</p></li>)}</ul> : null;
+  return idea.highlights.length ? <ul className="idea-key-points">{idea.highlights.map((item, index) => <li key={`${index}-${item}`}><span aria-hidden>{String(index + 1).padStart(2, "0")}</span><p>{item}</p></li>)}</ul> : <p className="idea-empty-section">No key points added yet.</p>;
 }
+const layoutIcons = { split: Columns2, panels: PanelsTopLeft, reading: AlignLeft };
 
-function Details({ idea }: { idea: Idea }) {
-  return <section id="idea-details" className="idea-reading" aria-label="Idea details">{idea.body ? <MarkdownBody markdown={idea.body} headingAnchorPrefix="idea-body" /> : <p className="idea-muted">No additional details have been added yet.</p>}</section>;
-}
-
-function Actions({ idea, canEdit, layout }: { idea: Idea; canEdit: boolean; layout: IdeaLayout }) {
-  return <div className="idea-page-actions"><div className="idea-save"><FavoriteButton itemId={idea.slug} itemTitle={idea.title} itemSubtitle={idea.summary} /><span>Save idea</span></div>{canEdit ? <Link className="idea-edit-link" href={`/admin/ideas/${idea.id}?layout=${layout}&returnTo=idea`}><Pencil size={14} aria-hidden /> Edit idea</Link> : null}</div>;
-}
-
-function SyncStatus({ idea, canEdit }: { idea: Idea; canEdit: boolean }) {
-  if (!canEdit) return null;
-  const pending = idea.contentRevision > idea.notionSyncedRevision;
-  return <p className={`idea-sync-status${pending ? " idea-sync-status--pending" : ""}`} role="status"><span aria-hidden>{pending ? <span className="idea-sync-dot" /> : <Check size={12} />}</span>{pending ? "Updated — pending Notion sync" : "No pending Notion changes"}</p>;
-}
-
-const layoutIcons = { brief: LayoutTemplate, canvas: PanelsTopLeft, workspace: PanelLeft };
-
-export default function IdeaDetailPage({ idea, canEdit = false, initialLayout = "brief" }: { idea: Idea; canEdit?: boolean; initialLayout?: IdeaLayout }) {
-  const [layout, setLayout] = useState<IdeaLayout>(initialLayout);
+export default function IdeaDetailPage({ idea: initialIdea, canEdit = false, initialBodyLayout = "split", categories = [], initialProgress }: {
+  idea: Idea;
+  canEdit?: boolean;
+  initialBodyLayout?: IdeaBodyLayout;
+  categories?: IdeaCategoryOption[];
+  initialProgress?: { userId: string; status: IdeaProgressStatus | null };
+}) {
+  const [idea, setIdea] = useState(initialIdea);
+  const [layout, setLayout] = useState<IdeaBodyLayout>(initialBodyLayout);
+  const [editing, setEditing] = useState<string | null>(null);
+  const editTriggers = useRef(new Map<string, HTMLButtonElement>());
+  const closeEditor = () => {
+    const key = editing;
+    setEditing(null);
+    if (key) window.requestAnimationFrame(() => editTriggers.current.get(key)?.focus({ preventScroll: true }));
+  };
+  const bodySections = ideaBodySections(idea.body);
   useEffect(() => {
-    const sync = () => setLayout(parseIdeaLayout(new URL(window.location.href).searchParams.get("layout")));
+    const sync = () => setLayout(parseIdeaBodyLayout(new URL(window.location.href).searchParams.get("body")));
     window.addEventListener("popstate", sync);
     return () => window.removeEventListener("popstate", sync);
   }, []);
-  const active = IDEA_LAYOUTS.find((item) => item.id === layout)!;
-  const sections = ideaOutline(idea.body);
-  const selectLayout = (value: IdeaLayout) => {
-    setLayout(value);
-    const url = new URL(window.location.href);
-    url.searchParams.set("layout", value);
-    window.history.replaceState(null, "", url);
+  const save = async (edit: IdeaSectionEdit) => {
+    const response = await fetch(`/api/admin/ideas/${idea.id}/sections`, { method: "PATCH", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify(edit) });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data.idea) throw new Error(data.error || "Could not save this section.");
+    setIdea(data.idea); closeEditor();
   };
-  const actions = <Actions idea={idea} canEdit={canEdit} layout={layout} />;
-  const status = <SyncStatus idea={idea} canEdit={canEdit} />;
+  const editButton = (key: string, label: string) => canEdit ? <button type="button" className="idea-edit-link" ref={(node) => { if (node) editTriggers.current.set(key, node); else editTriggers.current.delete(key); }} disabled={editing !== null && editing !== key} aria-label={label} onClick={() => setEditing(key)}><Pencil size={13} aria-hidden /><span>{key.startsWith("body-") ? "Edit" : label}</span></button> : null;
+  const editor = (key: string, section: IdeaSectionEdit["section"]) => editing === key ? <IdeaSectionEditor key={key} idea={idea} section={section} categories={categories} onSave={save} onCancel={closeEditor} /> : null;
+  const metadata = <section className="idea-detail-metadata"><div className="idea-section-head"><h2>Details</h2>{editButton("metadata", "Edit details")}</div>{editing === "metadata" ? editor("metadata", "metadata") : <><Facts idea={idea} /><Tags idea={idea} /></>}</section>;
+  const highlights = <section className="idea-detail-highlights"><div className="idea-section-head"><h2>Key points</h2>{editButton("highlights", "Edit key points")}</div>{editing === "highlights" ? editor("highlights", "highlights") : <Highlights idea={idea} />}</section>;
+  const details = <section className="idea-canvas-document" aria-label="Idea details"><div className="idea-section-head idea-document-head"><h2>In detail</h2>{editButton("body", "Edit full details")}</div>{editing === "body" ? editor("body", "body") : <div id="idea-details" className="idea-reading">{idea.body ? <MarkdownBody markdown={idea.body} headingAnchorPrefix="idea-body"
+    headingActions={canEdit ? (line) => { const section = bodySections.find((item) => item.id === `idea-body-${line}`); return section ? editButton(`body-${line}`, `Edit ${section.title}`) : null; } : undefined}
+    headingEditor={canEdit ? (line) => {
+      const section = bodySections.find((item) => item.id === `idea-body-${line}`);
+      return section && editing === `body-${line}` ? <IdeaSectionEditor key={`body-${line}`} idea={idea} section="body" heading={section.title} bodySource={section.source} transformBody={(source) => replaceIdeaBodySection(idea.body, section, source)} onSave={save} onCancel={closeEditor} /> : null;
+    } : undefined}
+  /> : <p className="idea-muted">No additional details have been added yet.</p>}</div>}</section>;
 
-  return (
-    <article className={`idea-detail idea-detail--${layout}`} data-idea-layout={layout}>
-      <div className="idea-layout-toolbar">
-        <Link href="/ideas" className="idea-back-link"><ArrowLeft size={15} aria-hidden /> Ideas<span>/</span><strong>Overview</strong></Link>
-        <div className="idea-layout-picker"><span>Try a layout</span><div role="group" aria-label="Idea page layout">{IDEA_LAYOUTS.map((item) => { const Icon = layoutIcons[item.id]; return <button key={item.id} type="button" title={item.description} aria-pressed={layout === item.id} onClick={() => selectLayout(item.id)}><Icon size={14} aria-hidden />{item.name}</button>; })}</div></div>
-      </div>
-      <p className="sr-only" role="status">{active.description}</p>
-
-      {layout === "brief" ? <div className="idea-brief">
-        <header className="idea-brief-hero" id="idea-overview">
-          <div className="idea-brief-heading"><div className="idea-product-icon" aria-hidden><Sparkles size={28} strokeWidth={1.5} /></div><div><Labels idea={idea} /><h1>{idea.title}</h1><p className="idea-lead">{idea.summary}</p></div></div>
-          <div className="idea-hero-bottom"><p className="idea-byline"><CalendarDays size={14} aria-hidden /> Updated {updatedDate(idea)}{idea.authorName ? <><span>·</span>{idea.authorName}</> : null}</p>{actions}</div>{status}
-        </header>
-        <div className="idea-brief-grid"><div className="idea-brief-document"><div className="idea-document-label"><FileText size={15} aria-hidden /><span>The idea, in detail</span></div><Details idea={idea} /></div><aside className="idea-brief-sidebar">{idea.highlights.length ? <section><h2>Why it’s interesting</h2><Highlights idea={idea} /></section> : null}<section><h2>Details</h2><Facts idea={idea} /><Tags idea={idea} /></section><Link href="/ideas" className="idea-explore-link">Discover more ideas <ArrowUpRight size={16} aria-hidden /></Link></aside></div>
-      </div> : null}
-
-      {layout === "canvas" ? <div className="idea-canvas">
-        <header className="idea-canvas-hero" id="idea-overview"><div className="idea-canvas-kicker"><span><Sparkles size={15} aria-hidden /> Fynda / Idea vault</span><span>Explore the possibility</span></div><Labels idea={idea} /><h1>{idea.title}</h1><p className="idea-lead">{idea.summary}</p><div className="idea-hero-bottom"><p className="idea-byline">{idea.authorName || "Fynda Idea"}<span>·</span>{updatedDate(idea)}</p>{actions}</div>{status}</header>
-        {idea.highlights.length ? <section className="idea-canvas-points" aria-labelledby="idea-canvas-points-title"><div className="idea-canvas-section-title"><h2 id="idea-canvas-points-title">The opportunity</h2><span>{String(idea.highlights.length).padStart(2, "0")} key points</span></div><Highlights idea={idea} /></section> : null}
-        <div className="idea-canvas-content"><aside><span className="idea-eyebrow">A closer look</span><h2>Inside the idea.</h2><Facts idea={idea} /><Tags idea={idea} /></aside><div className="idea-canvas-document"><Details idea={idea} /></div></div><Link href="/ideas" className="idea-canvas-next"><span>Keep your next idea close.</span>Explore the vault <ArrowRight size={18} aria-hidden /></Link>
-      </div> : null}
-
-      {layout === "workspace" ? <div className="idea-workspace">
-        <aside className="idea-workspace-sidebar"><div className="idea-workspace-label"><FileText size={15} aria-hidden /><span>Idea document</span></div><nav aria-label="On this page"><h2>On this page</h2><a href="#idea-overview">Overview</a>{sections.length ? sections.map((section) => <a key={section.id} href={`#${section.id}`}><CornerDownRight size={12} aria-hidden />{section.title}</a>) : <a href="#idea-details">Details</a>}{idea.highlights.length ? <a href="#idea-workspace-highlights">Key points</a> : null}</nav><div className="idea-workspace-properties"><Facts idea={idea} /><Tags idea={idea} /></div></aside>
-        <div className="idea-workspace-document"><header id="idea-overview"><div className="idea-workspace-top"><Labels idea={idea} />{actions}</div><h1>{idea.title}</h1><p className="idea-workspace-summary">{idea.summary}</p>{status}</header><Details idea={idea} />{idea.highlights.length ? <section className="idea-workspace-highlights" id="idea-workspace-highlights"><h2>Key points</h2><Highlights idea={idea} /></section> : null}<div className="idea-workspace-mobile-properties"><Facts idea={idea} /><Tags idea={idea} /></div><footer><span>End of idea</span><Link href="/ideas">Back to ideas <ArrowUpRight size={14} aria-hidden /></Link></footer></div>
-      </div> : null}
-    </article>
-  );
+  return <article className={`idea-detail idea-detail--canvas idea-body--${layout}`} data-idea-layout="canvas" data-idea-body-layout={layout}>
+    <div className="idea-layout-toolbar"><Link href="/ideas" className="idea-back-link"><ArrowLeft size={15} aria-hidden /> Ideas<span>/</span><strong>Overview</strong></Link><span className="idea-selected-layout"><PanelsTopLeft size={13} aria-hidden /> Canvas</span></div>
+    <header className="idea-canvas-hero" id="idea-overview"><div className="idea-canvas-kicker"><span><Sparkles size={15} aria-hidden /> Fynda / Idea vault</span><span>Explore the possibility</span></div><Labels idea={idea} />{editing === "overview" ? editor("overview", "overview") : <><h1>{idea.title}</h1><p className="idea-lead">{idea.summary}</p></>}<div className="idea-hero-bottom"><p className="idea-byline">{idea.authorName || "Fynda Idea"}<span>·</span>{updatedDate(idea)}</p><div className="idea-page-actions"><div className="idea-save"><FavoriteButton itemId={idea.slug} itemTitle={idea.title} itemSubtitle={idea.summary} /><span>Save idea</span></div>{editButton("overview", "Edit overview")}</div></div>{canEdit ? <p className={`idea-sync-status${idea.contentRevision > idea.notionSyncedRevision ? " idea-sync-status--pending" : ""}`} role="status">{idea.contentRevision > idea.notionSyncedRevision ? <><span className="idea-sync-dot" aria-hidden />Updated — pending Notion sync</> : <><Check size={12} aria-hidden />No pending Notion changes</>}</p> : null}</header>
+    <div className="idea-personal-bar"><IdeaStatusControl key={idea.id} ideaId={idea.id} initial={initialProgress} /><Link href="/dashboard?section=ideas">My idea tracker <ArrowUpRight size={14} aria-hidden /></Link></div>
+    <div className="idea-body-switcher"><div><span className="idea-eyebrow">Below the canvas</span><h2>Explore the details</h2></div><div className="idea-layout-picker"><span>Details layout</span><div role="group" aria-label="Canvas detail layout">{IDEA_BODY_LAYOUTS.map((item) => { const Icon = layoutIcons[item.id]; return <button key={item.id} type="button" title={item.description} disabled={editing !== null} aria-pressed={layout === item.id} onClick={() => { setLayout(item.id); const url = new URL(window.location.href); url.searchParams.set("body", item.id); window.history.replaceState(null, "", url); }}><Icon size={14} aria-hidden />{item.name}</button>; })}</div></div></div>
+    <p className="sr-only" role="status">{IDEA_BODY_LAYOUTS.find((item) => item.id === layout)?.description}</p>
+    {layout === "split" ? <div className="idea-bottom-split"><div className="idea-canvas-points">{highlights}</div><div className="idea-canvas-content"><aside>{metadata}</aside>{details}</div></div> : null}
+    {layout === "panels" ? <div className="idea-bottom-panels"><div className="idea-panel-main">{details}</div><aside><div className="idea-panel-card">{highlights}</div><div className="idea-panel-card">{metadata}</div></aside></div> : null}
+    {layout === "reading" ? <div className="idea-bottom-reading"><div className="idea-reading-key-points">{highlights}</div>{details}<div className="idea-reading-metadata">{metadata}</div></div> : null}
+    <Link href="/ideas" className="idea-canvas-next"><span>Keep your next idea close.</span>Explore the vault <ArrowRight size={18} aria-hidden /></Link>
+  </article>;
 }

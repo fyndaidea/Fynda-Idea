@@ -263,7 +263,8 @@ export async function updateIdea(
     tags: string[];
     highlights: string[];
     author_name: string | null;
-  }>
+  }>,
+  options?: { expectedRevision?: number }
 ) {
   const patch: Record<string, unknown> = { updated_at: new Date() };
 
@@ -287,7 +288,9 @@ export async function updateIdea(
     if (input.title != null) patch.title = title;
   }
 
-  return getDb().updateTable("ideas").set(patch).where("id", "=", id).returningAll().executeTakeFirst();
+  let query = getDb().updateTable("ideas").set(patch).where("id", "=", id);
+  if (options?.expectedRevision !== undefined) query = query.where("content_revision", "=", options.expectedRevision);
+  return query.returningAll().executeTakeFirst();
 }
 
 export async function deleteIdea(id: string) {

@@ -113,9 +113,17 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ---
 
+## Canvas and personal idea workflow (2026-10-17)
+
+- Nik selected **Canvas**. It is now the fixed page design; compare only the lower area using **Split**, **Panels**, and **Reading** (`body` URL parameter). No lower variation selected yet.
+- **My status** is private to each authenticated account and stable idea ID. Options match Idea Vault’s verified 13 Status names, including `🔥Ready for build`. Untracked is the default. The dashboard has **My ideas** with stage filters and editing, plus a tracker preview on Home. These personal stages do not change catalog publication or other users’ stages, and are not automatically written to Notion.
+- Admin edits open inline in the overview, key points, metadata, full details, and individual Markdown sections. Listing saves stay on the page, check revisions, preserve neighboring source, and enter the existing Notion sync queue. Failed drafts remain editable.
+- Migration `44_user_idea_progress.sql` was explicitly approved and applied to the configured Fynda Idea database. No live catalog content or personal stages were changed by implementation/testing; integration fixtures and credential-free test identities rolled back.
+- The existing admin access gate remains in effect. See `docs/idea-progress.md` for private tracking, API ownership and tests.
+
 ## App editing and Notion sync (2026-10-17)
 
-- Individual idea pages have an admin-only edit action returning to the selected page layout. Content saves update the timestamp and show **Updated — pending Notion sync**.
+- Individual idea pages have admin-only inline editing within their sections. Content saves update the timestamp and show **Updated — pending Notion sync**.
 - On Nik’s request to sync, inspect the pending revision queue and reconcile app edits into Idea Vault, preserving existing research and newer Notion changes. Acknowledge only the verified revision after successful copying; concurrent edits must remain pending. See `docs/idea-notion-sync.md`. Manual app edits wait for a sync request; the standing capture-and-publish workflow remains synchronized as before.
 - Migration `43_idea_notion_sync.sql` was explicitly approved and applied to Fynda Idea’s configured database; 1,344 existing ideas start at revision 0 with no content modifications.
 
@@ -123,6 +131,7 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 | When | Change |
 |---|---|
+| 2026-10-17 | Canvas selected. Added lower-area variations, private Notion-matched personal stages/dashboard tracker, and inline edits for each listing section. Applied approved migration 44. Verified desktop/mobile down to 320px, failed-save recovery, stage persistence/clearing/filtering, account isolation, real RLS, revision conflicts, anonymous endpoint denials and production build. |
 | 2026-10-17 | Nik rejected the initial three individual-page styles. Replaced them with Brief (compact product overview), Canvas (dark header and numbered highlights), and Workspace (document with real section links). Kept the comparison switcher, admin edit/sync actions and old layout URL compatibility. Checked desktop/mobile down to 320px, section targets, refresh selection, favorites, types/lint and production build. No final layout selected yet. |
 | 2026-10-17 | Added list-card details previews and Editorial / Dossier / Focus individual-page variations with URL-persisted selection. Added verified-admin editing, return to the selected layout, and a durable revision queue for requested Notion syncs. Checked production build, lint/types, desktop/mobile component interactions, anonymous endpoint denials, and rollback-only database integration tests. |
 | 2026-10-16 | Sort the Ideas directory by updated time descending, with favorites still first. Server pagination, client reordering, category idea lists, and MCP listings use newest updates first. The home page's explicitly highest-scored section retains score ordering. |

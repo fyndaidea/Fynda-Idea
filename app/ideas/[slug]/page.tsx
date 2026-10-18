@@ -5,7 +5,9 @@ import { getApiUser } from "@/lib/auth/get-api-user";
 import { getProfileById } from "@/lib/db/profile";
 import { notFound } from "next/navigation";
 import IdeaDetailPage from "@/components/directory/IdeaDetailPage";
-import { parseIdeaLayout } from "@/components/directory/idea-layouts";
+import { listIdeaProgress } from "@/lib/db/idea-progress-db";
+import { listCategories } from "@/lib/db/categories-db";
+import { parseIdeaBodyLayout } from "@/components/directory/idea-layouts";
 import { getIdeaBySlug } from "@/lib/db/ideas-db";
 import { absoluteUrl, breadcrumbJsonLd, collectionPageJsonLd } from "@/lib/seo/json-ld";
 import { buildIdeaMetaDescription } from "@/lib/seo/metadata";
@@ -13,7 +15,7 @@ import { buildIdeaMetaDescription } from "@/lib/seo/metadata";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ layout?: string | string[] }> };
+type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ body?: string | string[] }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -47,6 +49,10 @@ export default async function IdeaSlugPage({ params, searchParams }: Props) {
   const auth = await getApiUser(new Request("http://localhost/ideas", { headers: await headers() }));
   const profile = auth ? await getProfileById(auth.userId) : null;
   const canEdit = profile?.role === "admin";
+  const [progress, categories] = await Promise.all([
+    auth ? listIdeaProgress(auth.userId, idea.id).catch(() => undefined) : undefined,
+    canEdit ? listCategories({ includeUnpublished: true }) : [],
+  ]);
 
   const path = `/ideas/${idea.slug}`;
   const breadcrumb = breadcrumbJsonLd([
@@ -73,7 +79,7 @@ export default async function IdeaSlugPage({ params, searchParams }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(pageLd) }}
       />
       <div className="mx-auto w-full max-w-[1280px] px-4 pb-10 pt-3 sm:pb-12 sm:pt-5">
-        <IdeaDetailPage key={idea.slug} idea={idea} canEdit={canEdit} initialLayout={parseIdeaLayout(sp.layout)} />
+        <IdeaDetailPage key={idea.slug} idea={idea} canEdit={canEdit} categories={categories.map((category) => ({ id: String(category.id), name: category.name }))} initialBodyLayout={parseIdeaBodyLayout(sp.body)} initialProgress={auth && progress ? { userId: auth.userId, status: progress[0]?.status ?? null } : undefined} />
       </div>
     </main>
   );

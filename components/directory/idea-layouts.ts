@@ -1,15 +1,10 @@
-export const IDEA_LAYOUTS = [
-  { id: "brief", name: "Brief", description: "Product overview with a clear reading panel and key details alongside." },
-  { id: "canvas", name: "Canvas", description: "A bold opening, visual key points, and an open reading canvas." },
-  { id: "workspace", name: "Workspace", description: "A compact document with navigation to its actual sections." },
+// Canvas is the selected page layout; these variations affect only its details area.
+export const IDEA_BODY_LAYOUTS = [
+  { id: "split", name: "Split", description: "Open reading space with a compact details rail." },
+  { id: "panels", name: "Panels", description: "A contained document with key points and details alongside." },
+  { id: "reading", name: "Reading", description: "A narrow reading column with details at the end." },
 ] as const;
-
-export type IdeaLayout = (typeof IDEA_LAYOUTS)[number]["id"];
-
-export function parseIdeaLayout(value: unknown): IdeaLayout {
-  // Keep links to the first design round usable.
-  if (value === "editorial") return "brief";
-  if (value === "dossier") return "canvas";
-  if (value === "focus") return "workspace";
-  return IDEA_LAYOUTS.find((layout) => layout.id === value)?.id ?? "brief";
+export type IdeaBodyLayout = (typeof IDEA_BODY_LAYOUTS)[number]["id"];
+export function parseIdeaBodyLayout(value: unknown): IdeaBodyLayout {
+  return IDEA_BODY_LAYOUTS.find((layout) => layout.id === value)?.id ?? "split";
 }

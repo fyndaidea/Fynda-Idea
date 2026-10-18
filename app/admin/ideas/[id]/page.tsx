@@ -1,4 +1,3 @@
-import { parseIdeaLayout } from "@/components/directory/idea-layouts";
 import { notFound } from "next/navigation";
 import IdeaEditorClient from "@/components/admin/IdeaEditorClient";
 import { listCategories } from "@/lib/db/categories-db";
@@ -23,7 +22,7 @@ export default async function AdminEditIdeaPage({
     <IdeaEditorClient
       mode="edit"
       returnToIdea={sp.returnTo === "idea"}
-      ideaLayout={parseIdeaLayout(sp.layout)}
+      ideaLayout="canvas"
       idea={idea}
       categories={categories.map((c) => ({ id: String(c.id), name: c.name }))}
     />

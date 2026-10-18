@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { IdeaTracker } from "@/components/dashboard/IdeaTracker";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import {
   Bookmark,
   Check,
@@ -21,6 +22,8 @@ import type { FavoriteRow } from "@/lib/favorites/types";
 import { useDashboardData } from "@/components/dashboard/useDashboardData";
 import { ShimmerBlock } from "@/components/ui/Shimmer";
 import { btnPrimaryClass, btnSecondaryClass } from "@/lib/ui-classes";
+
+const subscribeToHydration = () => () => {};
 
 export function greetingTitle(name: string, date = new Date()) {
   const hour = date.getHours();
@@ -118,17 +121,13 @@ function OverviewContentSkeleton() {
 export function DashboardOverview() {
   const { user } = useAuth();
   const { favorites, loading, error } = useDashboardData();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(subscribeToHydration, () => true, () => false);
   const [copied, setCopied] = useState(false);
 
   const planLabel = isAdminRole(user?.role) ? "Admin" : "Member";
   const mcpUrl = mounted && typeof window !== "undefined"
     ? `${window.location.origin}/api/mcp/mcp`
     : "";
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const recent = useMemo(
     () =>
@@ -177,6 +176,8 @@ export function DashboardOverview() {
           </div>
         ))}
       </section>
+
+      <IdeaTracker compact />
 
       <section className="grid items-start gap-6 lg:grid-cols-2">
         <div className="rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card)] p-5 shadow-[var(--card-shadow)] sm:p-6">

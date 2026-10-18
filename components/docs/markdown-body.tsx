@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import type { ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -20,9 +21,11 @@ const markdownClass =
 type MarkdownBodyProps = {
   markdown: string;
   headingAnchorPrefix?: string;
+  headingActions?: (line: number) => ReactNode;
+  headingEditor?: (line: number) => ReactNode;
 };
 
-export function MarkdownBody({ markdown, headingAnchorPrefix }: MarkdownBodyProps) {
+export function MarkdownBody({ markdown, headingAnchorPrefix, headingActions, headingEditor }: MarkdownBodyProps) {
   return (
     <div className={markdownClass}>
       <ReactMarkdown
@@ -30,7 +33,8 @@ export function MarkdownBody({ markdown, headingAnchorPrefix }: MarkdownBodyProp
         components={{
           ...(headingAnchorPrefix ? {
             h2({ node, children }) {
-              return <h2 id={`${headingAnchorPrefix}-${node?.position?.start.line}`}>{children}</h2>;
+              const line = node?.position?.start.line ?? 0;
+              return <><h2 id={`${headingAnchorPrefix}-${line}`} className={headingActions ? "idea-editable-heading" : undefined}><span>{children}</span>{headingActions?.(line)}</h2>{headingEditor?.(line)}</>;
             },
           } : {}),
           a({ href, children, ...props }) {

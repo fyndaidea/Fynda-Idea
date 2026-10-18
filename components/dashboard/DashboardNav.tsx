@@ -7,7 +7,7 @@ import {
 } from "@/lib/auth/subscription-paths";
 import { ShimmerBlock } from "@/components/ui/Shimmer";
 
-export type DashboardSection = "overview" | "saved" | "preferences" | "api";
+export type DashboardSection = "overview" | "saved" | "ideas" | "preferences" | "api";
 
 export function resolveDashboardSection(
   group: string | null,
@@ -16,6 +16,7 @@ export function resolveDashboardSection(
 ): DashboardSection {
   if (group === "settings" && tab === "api") return "api";
   if (group === "settings" && tab === "preferences") return "preferences";
+  if (section === "ideas") return "ideas";
   if (section === "saved") return "saved";
   if (section === "preferences") return "preferences";
   if (section === "api") return "api";
@@ -26,6 +27,7 @@ export function resolveDashboardSection(
 
 const NAV: Array<{ id: DashboardSection; href: string; label: string }> = [
   { id: "overview", href: "/dashboard", label: "Home" },
+  { id: "ideas", href: "/dashboard?section=ideas", label: "My ideas" },
   { id: "saved", href: "/dashboard?section=saved", label: "Saved" },
   { id: "preferences", href: `/dashboard?${PREFERENCES_DASHBOARD_QUERY}`, label: "Preferences" },
   { id: "api", href: `/dashboard?${API_KEYS_DASHBOARD_QUERY}`, label: "API & MCP" },
@@ -106,7 +108,7 @@ export function DashboardPageShimmer() {
           <ShimmerBlock className="h-3 w-16" />
           <ShimmerBlock className="mt-3 h-10 w-[min(100%,22rem)]" rounded="rounded-lg" />
           <div className="mt-8 flex gap-6 pb-3.5">
-            {Array.from({ length: 4 }).map((_, i) => (
+            {Array.from({ length: 5 }).map((_, i) => (
               <ShimmerBlock key={i} className="h-4 w-16" />
             ))}
           </div>
@@ -130,7 +132,7 @@ export function DashboardPageShimmer() {
             <ShimmerBlock className="h-3 w-16" />
             <ShimmerBlock className="mt-2 h-6 w-40" />
             <div className="mt-6 space-y-4">
-              {Array.from({ length: 4 }).map((_, i) => (
+              {Array.from({ length: 5 }).map((_, i) => (
                 <div key={i} className="flex gap-3">
                   <ShimmerBlock className="h-10 w-10 shrink-0" rounded="rounded-xl" />
                   <div className="min-w-0 flex-1 space-y-2 py-1">
