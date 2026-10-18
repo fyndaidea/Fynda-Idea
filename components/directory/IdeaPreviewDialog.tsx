@@ -99,7 +99,7 @@ export function IdeaPreviewDialog({ idea, onClose }: { idea: IdeaPreviewModel; o
       </div>
       <footer className="idea-preview-footer">
         {!details && !error && !current.updatedAt ? <ShimmerBlock className="h-10 w-40" label="Loading idea metadata" /> : <IdeaUpdatedMeta idea={current} />}
-        {current.id ? <IdeaStatusControl ideaId={current.id} compact adminOnly /> : <span className="idea-muted">{error ? "Status unavailable" : "Loading status…"}</span>}
+        {current.id ? <IdeaStatusControl ideaId={current.id} compact /> : <span className="idea-muted">{error ? "Status unavailable" : "Loading status…"}</span>}
       </footer>
     </dialog>, document.body
   );

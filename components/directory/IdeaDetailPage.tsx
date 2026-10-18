@@ -31,7 +31,7 @@ function Highlights({ idea }: { idea: Idea }) {
 }
 const layoutIcons = { split: Columns2, panels: PanelsTopLeft, reading: AlignLeft };
 
-export default function IdeaDetailPage({ idea: initialIdea, canEdit = false, initialBodyLayout = "split", categories = [], initialProgress }: {
+export default function IdeaDetailPage({ idea: initialIdea, canEdit = false, initialBodyLayout = "panels", categories = [], initialProgress }: {
   idea: Idea;
   canEdit?: boolean;
   initialBodyLayout?: IdeaBodyLayout;
@@ -74,7 +74,7 @@ export default function IdeaDetailPage({ idea: initialIdea, canEdit = false, ini
   return <article className={`idea-detail idea-detail--canvas idea-body--${layout}`} data-idea-layout="canvas" data-idea-body-layout={layout}>
     <div className="idea-layout-toolbar"><Link href="/ideas" className="idea-back-link"><ArrowLeft size={15} aria-hidden /> Ideas<span>/</span><strong>Overview</strong></Link><span className="idea-selected-layout"><PanelsTopLeft size={13} aria-hidden /> Canvas</span></div>
     <header className="idea-canvas-hero" id="idea-overview"><div className="idea-canvas-kicker"><span><Sparkles size={15} aria-hidden /> Fynda / Idea vault</span><span>Explore the possibility</span></div><Labels idea={idea} />{editing === "overview" ? editor("overview", "overview") : <><h1>{idea.title}</h1><p className="idea-lead">{idea.summary}</p></>}<div className="idea-hero-bottom"><p className="idea-byline">{idea.authorName || "Fynda Idea"}<span>·</span>{updatedDate(idea)}</p><div className="idea-page-actions"><div className="idea-save"><FavoriteButton itemId={idea.slug} itemTitle={idea.title} itemSubtitle={idea.summary} /><span>Save idea</span></div>{editButton("overview", "Edit overview")}</div></div>{canEdit ? <p className={`idea-sync-status${idea.contentRevision > idea.notionSyncedRevision ? " idea-sync-status--pending" : ""}`} role="status">{idea.contentRevision > idea.notionSyncedRevision ? <><span className="idea-sync-dot" aria-hidden />Updated — pending Notion sync</> : <><Check size={12} aria-hidden />No pending Notion changes</>}</p> : null}</header>
-    <div className="idea-personal-bar"><IdeaStatusControl key={idea.id} ideaId={idea.id} initial={initialProgress} /><Link href="/dashboard?section=ideas">My idea tracker <ArrowUpRight size={14} aria-hidden /></Link></div>
+    <div className="idea-personal-bar"><IdeaStatusControl key={idea.id} ideaId={idea.id} initial={initialProgress} /><Link href="/dashboard?section=ideas">Idea tracker <ArrowUpRight size={14} aria-hidden /></Link></div>
     <div className="idea-body-switcher"><div><span className="idea-eyebrow">Below the canvas</span><h2>Explore the details</h2></div><div className="idea-layout-picker"><span>Details layout</span><div role="group" aria-label="Canvas detail layout">{IDEA_BODY_LAYOUTS.map((item) => { const Icon = layoutIcons[item.id]; return <button key={item.id} type="button" title={item.description} disabled={editing !== null} aria-pressed={layout === item.id} onClick={() => { setLayout(item.id); const url = new URL(window.location.href); url.searchParams.set("body", item.id); window.history.replaceState(null, "", url); }}><Icon size={14} aria-hidden />{item.name}</button>; })}</div></div></div>
     <p className="sr-only" role="status">{IDEA_BODY_LAYOUTS.find((item) => item.id === layout)?.description}</p>
     {layout === "split" ? <div className="idea-bottom-split"><div className="idea-canvas-points">{highlights}</div><div className="idea-canvas-content"><aside>{metadata}</aside>{details}</div></div> : null}

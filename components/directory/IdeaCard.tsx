@@ -80,7 +80,7 @@ export function IdeaCard({ idea }: { idea: IdeaCardModel }) {
           >
             View details
           </IdeaPreviewLink>
-          {idea.id ? <div className="pointer-events-auto relative z-10 min-w-0"><IdeaStatusControl ideaId={idea.id} compact adminOnly /></div> : null}
+          {idea.id ? <div className="pointer-events-auto relative z-10 min-w-0"><IdeaStatusControl ideaId={idea.id} compact /></div> : null}
         </div>
       </div>
     </article>

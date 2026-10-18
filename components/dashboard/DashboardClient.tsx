@@ -26,7 +26,7 @@ function sectionCopy(active: DashboardSection): string | undefined {
     case "overview":
       return "Here’s what’s live on your account.";
     case "ideas":
-      return "Track your ideas from review through build and launch.";
+      return "Track ideas you’re considering, from review through build and launch.";
     case "saved":
       return "Ideas you’ve starred across the site.";
     case "preferences":
@@ -38,7 +38,7 @@ function sectionCopy(active: DashboardSection): string | undefined {
 
 function mastheadTitle(active: DashboardSection, name: string): string {
   if (active === "overview") return greetingTitle(name);
-  if (active === "ideas") return "My ideas";
+  if (active === "ideas") return "Idea tracker";
   if (active === "saved") return "Saved";
   if (active === "api") return "API & MCP";
   return "Preferences";

@@ -27,7 +27,7 @@ export function resolveDashboardSection(
 
 const NAV: Array<{ id: DashboardSection; href: string; label: string }> = [
   { id: "overview", href: "/dashboard", label: "Home" },
-  { id: "ideas", href: "/dashboard?section=ideas", label: "My ideas" },
+  { id: "ideas", href: "/dashboard?section=ideas", label: "Idea tracker" },
   { id: "saved", href: "/dashboard?section=saved", label: "Saved" },
   { id: "preferences", href: `/dashboard?${PREFERENCES_DASHBOARD_QUERY}`, label: "Preferences" },
   { id: "api", href: `/dashboard?${API_KEYS_DASHBOARD_QUERY}`, label: "API & MCP" },

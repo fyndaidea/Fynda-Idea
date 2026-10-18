@@ -6,5 +6,5 @@ export const IDEA_BODY_LAYOUTS = [
 ] as const;
 export type IdeaBodyLayout = (typeof IDEA_BODY_LAYOUTS)[number]["id"];
 export function parseIdeaBodyLayout(value: unknown): IdeaBodyLayout {
-  return IDEA_BODY_LAYOUTS.find((layout) => layout.id === value)?.id ?? "split";
+  return IDEA_BODY_LAYOUTS.find((layout) => layout.id === value)?.id ?? "panels";
 }

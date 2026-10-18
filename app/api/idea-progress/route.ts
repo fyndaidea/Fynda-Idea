@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { getApiUser } from "@/lib/auth/get-api-user";
 import { getIdeaById } from "@/lib/db/ideas-db";
-import { listIdeaProgress, saveIdeaProgress } from "@/lib/db/idea-progress-db";
+import { listIdeaProgress } from "@/lib/db/idea-progress-db";
+import { saveIdeaStageForUser } from "@/lib/ideas/save-stage";
+import { NotionStatusError } from "@/lib/ideas/notion-status";
 import { isIdeaProgressStatus } from "@/lib/ideas/progress";
 
 export const dynamic = "force-dynamic";
@@ -35,9 +37,10 @@ export async function PATCH(request: NextRequest) {
   try {
     const idea = await getIdeaById(body.ideaId);
     if (!idea || idea.status !== "published") return NextResponse.json({ error: "Idea not found" }, { status: 404, headers });
-    await saveIdeaProgress(auth.userId, idea.id, body.status);
-    return NextResponse.json({ status: body.status }, { headers });
+    const result = await saveIdeaStageForUser(auth.userId, idea, body.status);
+    return NextResponse.json(result, { headers });
   } catch (error) {
+    if (error instanceof NotionStatusError) return NextResponse.json({ error: error.message }, { status: error.statusCode, headers });
     console.error("[idea-progress PATCH]", error);
     return NextResponse.json({ error: "Could not save your idea status" }, { status: 500, headers });
   }
