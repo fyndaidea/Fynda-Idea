@@ -114,17 +114,11 @@
 .idea-personal-bar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--card-border); }
 .idea-personal-bar > a { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; color: var(--accent); }
 .idea-personal-status { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
-.idea-personal-status > label { font-size: 11px; font-weight: 550; color: var(--muted); }
-.idea-personal-status select { min-width: 165px; max-width: 100%; border: 1px solid var(--card-border); border-radius: 8px; padding: 8px 30px 8px 10px; background: var(--card); color: var(--foreground); font-size: 12px; cursor: pointer; }
-.idea-personal-status select:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.idea-personal-status select:disabled { opacity: .6; cursor: wait; }
 .idea-personal-status-hint { color: var(--muted-2); font-size: 10px; }
 .idea-personal-status > p { flex-basis: 100%; font-size: 11px; color: #bc2525; }
 .idea-personal-status > p button { text-decoration: underline; margin-left: 8px; }
 .idea-personal-status-login { color: var(--accent); font-size: 12px; }
 .idea-personal-status--compact { gap: 6px; max-width: 100%; }
-.idea-personal-status--compact > label { font-size: 10px; }
-.idea-personal-status--compact select { min-width: 0; width: 155px; max-width: 100%; font-size: 11px; padding: 7px 22px 7px 9px; }
 .idea-personal-status--compact .idea-personal-status-hint:empty { display: none; }
 .idea-stage-badge { display: inline-flex; border: 1px solid var(--card-border); border-radius: 7px; padding: 6px 9px; font-size: 11px; color: var(--muted); background: var(--card); }
 .idea-preview-footer > .idea-personal-status { margin-left: auto; justify-content: flex-end; }
@@ -218,3 +212,23 @@
   .idea-preview-tools .idea-text-link { font-size: 11px; }
 }
 @media (prefers-reduced-motion: reduce) { .idea-preview-dialog[open] { animation: none; } }
+
+/* Custom personal-stage menu, including inside the preview dialog's top layer. */
+.idea-stage-trigger { display: inline-flex; align-items: center; gap: 9px; min-width: 165px; max-width: 100%; padding: 9px 11px; border: 1px solid var(--card-border); border-radius: 10px; background: var(--card); color: var(--foreground); font-size: 12px; text-align: left; cursor: pointer; transition: border-color .15s, background .15s; }
+.idea-stage-trigger > span:nth-child(2) { flex: 1; overflow-wrap: anywhere; }
+.idea-stage-trigger:hover, .idea-stage-trigger[aria-expanded="true"] { background: var(--card-muted); border-color: var(--accent-border); }
+.idea-stage-trigger:focus-visible, .idea-stage-option:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.idea-stage-trigger:disabled, .idea-stage-trigger[aria-disabled="true"] { opacity: .6; cursor: wait; }
+.idea-stage-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.idea-personal-status--compact .idea-stage-trigger { min-width: 150px; font-size: 11px; padding: 8px 10px; }
+.idea-stage-menu { position: fixed; inset: auto; margin: 0; padding: 6px; overflow-y: auto; overscroll-behavior: contain; border: 1px solid var(--card-border); border-radius: 13px; background: var(--card); color: var(--foreground); box-shadow: 0 12px 40px rgb(0 0 0 / .15), 0 2px 8px rgb(0 0 0 / .05); font-family: var(--font-sans), sans-serif; }
+.idea-stage-menu::backdrop { background: transparent; }
+.idea-stage-menu-heading { padding: 9px 9px 10px; border-bottom: 1px solid var(--card-border); font-size: 12px; font-weight: 600; }
+.idea-stage-group-heading { padding: 12px 9px 5px; font-size: 10px; color: var(--muted-2); }
+.idea-stage-option { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 34px; padding: 8px 9px; border: 0; border-radius: 7px; background: transparent; color: var(--foreground); font-size: 12px; text-align: left; cursor: pointer; }
+.idea-stage-option > span { min-width: 0; }
+.idea-stage-option > svg { margin-left: auto; color: var(--accent); flex-shrink: 0; }
+.idea-stage-option:hover, .idea-stage-option:focus-visible { background: var(--card-muted); }
+.idea-stage-option[aria-checked="true"] { background: var(--accent-muted); }
+.idea-stage-option--clear { border-top: 1px solid var(--card-border); border-radius: 0 0 7px 7px; margin-top: 7px; padding-top: 11px; color: var(--muted); }
+.idea-stage-option small { display: block; margin-top: 3px; color: var(--muted-2); font-size: 10px; }

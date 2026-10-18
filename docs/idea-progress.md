@@ -4,7 +4,7 @@ Canvas is the selected idea-page design. The lower area has a **Details layout**
 
 ## Personal stages
 
-The **My status** selector stores a private stage under the authenticated user and stable idea ID. It works independently of favorites. Choosing **Not tracking** removes that user's tracker entry. `/dashboard?section=ideas` lists tracked ideas, filters them by stage, and lets the user update stages there. The dashboard overview also includes recent tracked ideas.
+The status menu stores a private stage under the authenticated user and stable idea ID. It works independently of favorites. An unset stage displays **Set status**; choosing **Clear status** removes that user's tracker entry. Read-only badges display **No status** when unset. There is no visible “My status” label. `/dashboard?section=ideas` lists tracked ideas, filters them by stage, and lets the user update stages there. The dashboard overview also includes recent tracked ideas.
 
 The options match the Idea Vault Status schema, verified on 2026-10-17 from data source `ed0807f3-3673-82d5-9589-07793eed341c`:
 
@@ -14,7 +14,9 @@ The options match the Idea Vault Status schema, verified on 2026-10-17 from data
 
 No stage is chosen automatically. Listing publication (`draft` / `published`) stays separate. Personal stages do not update Notion or another user's stage. A future explicit request to sync personal stages must use the requesting account's data and reconcile it with the intended Notion page; never collapse multiple users' stages into one global status automatically.
 
-Idea cards and preview footers also show **My status**. Admins can change their own stage directly there; other accounts see a read-only label on these surfaces and can continue using their personal tracker and full idea page. Nik confirmed these controls use the existing personal stage rather than a shared listing stage. Selectors and favorites are separate from the card's preview link.
+Idea cards and preview footers also show the personal stage. Admins can change their own stage directly there; other accounts see a read-only label on these surfaces and can continue using their personal tracker and full idea page. Nik confirmed these controls use the existing personal stage rather than a shared listing stage. Selectors and favorites are separate from the card's preview link.
+
+The custom menu uses grouped stage options, colored indicators and a selected checkmark. A native auto popover provides top-layer placement and outside-click dismissal, including inside the native preview dialog. Positioning flips above the trigger near the bottom edge and keeps the list inside the viewport. Arrow keys, Home/End and typeahead move focus; Enter/Space choose a stage; Escape closes the menu and restores trigger focus without closing the preview. Stages remain optional; catalog/Notion stages are not automatically assigned as personal stages.
 
 Cards, previews, and full-page selectors share an account-scoped client store. Visible cards load all tracked stages in one request, and successful saves update every mounted selector for the same idea. Reads revalidate on mount; failed saves retain the saved stage. Responses identify their authenticated owner, and saves include an expected account precondition so an account switch cannot silently apply an old view's change to a different account.
 
