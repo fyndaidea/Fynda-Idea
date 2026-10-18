@@ -63,3 +63,62 @@ test("invalid vault targets, remote failures and unconfirmed statuses cannot bec
   await assert.rejects(syncIdeaNotionStatus(idea, "Potential", { token: "test-only", request: async () => new Response("", { status: 429 }) }), /Could not sync/);
   await assert.rejects(syncIdeaNotionStatus(idea, "Potential", { token: "test-only", request: async () => Response.json(page()) }), /did not confirm/);
 });
+
+test("admin display reads live Notion stages while members read only their private progress", async () => {
+  const { effectiveIdeaStages } = await import("../lib/ideas/effective-stages");
+  let remoteReads = 0;
+  const dependencies = {
+    roleForUser: async (id: string) => id === "verified-admin" ? "admin" : "user",
+    personal: async (id: string) => [{ ideaId: idea.id, slug: idea.slug, title: "Idea", summary: "", status: id === "member-a" ? "Potential" as const : "Paused" as const, updatedAt: "2026-10-18" }],
+    notion: async () => { remoteReads++; return { statuses: { [idea.id]: "To Review" as const }, errors: {} }; },
+  };
+  assert.equal((await effectiveIdeaStages("member-a", [idea], dependencies)).statuses[idea.id], "Potential");
+  assert.equal((await effectiveIdeaStages("member-b", [idea], dependencies)).statuses[idea.id], "Paused");
+  assert.equal(remoteReads, 0);
+  const admin = await effectiveIdeaStages("verified-admin", [idea], dependencies);
+  assert.equal(admin.scope, "notion");
+  assert.equal(admin.statuses[idea.id], "To Review");
+  assert.equal(remoteReads, 1);
+  await assert.rejects(effectiveIdeaStages("verified-admin", [idea], { ...dependencies, notion: async () => { throw new Error("Unavailable"); } }), /Unavailable/);
+});
+
+test("batch status reads verify both links and reject stale body labels or other vault targets", async () => {
+  const { readIdeaNotionStages } = await import("../lib/ideas/notion-stages");
+  const requests: unknown[] = [];
+  const current = { ...page(), id: pageId };
+  const request: typeof fetch = async (_url, init) => { requests.push(JSON.parse(String(init?.body))); return Response.json({ results: [current], has_more: false }); };
+  const stages = await readIdeaNotionStages([{ ...idea, body: idea.body + "\nIdea Vault status: Paused" }], { token: "test-only", request });
+  assert.equal(stages.statuses[idea.id], "To Review");
+  assert.equal(requests.length, 1, "visible ideas are queried together");
+  for (const invalid of [
+    { ...current, id: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+    { ...current, parent: { database_id: "other" } },
+    { ...current, archived: true },
+    { ...current, properties: { ...current.properties, Link: { url: "https://attacker.invalid/ideas/ai-scientist" } } },
+  ]) {
+    const result = await readIdeaNotionStages([idea], { token: "test-only", request: async () => Response.json({ results: [invalid], has_more: false }) });
+    assert.equal(result.statuses[idea.id], undefined);
+    assert.ok(result.errors[idea.id]);
+  }
+  const missing = await readIdeaNotionStages([{ ...idea, body: "Idea Vault status: To Review" }], { token: "test-only", request });
+  assert.equal(missing.statuses[idea.id], undefined);
+  assert.ok(missing.errors[idea.id]);
+  await assert.rejects(readIdeaNotionStages([idea], { token: "test-only", request: async () => new Response("", { status: 429 }) }), /Could not read/);
+});
+
+test("Notion stage filtering follows pagination instead of filtering the visible page", async () => {
+  const { notionSlugsAtStage } = await import("../lib/ideas/notion-stages");
+  let calls = 0;
+  const slugs = await notionSlugsAtStage("To Review", { token: "test-only", request: async (_url, init) => {
+    const body = JSON.parse(String(init?.body));
+    assert.deepEqual(body.filter.and[1], { property: "Status", status: { equals: "To Review" } });
+    calls++;
+    assert.equal(body.start_cursor, calls === 1 ? undefined : "next-page");
+    const current = page();
+    const slug = calls === 1 ? "ai-scientist" : "other-idea";
+    current.properties.Link.url = `https://fynda-idea-prod.vercel.app/ideas/${slug}`;
+    return Response.json({ results: [{ ...current, id: pageId }], has_more: calls === 1, next_cursor: calls === 1 ? "next-page" : null });
+  } });
+  assert.deepEqual(slugs, ["ai-scientist", "other-idea"]);
+  assert.equal(calls, 2);
+});

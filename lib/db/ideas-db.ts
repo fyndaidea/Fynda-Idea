@@ -110,8 +110,11 @@ export async function listIdeas(options?: {
   tag?: string;
   search?: string;
   favoriteSlugs?: string[];
-  sortBy?: "updated" | "score";
+  sortBy?: import("@/lib/ideas/directory-options").IdeaSort;
+  includeSlugs?: string[];
+  excludeSlugs?: string[];
   notionSyncPending?: boolean;
+  ids?: string[];
 }) {
   const limit = options?.limit ?? 100;
   const offset = options?.offset ?? 0;
@@ -121,11 +124,17 @@ export async function listIdeas(options?: {
     .limit(limit)
     .offset(offset);
 
+  if (options?.ids) q = options.ids.length ? q.where("id", "in", options.ids) : q.where(sql<boolean>`false`);
   if (options?.notionSyncPending) q = q.whereRef("content_revision", ">", "notion_synced_revision");
 
   if (options?.favoriteSlugs?.length) {
     q = q.orderBy(sql<number>`case when slug in (${sql.join(options.favoriteSlugs)}) then 0 else 1 end`);
   }
+  if (options?.includeSlugs) q = options.includeSlugs.length ? q.where("slug", "in", options.includeSlugs) : q.where(sql<boolean>`false`);
+  if (options?.excludeSlugs?.length) q = q.where("slug", "not in", options.excludeSlugs);
+  if (options?.sortBy === "title") q = q.orderBy(sql<string>`lower(title) collate "C"`, "asc");
+  if (options?.sortBy === "newest") q = q.orderBy("created_at", "desc");
+  if (options?.sortBy === "oldest") q = q.orderBy("created_at", "asc");
   if (options?.sortBy === "score") q = q.orderBy("score", "desc");
   q = q.orderBy("updated_at", "desc").orderBy("id", "asc");
 
@@ -182,8 +191,12 @@ export async function countIdeas(options?: {
   featuredOnly?: boolean;
   categoryId?: string;
   search?: string;
+  includeSlugs?: string[];
+  excludeSlugs?: string[];
 }) {
   let q = getDb().selectFrom("ideas").select(({ fn }) => fn.countAll<number>().as("c"));
+  if (options?.includeSlugs) q = options.includeSlugs.length ? q.where("slug", "in", options.includeSlugs) : q.where(sql<boolean>`false`);
+  if (options?.excludeSlugs?.length) q = q.where("slug", "not in", options.excludeSlugs);
   if (!options?.includeDrafts) {
     q = q.where("status", "=", "published");
   }

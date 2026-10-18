@@ -5,7 +5,7 @@ import { getApiUser } from "@/lib/auth/get-api-user";
 import { getProfileById } from "@/lib/db/profile";
 import { notFound } from "next/navigation";
 import IdeaDetailPage from "@/components/directory/IdeaDetailPage";
-import { listIdeaProgress } from "@/lib/db/idea-progress-db";
+import { effectiveIdeaStages } from "@/lib/ideas/effective-stages";
 import { listCategories } from "@/lib/db/categories-db";
 import { parseIdeaBodyLayout } from "@/components/directory/idea-layouts";
 import { getIdeaBySlug } from "@/lib/db/ideas-db";
@@ -50,7 +50,7 @@ export default async function IdeaSlugPage({ params, searchParams }: Props) {
   const profile = auth ? await getProfileById(auth.userId) : null;
   const canEdit = profile?.role === "admin";
   const [progress, categories] = await Promise.all([
-    auth ? listIdeaProgress(auth.userId, idea.id).catch(() => undefined) : undefined,
+    auth ? effectiveIdeaStages(auth.userId, [idea]).catch(() => undefined) : undefined,
     canEdit ? listCategories({ includeUnpublished: true }) : [],
   ]);
 
@@ -79,7 +79,7 @@ export default async function IdeaSlugPage({ params, searchParams }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(pageLd) }}
       />
       <div className="mx-auto w-full max-w-[1280px] px-4 pb-10 pt-3 sm:pb-12 sm:pt-5">
-        <IdeaDetailPage key={idea.slug} idea={idea} canEdit={canEdit} categories={categories.map((category) => ({ id: String(category.id), name: category.name }))} initialBodyLayout={parseIdeaBodyLayout(sp.body)} initialProgress={auth && progress ? { userId: auth.userId, status: progress[0]?.status ?? null } : undefined} />
+        <IdeaDetailPage key={idea.slug} idea={idea} canEdit={canEdit} categories={categories.map((category) => ({ id: String(category.id), name: category.name }))} initialBodyLayout={parseIdeaBodyLayout(sp.body)} initialProgress={auth && progress && !progress.errors[idea.id] ? { userId: auth.userId, status: progress.statuses[idea.id] ?? null, scope: progress.scope, revision: progress.revision } : undefined} />
       </div>
     </main>
   );

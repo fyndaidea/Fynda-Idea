@@ -36,7 +36,7 @@ export default function IdeaDetailPage({ idea: initialIdea, canEdit = false, ini
   canEdit?: boolean;
   initialBodyLayout?: IdeaBodyLayout;
   categories?: IdeaCategoryOption[];
-  initialProgress?: { userId: string; status: IdeaProgressStatus | null };
+  initialProgress?: { userId: string; status: IdeaProgressStatus | null; scope?: "notion" | "personal"; revision?: string };
 }) {
   const [idea, setIdea] = useState(initialIdea);
   const [layout, setLayout] = useState<IdeaBodyLayout>(initialBodyLayout);

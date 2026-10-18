@@ -8,12 +8,13 @@ import { IdeaStatusControl } from "./IdeaStatusControl";
 /** Minimal fields for directory cards (full Idea or hub partials). */
 export type IdeaCardModel = IdeaPreviewModel;
 
-export function IdeaCard({ idea }: { idea: IdeaCardModel }) {
+export function IdeaCard({ idea, view = "grid" }: { idea: IdeaCardModel; view?: "grid" | "list" }) {
   const categories = idea.categories ?? [];
   const highlights = idea.highlights ?? [];
   return (
     <article
       className={[
+        view === "list" ? "idea-list-card" : "",
         "group relative flex h-full min-h-[12rem] flex-col rounded-2xl border p-5 transition",
         "border-[color:var(--card-border)] bg-[color:var(--card)]",
         "hover:border-[color:var(--accent-border)] hover:shadow-[var(--card-shadow)]",
@@ -24,8 +25,8 @@ export function IdeaCard({ idea }: { idea: IdeaCardModel }) {
         className="absolute inset-0 z-0 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)]"
         aria-label={`View ${idea.title} details`}
       />
-      <div className="pointer-events-none relative flex flex-1 flex-col">
-        <div className="flex items-start justify-between gap-3">
+      <div className="idea-card-content pointer-events-none relative flex flex-1 flex-col">
+        <div className="idea-card-heading flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
               <h3 className="text-base font-semibold tracking-tight text-[color:var(--foreground)] [overflow-wrap:anywhere]">
@@ -58,11 +59,11 @@ export function IdeaCard({ idea }: { idea: IdeaCardModel }) {
           </span>
         </div>
 
-        <p className="mt-4 line-clamp-3 flex-1 text-sm leading-6 text-[color:var(--muted)]">
+        <p className="idea-card-summary mt-4 line-clamp-3 flex-1 text-sm leading-6 text-[color:var(--muted)]">
           {idea.summary}
         </p>
 
-        {highlights.length > 0 ? (
+        {highlights.length > 0 && view === "grid" ? (
           <ul className="mt-4 space-y-1.5">
             {highlights.slice(0, 3).map((highlight) => (
               <li key={highlight} className="flex gap-2 text-xs leading-5 text-[color:var(--muted)]">
@@ -73,7 +74,7 @@ export function IdeaCard({ idea }: { idea: IdeaCardModel }) {
           </ul>
         ) : null}
 
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--card-border)] pt-4">
+        <div className="idea-card-footer mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--card-border)] pt-4">
           <IdeaPreviewLink
             idea={idea}
             className="pointer-events-auto relative z-10 text-sm font-semibold text-[color:var(--accent)] transition hover:text-[color:var(--accent-hover)]"

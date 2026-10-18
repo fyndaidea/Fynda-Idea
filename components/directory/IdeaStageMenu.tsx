@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, ChevronDown, LoaderCircle } from "lucide-react";
-import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useId, useRef, useState, type KeyboardEvent, type MouseEvent } from "react";
 import { IDEA_PROGRESS_GROUPS, IDEA_PROGRESS_STATUSES, type IdeaProgressStatus } from "@/lib/ideas/progress";
 
 function stageColor(status: IdeaProgressStatus | null) {
@@ -11,15 +11,16 @@ function stageColor(status: IdeaProgressStatus | null) {
   return "#6676ce";
 }
 
-const options: (IdeaProgressStatus | null)[] = [...IDEA_PROGRESS_STATUSES, null];
 
 /** A top-layer menu stays above both cards and the native idea-preview dialog. */
-export function IdeaStageMenu({ status, ready, busy, onChange }: {
+export function IdeaStageMenu({ status, ready, busy, onChange, allowClear = true }: {
+  allowClear?: boolean;
   status: IdeaProgressStatus | null;
   ready: boolean;
   busy: boolean;
   onChange: (status: IdeaProgressStatus | null) => void;
 }) {
+  const options: (IdeaProgressStatus | null)[] = allowClear ? [...IDEA_PROGRESS_STATUSES, null] : [...IDEA_PROGRESS_STATUSES];
   const id = useId();
   const trigger = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLDivElement>(null);
@@ -91,10 +92,16 @@ export function IdeaStageMenu({ status, ready, busy, onChange }: {
     }
   }
 
+  function select(event: MouseEvent<HTMLButtonElement>) {
+    const value = (event.currentTarget.dataset.stage || null) as IdeaProgressStatus | null;
+    close(true);
+    if (value !== status) onChange(value);
+  }
+
   function option(value: IdeaProgressStatus | null, index: number) {
     return <button key={value ?? "clear"} ref={(node) => { items.current[index] = node; }} type="button"
       role="menuitemradio" aria-checked={status === value} tabIndex={-1} className={`idea-stage-option${value === null ? " idea-stage-option--clear" : ""}`}
-      onClick={() => { close(true); if (value !== status) onChange(value); }}>
+      data-stage={value ?? ""} onClick={select}>
       {value ? <span className="idea-stage-dot" style={{ background: stageColor(value) }} aria-hidden /> : null}
       <span>{value ?? "Clear status"}{value === null ? <small>Remove from your dashboard</small> : null}</span>
       {status === value ? <Check size={14} aria-hidden /> : null}
@@ -117,7 +124,7 @@ export function IdeaStageMenu({ status, ready, busy, onChange }: {
         <div className="idea-stage-group-heading" aria-hidden>{group.name}</div>
         {group.options.map((value) => option(value, options.indexOf(value)))}
       </div>)}
-      {option(null, options.length - 1)}
+      {allowClear ? option(null, options.length - 1) : null}
     </div>
   </>;
 }

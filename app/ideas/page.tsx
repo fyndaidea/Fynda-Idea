@@ -1,9 +1,9 @@
 import { IdeasHubBrowser } from "@/components/directory/IdeasHubBrowser";
-import { listIdeas, countIdeas } from "@/lib/db/ideas-db";
+import { ideasDirectory } from "@/lib/ideas/directory";
+import { parseDirectoryOptions } from "@/lib/ideas/directory-options";
 import { pageDescClass, pageTitleClass } from "@/lib/ui-classes";
 import { headers } from "next/headers";
 import { getApiUser } from "@/lib/auth/get-api-user";
-import { getProfileFavorites } from "@/lib/favorites/store";
 import { FavoritesProvider } from "@/components/favorites/FavoritesProvider";
 
 export const dynamic = "force-dynamic";
@@ -14,24 +14,17 @@ export const metadata = {
   description: "Browse curated startup and product ideas on Fynda Idea.",
 };
 
-const PAGE_SIZE = 24;
-
 export default async function IdeasPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; page?: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const sp = await searchParams;
-  const q = typeof sp.q === "string" ? sp.q.trim() : "";
-  const page = Math.max(1, Number(sp.page || 1) || 1);
-  const offset = (page - 1) * PAGE_SIZE;
+  const params = new URLSearchParams(Object.entries(sp).flatMap(([key, value]) => typeof value === "string" ? [[key, value]] : []));
+  const options = parseDirectoryOptions(params);
   const auth = await getApiUser(new Request("http://localhost/ideas", { headers: await headers() }));
-  const favoriteSlugs = auth ? (await getProfileFavorites(auth.userId)).idea.map((item) => item.id) : [];
-
-  const [ideas, total] = await Promise.all([
-    listIdeas({ search: q || undefined, limit: PAGE_SIZE, offset, favoriteSlugs }).catch(() => []),
-    countIdeas({ search: q || undefined }).catch(() => 0),
-  ]);
+  const result = await ideasDirectory(options, auth?.userId).catch(() => ({ ideas: [], total: 0, page: 1, favorites: [], stages: undefined, stageError: undefined, error: "Could not load ideas. Please try again." }));
+  const error = "error" in result ? result.error : undefined;
 
   return (
     <main className="bg-[color:var(--background)]">
@@ -43,13 +36,15 @@ export default async function IdeasPage({
           </p>
         </div>
 
-        <FavoritesProvider itemType="idea" initial={{ userId: auth?.userId ?? null, slugs: favoriteSlugs }}>
+        <FavoritesProvider itemType="idea" initial={{ userId: auth?.userId ?? null, slugs: result.favorites }}>
           <IdeasHubBrowser
-            initialIdeas={ideas}
-            initialTotal={total}
-            initialPage={page}
-            initialQuery={q}
+            initialIdeas={result.ideas}
+            initialTotal={result.total}
+            initialPage={result.page}
+            initialQuery={options.q}
             initialUserId={auth?.userId ?? null}
+            initialStages={result.stages}
+            initialError={error}
           />
         </FavoritesProvider>
       </div>

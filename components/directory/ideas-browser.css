@@ -1,0 +1,38 @@
+.ideas-toolbar { display:flex; align-items:center; justify-content:flex-end; gap:8px; flex-wrap:wrap; }
+.ideas-count { color:var(--muted); font-size:13px; white-space:nowrap; margin-right:6px; }
+.ideas-count strong { color:var(--foreground); font-weight:650; }
+.ideas-control-popover { position:relative; }
+.ideas-tool-button { list-style:none; display:flex; align-items:center; gap:8px; min-height:40px; padding:0 12px; border:1px solid var(--card-border); border-radius:11px; background:var(--card); font-size:12px; font-weight:550; cursor:pointer; white-space:nowrap; }
+.ideas-tool-button::-webkit-details-marker { display:none; }
+.ideas-control-popover[open]>.ideas-tool-button { border-color:var(--accent-border); background:var(--accent-muted); }
+.ideas-tool-button:focus-visible,.ideas-view-switch button:focus-visible,.ideas-radio:focus-within,.ideas-check:focus-within { outline:2px solid var(--ring); outline-offset:3px; }
+.ideas-filter-count { display:grid; place-items:center; width:18px; height:18px; border-radius:6px; color:var(--accent); background:var(--accent-muted); font-size:10px; }
+.ideas-filter-panel,.ideas-sort-panel { position:absolute; right:0; top:calc(100% + 8px); z-index:30; width:272px; max-width:calc(100vw - 32px); max-height:min(550px,65dvh); overflow-y:auto; overscroll-behavior:contain; border:1px solid var(--card-border); border-radius:14px; background:var(--card); padding:10px; box-shadow:0 14px 50px #0002; }
+.ideas-sort-panel { width:230px; }
+.ideas-panel-title { display:flex; justify-content:space-between; align-items:center; padding:6px 8px 12px; font-size:13px; }
+.ideas-panel-title button { color:var(--accent); font-size:12px; cursor:pointer; }
+.ideas-check { display:flex; gap:9px; align-items:center; min-height:38px; padding:8px; font-size:13px; cursor:pointer; }
+.ideas-check input { accent-color:var(--accent); }
+.ideas-stage-filter { border-top:1px solid var(--card-border); margin-top:10px; padding-top:8px; min-width:0; }
+.ideas-stage-filter legend { font-size:12px; font-weight:650; margin-left:8px; padding:0 5px; }
+.ideas-radio { position:relative; display:flex; align-items:center; gap:8px; min-height:36px; padding:8px; border-radius:8px; cursor:pointer; font-size:12px; }
+.ideas-radio span { flex:1; }
+.ideas-radio:hover,.ideas-radio:has(input:checked) { background:var(--accent-muted); }
+.ideas-radio:has(input:checked) { color:var(--accent); }
+.ideas-radio input { position:absolute; width:1px; height:1px; opacity:0; }
+.ideas-filter-group { color:var(--muted); font-size:10px; font-weight:650; text-transform:uppercase; letter-spacing:.08em; padding:12px 8px 6px; }
+.ideas-filter-help { font-size:11px; line-height:1.6; color:var(--muted); padding:8px; }
+.ideas-view-switch { display:flex; padding:3px; border:1px solid var(--card-border); border-radius:11px; background:var(--card); }
+.ideas-view-switch button { display:grid; place-items:center; height:32px; width:34px; border-radius:7px; color:var(--muted); cursor:pointer; }
+.ideas-view-switch button[aria-pressed=true] { color:var(--foreground); background:var(--background); box-shadow:0 1px 3px #0001; }
+.ideas-clear-filters { color:var(--muted); padding:6px; cursor:pointer; }
+.ideas-results--list { display:grid; grid-template-columns:minmax(0,1fr); gap:10px; }
+.ideas-results--list .idea-list-card { min-height:0; padding:20px 24px; }
+.ideas-results--list .idea-card-summary { margin-top:8px; }
+@media(min-width:768px) {
+ .ideas-results--list .idea-card-content { display:grid; grid-template-columns:minmax(0,1fr) minmax(210px,auto); align-items:center; gap:4px 32px; }
+ .ideas-results--list .idea-card-heading { grid-column:1; grid-row:1; }
+ .ideas-results--list .idea-card-summary { grid-column:1; grid-row:2; max-width:760px; -webkit-line-clamp:2; }
+ .ideas-results--list .idea-card-footer { grid-column:2; grid-row:1 / span 2; flex-direction:column-reverse; align-items:flex-end; border:0; padding:0; margin:0; }
+}
+@media(max-width:639px) { .ideas-toolbar { justify-content:flex-start; gap:6px; } .ideas-count { width:100%; margin:0 0 5px; } .ideas-tool-button { padding:0 10px; } .ideas-filter-panel { right:auto; left:0; } .ideas-sort-panel { right:-20px; } .ideas-results--list .idea-list-card { padding:18px; } }

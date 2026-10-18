@@ -1,97 +1,112 @@
 "use client";
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
-import { isIdeaProgressStatus, type IdeaProgress, type IdeaProgressStatus } from "@/lib/ideas/progress";
+import { isIdeaProgressStatus, type IdeaProgressStatus } from "@/lib/ideas/progress";
 
+export type IdeaStageSeed = { userId: string; status: IdeaProgressStatus | null; scope?: "notion" | "personal"; revision?: string };
 type Snapshot = {
-  loaded: boolean;
-  statuses: Record<string, IdeaProgressStatus>;
-  saved: Record<string, IdeaProgressStatus | null>;
+  statuses: Record<string, IdeaProgressStatus | null>;
+  loaded: Record<string, boolean>;
   pending: Record<string, boolean>;
   errors: Record<string, string | undefined>;
-  error?: string;
+  scope?: "notion" | "personal";
 };
-const empty: Snapshot = { loaded: false, statuses: {}, saved: {}, pending: {}, errors: {} };
-type Store = { snapshot: Snapshot; listeners: Set<() => void>; request?: Promise<void>; version: number };
+const empty: Snapshot = { statuses: {}, loaded: {}, pending: {}, errors: {} };
+type Store = { snapshot: Snapshot; listeners: Set<() => void>; queued: Set<string>; seeds: Record<string, string>; versions: Record<string, number>; timer?: ReturnType<typeof setTimeout>; request?: Promise<void> };
 const stores = new Map<string, Store>();
 function storeFor(userId: string) {
   let store = stores.get(userId);
-  if (!store) { store = { snapshot: empty, listeners: new Set(), version: 0 }; stores.set(userId, store); }
+  if (!store) { store = { snapshot: empty, listeners: new Set(), queued: new Set(), seeds: {}, versions: {} }; stores.set(userId, store); }
   return store;
 }
 function publish(store: Store, patch: Partial<Snapshot>) {
   store.snapshot = { ...store.snapshot, ...patch };
-  store.listeners.forEach((listener) => listener());
+  store.listeners.forEach(listener => listener());
 }
-function load(userId: string) {
+function queueLoad(userId: string, ideaId: string) {
   const store = storeFor(userId);
-  if (store.request) return store.request;
-  const version = store.version;
-  store.request = (async () => {
-    try {
-      const response = await fetch("/api/idea-progress", { credentials: "include", cache: "no-store" });
-      if (!response.ok) throw new Error("Could not load your status.");
-      const data = await response.json() as { userId: string; progress: IdeaProgress[] };
-      if (data.userId !== userId) throw new Error("Account changed");
-      if (!Array.isArray(data.progress)) throw new Error("Invalid status response");
-      const statuses: Snapshot["statuses"] = {};
-      for (const item of data.progress) if (isIdeaProgressStatus(item.status)) statuses[item.ideaId] = item.status;
-      // A read started before a save must never restore the older value.
-      if (store.version === version) publish(store, { loaded: true, statuses, saved: {}, error: undefined });
-    } catch {
-      if (store.version === version) publish(store, { error: "Could not load your status." });
-    } finally {
-      store.request = undefined;
-      if (store.version !== version && store.listeners.size) void load(userId);
-    }
-  })();
-  return store.request;
+  store.queued.add(ideaId);
+  if (store.timer || store.request) return;
+  store.timer = setTimeout(() => {
+    store.timer = undefined;
+    const ids = [...store.queued].slice(0, 100);
+    ids.forEach(id => store.queued.delete(id));
+    const versions = Object.fromEntries(ids.map(id => [id, store.versions[id] ?? 0]));
+    store.request = (async () => {
+      try {
+        const response = await fetch(`/api/idea-progress?scope=effective&ideaIds=${ids.join(",")}`, { credentials: "include", cache: "no-store" });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Could not load your status.");
+        if (data.userId !== userId || !["notion", "personal"].includes(data.scope)) throw new Error("Account changed. Reload to see your status.");
+        const statuses = { ...store.snapshot.statuses }, loaded = { ...store.snapshot.loaded }, errors = { ...store.snapshot.errors };
+        for (const id of ids) {
+          if ((store.versions[id] ?? 0) !== versions[id] || store.snapshot.pending[id]) continue;
+          const status: unknown = data.statuses?.[id];
+          if ((status === null || isIdeaProgressStatus(status)) && !data.errors?.[id]) {
+            statuses[id] = status; loaded[id] = true; errors[id] = undefined;
+          } else errors[id] = data.errors?.[id] || "Could not verify this idea’s status.";
+        }
+        publish(store, { statuses, loaded, errors, scope: data.scope });
+      } catch (error) {
+        const errors = { ...store.snapshot.errors };
+        for (const id of ids) if ((store.versions[id] ?? 0) === versions[id]) errors[id] = error instanceof Error ? error.message : "Could not load your status.";
+        publish(store, { errors });
+      } finally {
+        store.request = undefined;
+        if (store.queued.size) queueLoad(userId, [...store.queued][0]);
+      }
+    })();
+  }, 0);
 }
 
-/** One account-scoped read for all visible cards and previews; saves update both. */
-export function useIdeaProgress(userId: string | undefined, ideaId: string, initial?: IdeaProgressStatus | null) {
+/** Visible cards, previews and details share account-scoped values and batched authoritative reads. */
+export function useIdeaProgress(userId: string | undefined, ideaId: string, initial?: IdeaStageSeed) {
   const subscribe = useCallback((listener: () => void) => {
     if (!userId) return () => {};
-    const store = storeFor(userId);
-    store.listeners.add(listener);
+    const store = storeFor(userId); store.listeners.add(listener);
     return () => { store.listeners.delete(listener); };
   }, [userId]);
   const getSnapshot = useCallback(() => userId ? storeFor(userId).snapshot : empty, [userId]);
   const snapshot = useSyncExternalStore(subscribe, getSnapshot, () => empty);
-  useEffect(() => { if (userId) void load(userId); }, [userId]);
-  const retry = () => { if (userId) void load(userId); };
+  const seedKey = initial ? initial.revision ?? JSON.stringify([initial.userId, ideaId, initial.status, initial.scope]) : undefined;
+  useEffect(() => {
+    if (!userId || !initial || initial.userId !== userId || !seedKey) return;
+    const store = storeFor(userId);
+    if (store.seeds[ideaId] !== seedKey && !store.snapshot.pending[ideaId]) {
+      store.seeds[ideaId] = seedKey;
+      publish(store, { statuses: { ...store.snapshot.statuses, [ideaId]: initial.status }, loaded: { ...store.snapshot.loaded, [ideaId]: true }, errors: { ...store.snapshot.errors, [ideaId]: undefined }, scope: initial.scope });
+    }
+  }, [userId, ideaId, seedKey, initial]);
+  useEffect(() => { if (userId && !initial) queueLoad(userId, ideaId); }, [userId, ideaId, initial]);
+  const retry = () => { if (userId) queueLoad(userId, ideaId); };
   const save = async (status: IdeaProgressStatus | null) => {
     if (!userId) return false;
     const store = storeFor(userId);
     if (store.snapshot.pending[ideaId]) return false;
-    store.version += 1;
+    store.versions[ideaId] = (store.versions[ideaId] ?? 0) + 1;
     publish(store, { pending: { ...store.snapshot.pending, [ideaId]: true }, errors: { ...store.snapshot.errors, [ideaId]: undefined } });
     try {
-      const response = await fetch("/api/idea-progress", {
-        method: "PATCH", credentials: "include", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ideaId, status, expectedUserId: userId }),
-      });
+      const response = await fetch("/api/idea-progress", { method: "PATCH", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ideaId, status, expectedUserId: userId }) });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || "Could not save your status.");
       if (data.status !== null && !isIdeaProgressStatus(data.status)) throw new Error("Invalid status response");
-      const statuses = { ...store.snapshot.statuses };
-      if (data.status === null) delete statuses[ideaId]; else statuses[ideaId] = data.status;
-      publish(store, { statuses, saved: { ...store.snapshot.saved, [ideaId]: data.status } });
+      // An admin cannot clear the shared stage; the menu only offers concrete Notion stages.
+      publish(store, { statuses: { ...store.snapshot.statuses, [ideaId]: data.status }, loaded: { ...store.snapshot.loaded, [ideaId]: true } });
+      window.dispatchEvent(new CustomEvent("idea-stage-saved", { detail: { userId, ideaId, status: data.status } }));
       return true;
     } catch (error) {
       publish(store, { errors: { ...store.snapshot.errors, [ideaId]: error instanceof Error ? error.message : "Could not save your status." } });
+      // A remote write may have succeeded before local persistence failed. Reconcile on retry.
       return false;
     } finally {
-      store.version += 1;
       publish(store, { pending: { ...store.snapshot.pending, [ideaId]: false } });
     }
   };
-  const saved = Object.prototype.hasOwnProperty.call(snapshot.saved, ideaId);
   return {
-    status: saved ? snapshot.saved[ideaId] : snapshot.loaded ? snapshot.statuses[ideaId] ?? null : initial ?? null,
-    ready: saved || snapshot.loaded || initial !== undefined,
+    status: snapshot.loaded[ideaId] ? snapshot.statuses[ideaId] : initial?.status ?? null,
+    ready: Boolean(snapshot.loaded[ideaId]) || initial !== undefined,
+    scope: snapshot.scope ?? initial?.scope,
     busy: snapshot.pending[ideaId] ?? false,
-    error: snapshot.errors[ideaId] ?? snapshot.error,
-    save, retry,
+    error: snapshot.errors[ideaId], save, retry,
   };
 }

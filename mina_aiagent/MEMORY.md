@@ -63,6 +63,11 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Intelligence, company media and invoice workflows (2026-10-18)
+
+- Captured five supplied notes as **3 new published ideas + 2 existing keepers updated**, synchronized with Idea Vault. New: company/sector decoding channels with podcasts and in-person interviews; LinkedIn intelligence; social media intelligence. Reddit intelligence extends Reddit analyzer; invoice tracking and a late-payment AI agent with follow-up nudges extend Business OS AI.
+- Preserved content, metadata and **To Review** stages. Verified captures/links and acknowledged matching revisions only; no archive/delete or outreach messages. **After:** Fynda Idea / Idea Vault **1,369 / 1,369**, all app listings published, each slug uniquely linked. [Mapping](./captures/2026-10-18-intelligence-invoice-intake.md).
+
 ### AI Business OS strategy follow-up (2026-10-18)
 
 - Appended Nik’s full supplied GHL competitive strategy, four playbooks, examples, trade-off tables and all source links to the existing **Business OS AI — AI-powered business operating system** keeper on both surfaces. No duplicate created.
@@ -139,6 +144,12 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 | Notes | Schemas matched 1:1. `table` blocks skipped (Notion API). Market pages already in Market Vault (Sophie). |
 
 ---
+
+## Admin Notion stages and directory controls (2026-10-18)
+
+- Nik clarified that admins must display the current linked Notion Status even without a personal tracker row; members continue to use private stages. Added database-role-checked effective reads with batch queries and reciprocal target checks. Unavailable status reads show errors/retry rather than inferred defaults. Admin menus omit Clear status; verified admin writes still sync only Status, while member changes stay personal.
+- Added top-right status/favorites/featured filters, updated/newest/oldest/title/score sorts and grid/list views. URL persistence, server filtering/counts/order before pagination, and favorites-first ordering are preserved. Cards, previews and full pages share account-scoped state.
+- Verified real read-only admin APIs against Notion, anonymous denial, 16 relevant tests including rolled-back DB fixtures, focused ESLint/types, actual-component desktop/mobile browser checks down to 320px, save failure/retry, member isolation, URL refresh and preview consistency. Production Webpack build passed; local Turbopack worker binding is restricted. Full lint has unrelated existing failures. No live stages were changed by testing. See [workflow docs](../docs/idea-progress.md).
 
 ## Canvas and personal idea workflow (2026-10-17)
 

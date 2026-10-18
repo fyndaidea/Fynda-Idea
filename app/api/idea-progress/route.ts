@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { getApiUser } from "@/lib/auth/get-api-user";
-import { getIdeaById } from "@/lib/db/ideas-db";
+import { getIdeaById, listIdeas } from "@/lib/db/ideas-db";
 import { listIdeaProgress } from "@/lib/db/idea-progress-db";
 import { saveIdeaStageForUser } from "@/lib/ideas/save-stage";
 import { NotionStatusError } from "@/lib/ideas/notion-status";
+import { effectiveIdeaStages } from "@/lib/ideas/effective-stages";
 import { isIdeaProgressStatus } from "@/lib/ideas/progress";
 
 export const dynamic = "force-dynamic";
@@ -17,6 +18,12 @@ export async function GET(request: NextRequest) {
   const ideaId = request.nextUrl.searchParams.get("ideaId") ?? undefined;
   if (ideaId && !idSchema.safeParse(ideaId).success) return NextResponse.json({ error: "Invalid idea" }, { status: 400, headers });
   try {
+    if (request.nextUrl.searchParams.get("scope") === "effective") {
+      const ids = [...new Set((request.nextUrl.searchParams.get("ideaIds") ?? "").split(",").filter(Boolean))];
+      if (!ids.length || ids.length > 100 || ids.some(id => !idSchema.safeParse(id).success)) return NextResponse.json({ error: "Choose between 1 and 100 valid ideas" }, { status: 400, headers });
+      const ideas = await listIdeas({ ids, limit: 100 });
+      return NextResponse.json({ userId: auth.userId, ...await effectiveIdeaStages(auth.userId, ideas) }, { headers });
+    }
     return NextResponse.json({ userId: auth.userId, progress: await listIdeaProgress(auth.userId, ideaId) }, { headers });
   } catch (error) {
     console.error("[idea-progress GET]", error);
