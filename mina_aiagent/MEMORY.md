@@ -63,6 +63,12 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### AI Business OS strategy follow-up (2026-10-18)
+
+- Appended Nik’s full supplied GHL competitive strategy, four playbooks, examples, trade-off tables and all source links to the existing **Business OS AI — AI-powered business operating system** keeper on both surfaces. No duplicate created.
+- Retained market figures, supplier capabilities, outcomes and compliance assertions as explicitly unverified user-supplied material. Preserved earlier content, catalog metadata and **To Review** status; no research conviction or build decision added.
+- Read back the complete additions and prior blocks, verified reciprocal links, and acknowledged only the exact synced app revision. Catalog count remains **1,366**. Updated the data-plan canvas. [Capture](./captures/2026-10-18-ai-business-os.md).
+
 ### Growth and business intake (2026-10-18)
 
 - Captured **6 inputs** as **4 new published ideas + notes on 2 existing keepers**, synchronized with Idea Vault. New: Similarweb alternative, Shopify store revenue tracker, Fitness and coaching business, HRT and peptides company. Newsletter business and GoHighLevel agency were enriched without twinning.
