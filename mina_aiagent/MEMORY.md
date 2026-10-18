@@ -63,6 +63,11 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### GHL expert → agency → pain-point-led AI Business OS (2026-10-18)
+
+- Confirmed the idea already exists as the GoHighLevel agency’s agency-first route. Added Nik’s explicit sequence: GHL expertise → agency/client work → discover and solve pain points → sell/resell AI Business OS and/or replace GHL where it fits. The actual pain and solution govern the offer.
+- Updated **GoHighLevel agency** and the related **Business OS AI** product keeper in Fynda Idea and Idea Vault with reciprocal links. No new idea; no archive/merge. Verified original content/metadata preservation, unchanged **To Review** status and exact-revision sync; no earlier pending content cleared. [Capture](./captures/2026-10-18-ghl-agency-painpoints.md).
+
 ### AI Business OS — programmable technology organizations (2026-10-18)
 
 - Added the Reddit AstroPlum / Studio OS concept to the existing Business OS AI keeper on both surfaces: goals → capabilities → coordinated AI/software/tools/humans → build/integrate → operate/evolve. Included approvals, verification, evidence tracking and continuity; preserved the initial measurable-problem wedge and separate long-term research-laboratory ambition.
