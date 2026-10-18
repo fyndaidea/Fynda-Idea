@@ -63,6 +63,12 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### AI Business OS — programmable technology organizations (2026-10-18)
+
+- Added the Reddit AstroPlum / Studio OS concept to the existing Business OS AI keeper on both surfaces: goals → capabilities → coordinated AI/software/tools/humans → build/integrate → operate/evolve. Included approvals, verification, evidence tracking and continuity; preserved the initial measurable-problem wedge and separate long-term research-laboratory ambition.
+- The short URL resolved to Reddit post **1x88e2p**. Reddit required a CAPTCHA; Nik supplied the actual post and author replies, so the initial temporary pending-source note was replaced with an attributed summary. Prototype/traction claims remain self-reported, not verified results. Ads and page controls were excluded.
+- Verified both complete additions and preserved all earlier content (including invoice/late-payment agent scope), metadata and **To Review** status. Acknowledged only the matched revision. No new record, archive or status promotion; catalog count remains **1,369**. [Capture](./captures/2026-10-18-business-os-reddit-reference.md).
+
 ### Intelligence, company media and invoice workflows (2026-10-18)
 
 - Captured five supplied notes as **3 new published ideas + 2 existing keepers updated**, synchronized with Idea Vault. New: company/sector decoding channels with podcasts and in-person interviews; LinkedIn intelligence; social media intelligence. Reddit intelligence extends Reddit analyzer; invoice tracking and a late-payment AI agent with follow-up nudges extend Business OS AI.
