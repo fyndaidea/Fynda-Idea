@@ -63,6 +63,13 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Creator, learning and community intake (2026-10-17)
+
+- **10 notes → 4 new published ideas + 6 existing keepers updated**, synchronized with Idea Vault. New: YouTube games; Streaming and streamer tools; Creator tools — revenue tracking and analytics; Content creation and analytics tools.
+- Appended notes to the existing AI CRM, clipper-economy software, AI tutor/mentor, podcast, Highlevel Alternative and AI Skool-network ideas. Preserved the **Nik AI** name in the community note. Kept streamer tools distinct from streaming-content ideas, and creator revenue analytics distinct from content-creation/measurement tooling.
+- All ten affected vault records remain **To Review**. Existing titles, descriptions, research, ranking scores, metadata and statuses were preserved; no archive/merge. YouTube games remains format-unspecified. Verified raw notes, reciprocal links and matched revision acknowledgements.
+- Final verification and bookkeeping completed **2026-10-18**. **After:** Fynda Idea / Idea Vault **1,362 / 1,362**. Mapping: [Creator, learning and community intake](./captures/2026-10-17-creator-learning-intake.md).
+
 ### AI idea intake (2026-10-17)
 
 - Captured **46 supplied entries as 37 distinct records**: **14 new published ideas** and appended notes on **23 existing keepers**, on both Fynda Idea and Idea Vault. Repeated SEO, cofounder, marketing and shopping notes were consolidated; personal/business intelligence, commerce/Shopify replacement, and inbound/outbound voice notes use their existing keepers. Existing records were not merged or archived.
