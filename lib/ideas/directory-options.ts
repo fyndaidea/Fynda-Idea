@@ -19,7 +19,7 @@ export function parseDirectoryOptions(params: URLSearchParams) {
     stage: (isIdeaProgressStatus(stage) || stage === "none" ? stage : "") as IdeaProgressStatus | "none" | "",
     saved: params.get("saved") === "1",
     featured: params.get("featured") === "1",
-    view: params.get("view") === "list" ? "list" as const : "grid" as const,
+    view: (params.get("view") === "table" ? "table" : params.get("view") === "list" ? "list" : "grid") as "grid" | "list" | "table",
   };
 }
 export function compareDirectoryIdeas(a: { id: string; title: string; score: number; updatedAt: Date | string; createdAt: Date | string }, b: typeof a, sort: IdeaSort) {

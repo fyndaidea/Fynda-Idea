@@ -50,13 +50,15 @@ export function IdeaCard({ idea, view = "grid" }: { idea: IdeaCardModel; view?: 
               <p className="mt-1.5 text-xs font-serif italic text-[color:var(--muted-2)]">Idea</p>
             )}
           </div>
-          <span className="pointer-events-auto relative z-10 shrink-0">
-            <FavoriteButton
-              itemId={idea.slug}
-              itemTitle={idea.title}
-              itemSubtitle={idea.summary}
-            />
-          </span>
+          {view === "grid" ? (
+            <span className="pointer-events-auto relative z-10 shrink-0">
+              <FavoriteButton
+                itemId={idea.slug}
+                itemTitle={idea.title}
+                itemSubtitle={idea.summary}
+              />
+            </span>
+          ) : null}
         </div>
 
         <p className="idea-card-summary mt-4 line-clamp-3 flex-1 text-sm leading-6 text-[color:var(--muted)]">
@@ -81,7 +83,10 @@ export function IdeaCard({ idea, view = "grid" }: { idea: IdeaCardModel; view?: 
           >
             View details
           </IdeaPreviewLink>
-          {idea.id ? <div className="pointer-events-auto relative z-10 min-w-0"><IdeaStatusControl ideaId={idea.id} compact /></div> : null}
+          <div className={`pointer-events-auto relative z-10 min-w-0${view === "list" ? " idea-list-actions" : ""}`}>
+            {idea.id ? <IdeaStatusControl ideaId={idea.id} compact /> : null}
+            {view === "list" ? <FavoriteButton itemId={idea.slug} itemTitle={idea.title} itemSubtitle={idea.summary} /> : null}
+          </div>
         </div>
       </div>
     </article>

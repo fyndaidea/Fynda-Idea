@@ -1,12 +1,13 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useFavoritesContext } from "@/components/favorites/FavoritesProvider";
 import { IdeaCard, IdeaCardSkeleton } from "@/components/directory/IdeaCard";
 import { useSearchParams } from "next/navigation";
 import { parseDirectoryOptions, compareDirectoryIdeas, type DirectoryOptions } from "@/lib/ideas/directory-options";
 import type { StageSnapshot } from "@/lib/ideas/effective-stages";
+import { IdeasTable } from "./IdeasTable";
 import { IdeasToolbar } from "./IdeasToolbar";
 import { IdeaStageSeedContext } from "./IdeaStatusControl";
 import "./ideas-browser.css";
@@ -61,6 +62,7 @@ export function IdeasHubBrowser({
   const requestKey = JSON.stringify([query, safePage, userId, sort, stage, saved, featured]);
   const navigationPending = requestKey !== loadedKey;
   const gridRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
   const positions = useRef(new Map<string, { x: number; y: number }>());
   const visibleIdeas = useMemo(() => [...ideas].sort((a, b) =>
     Number(isFavorite(b.slug)) - Number(isFavorite(a.slug)) ||
@@ -149,18 +151,21 @@ export function IdeasHubBrowser({
             <Search className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
           </span>
           <input
+            ref={searchRef}
             value={query}
             aria-label="Search ideas"
             onChange={(e) => change({ q: e.target.value })}
             placeholder="Search ideas…"
-            className="h-11 w-full rounded-xl border border-[color:var(--card-border)] bg-[color:var(--card)] pl-10 pr-3 text-sm text-[color:var(--foreground)] outline-none ring-[color:var(--ring)] placeholder:text-[color:var(--muted)] focus:ring-2"
+            className="h-11 w-full rounded-xl border border-[color:var(--card-border)] bg-[color:var(--card)] pl-10 pr-10 text-sm text-[color:var(--foreground)] outline-none ring-[color:var(--ring)] placeholder:text-[color:var(--muted)] focus:ring-2"
           />
+          {query ? <button type="button" className="ideas-clear-search" aria-label="Clear search" title="Clear search"
+            onClick={() => { change({ q: "" }); searchRef.current?.focus(); }}><X size={15} aria-hidden /></button> : null}
         </div>
         <IdeasToolbar options={options} total={total} signedIn={Boolean(userId)} onChange={change} />
       </div>
 
-      <div ref={gridRef} aria-busy={busy} aria-label="Ideas" className={view === "list" ? "relative ideas-results--list" : "relative grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"}>
-        {showSkeleton
+      <div ref={gridRef} aria-busy={busy} aria-label="Ideas" className={view === "table" ? "relative" : view === "list" ? "relative ideas-results--list" : "relative grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"}>
+        {view === "table" ? <IdeasTable ideas={visibleIdeas} loading={showSkeleton} /> : showSkeleton
           ? Array.from({ length: 6 }).map((_, i) => <IdeaCardSkeleton key={`sk-${i}`} />)
           : visibleIdeas.map((idea) => <div key={idea.id} data-idea-id={idea.id}><IdeaCard idea={idea} view={view} /></div>)}
       </div>

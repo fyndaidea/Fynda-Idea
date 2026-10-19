@@ -63,6 +63,13 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Roblox games and directory view polish (2026-10-19)
+
+- Published **Roblox games** after full app and Idea Vault name/content dedupe checks found no Roblox match. New vault record is **To Review**, Entry Type Idea, Source Mina, with verified reciprocal links and exact-revision sync acknowledgement. Genre, audience, production approach and monetization remain open. [Capture](./captures/2026-10-19-roblox-games.md).
+- **After:** Fynda Idea / Idea Vault **1,370 / 1,370**; all listings published and every app slug uniquely linked. Updated the data-plan canvas.
+- Fixed list favorites by moving them into the far-right action group beside status. Added URL-persistent **Table** view with title/summary previews, category, status, updated date and saved controls. Reused the existing date formatter so table and preview dates match. Added a conditional search-clear button that resets the query/page while preserving other controls and restores input focus.
+- Verified production Webpack build, focused types/lint and directory/stage regressions; actual-component browser checks covered list alignment at desktop/320px, table refresh persistence, previews and shared statuses, search clear/focus, and contained horizontal table scrolling on mobile. No live favorites or stages were changed by UI testing.
+
 ### GHL expert → agency → pain-point-led AI Business OS (2026-10-18)
 
 - Confirmed the idea already exists as the GoHighLevel agency’s agency-first route. Added Nik’s explicit sequence: GHL expertise → agency/client work → discover and solve pain points → sell/resell AI Business OS and/or replace GHL where it fits. The actual pain and solution govern the offer.

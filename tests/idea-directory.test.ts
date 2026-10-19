@@ -5,6 +5,7 @@ import { parseDirectoryOptions, compareDirectoryIdeas } from "../lib/ideas/direc
 test("directory URLs validate controls and preserve typed search spaces", () => {
   assert.deepEqual(parseDirectoryOptions(new URLSearchParams("q=AI+&page=-2&sort=sql&stage=admin&view=unknown")), { q: "AI ", page: 1, sort: "updated", stage: "", view: "grid", featured: false, saved: false });
   const selected = parseDirectoryOptions(new URLSearchParams("page=2.5&sort=oldest&stage=To+Review&view=list&featured=1&saved=1"));
+  assert.equal(parseDirectoryOptions(new URLSearchParams("view=table&q=Roblox")).view, "table");
   assert.equal(selected.page, 2); assert.equal(selected.stage, "To Review"); assert.equal(selected.view, "list"); assert.ok(selected.saved && selected.featured);
   assert.equal(parseDirectoryOptions(new URLSearchParams("page=Infinity")).page, 100000);
 });
