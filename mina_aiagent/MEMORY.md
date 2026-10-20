@@ -63,6 +63,12 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Multichannel sales, own coin and community platform (2026-10-20)
+
+- Captured **3 inputs** as **1 new published listing + 2 existing keepers updated**, synchronized with Idea Vault. New: Create a crypto coin. Existing: Distribution-to-revenue engine (LinkedIn, Reddit, SMS, cold email, inbound/outbound, templates, AI agents and workflows for booking/closing); Skool alternative (Skool.com/Circle.so clone with improvements).
+- Preserved original content, metadata, source references and **To Review** stages. Crypto purpose/network/launch model and community-platform improvements remain to define; no transactions, coin issuance or outreach were performed. No archive/merge. Verified both surfaces and acknowledged matching app revisions only.
+- **After:** Fynda Idea / Idea Vault **1,371 / 1,371**, all listings published and every slug uniquely linked. Updated the data-plan canvas. [Capture mapping](./captures/2026-10-20-sales-crypto-community.md).
+
 ### Roblox games and directory view polish (2026-10-19)
 
 - Published **Roblox games** after full app and Idea Vault name/content dedupe checks found no Roblox match. New vault record is **To Review**, Entry Type Idea, Source Mina, with verified reciprocal links and exact-revision sync acknowledgement. Genre, audience, production approach and monetization remain open. [Capture](./captures/2026-10-19-roblox-games.md).
