@@ -63,6 +63,12 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Grok Bot and personal assistant setup agency (2026-10-20)
+
+- Published **Grok Bot and personal assistant setup agency** for business owners and individuals after checking the full app catalog and relevant Idea Vault names. Kept the dedicated setup-service concept distinct from broader consulting/automation agencies and assistant software. No merge/archive.
+- New vault record is **To Review**, Entry Type Idea, Source Mina. Preserved the exact user note; service packages, capabilities, pricing and ongoing support remain to define. No customer setup was performed. Verified complete capture/links and exact-revision sync.
+- **After:** Fynda Idea / Idea Vault **1,372 / 1,372**, all listings published and every slug uniquely linked. Updated the data-plan canvas. [Capture](./captures/2026-10-20-assistant-setup-agency.md).
+
 ### Multichannel sales, own coin and community platform (2026-10-20)
 
 - Captured **3 inputs** as **1 new published listing + 2 existing keepers updated**, synchronized with Idea Vault. New: Create a crypto coin. Existing: Distribution-to-revenue engine (LinkedIn, Reddit, SMS, cold email, inbound/outbound, templates, AI agents and workflows for booking/closing); Skool alternative (Skool.com/Circle.so clone with improvements).
