@@ -221,3 +221,10 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 | 2026-10-04 | Fleet-wide: **do not set Notion Status = Reviewed** unless Nik explicitly asks. |
 | 2026-10-12 | Mina moved from `~/Desktop/Projects/aiagents/mina_ideasteward` into the Fynda Idea repo at `mina_aiagent/`. `idea-data-plan.canvas.tsx` now lives under this workspace's Cursor project (`Users-nikeshhvijayabaskaran-Desktop-Projects-Fynda-Fynda-Idea-fynda-idea/canvases`). Git pull/commit now targets fynda.idea. |
 | 2026-10-15 | Full Idea Vault sync onto Fynda Idea, then closed the last gap: catalog **1326** = vault **1326**, every Link points at a live slug. |
+
+## Sales, Bible distribution, Roblox and agency intake (2026-10-21)
+
+- Four notes → two new published ideas (**Knock Knock alternative**, **Bible app + AI Bible-video distribution**) plus updates to **Roblox games** and **Marketing and Lead Gen Agency** (JKD Agency reference).
+- Knock Knock App is the likely reference from earlier sales context, explicitly marked as interpretation. X text recovered through FxTwitter; Facebook public caption/owner identified, full service unverified. Preserve original URLs and distinguish source claims from verified results.
+- Readback preserved prior content/metadata and To Review; exact sync revisions acknowledged. Catalog/Vault **1,374/1,374**, every listing linked uniquely. Canvas and Notion work log updated; no merge/archive or outreach.
+- Mapping: [October 21 captures](./captures/2026-10-21-sales-bible-agency.md).
