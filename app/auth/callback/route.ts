@@ -17,21 +17,23 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const nextRaw = searchParams.get("next");
+  const recoveryFailure = nextRaw === "/reset-password"
+    ? `${origin}/reset-password?error=invalid_reset_link` : null;
 
   if (!isSupabaseConfigured()) {
     return NextResponse.redirect(`${origin}/login?reason=configure`);
   }
 
   if (!code) {
-    return NextResponse.redirect(`${origin}/login?error=missing_code`);
+    return NextResponse.redirect(recoveryFailure ?? `${origin}/login?error=missing_code`);
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.exchangeCodeForSession(code);
+  const { data: exchanged, error } = await supabase.auth.exchangeCodeForSession(code);
   if (error) {
     console.error("[auth/callback]", error.message);
     return NextResponse.redirect(
-      `${origin}/login?error=${encodeURIComponent(error.message)}`
+      recoveryFailure ?? `${origin}/login?error=${encodeURIComponent(error.message)}`
     );
   }
 
@@ -39,7 +41,7 @@ export async function GET(request: Request) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.redirect(`${origin}/login?error=auth`);
+    return NextResponse.redirect(recoveryFailure ?? `${origin}/login?error=auth`);
   }
 
   if (!(await canUseAuthSession(supabase, user))) {
@@ -51,6 +53,11 @@ export async function GET(request: Request) {
     await upsertProfileFromUser(user);
   } catch (e) {
     console.error("[auth/callback] profile sync", e);
+  }
+
+  // Recovery must reach the password form before normal admin/dashboard routing.
+  if (nextRaw === "/reset-password" || (exchanged && "redirectType" in exchanged && exchanged.redirectType === "recovery")) {
+    return NextResponse.redirect(`${origin}/reset-password`);
   }
 
   let role: string | null = null;
