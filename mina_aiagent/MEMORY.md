@@ -228,3 +228,9 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Knock Knock App is the likely reference from earlier sales context, explicitly marked as interpretation. X text recovered through FxTwitter; Facebook public caption/owner identified, full service unverified. Preserve original URLs and distinguish source claims from verified results.
 - Readback preserved prior content/metadata and To Review; exact sync revisions acknowledged. Catalog/Vault **1,374/1,374**, every listing linked uniquely. Canvas and Notion work log updated; no merge/archive or outreach.
 - Mapping: [October 21 captures](./captures/2026-10-21-sales-bible-agency.md).
+
+## Freedom Formula AI service capture (2026-10-22)
+
+- Published **Freedom Formula-inspired AI client acquisition and growth service** and synced its **To Review** Idea Vault page. Preserved raw note and official URL; source describes DWY/DFY growth services. AI implementation examples are marked suggestions, not finalized requirements; provider claims remain unverified.
+- No exact reference match on either surface; kept related generic agency, GHL agency and software/OS ideas intact. Readback verified full content, reciprocal links and matching sync revision. Catalog/Vault **1375/1375**, every slug linked uniquely; previous app listings unchanged. No merge/archive.
+- Mapping: [October 22 capture](./captures/2026-10-22-freedom-formula-ai.md).
