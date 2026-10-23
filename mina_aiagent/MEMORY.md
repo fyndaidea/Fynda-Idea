@@ -240,3 +240,9 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Added **AI OnlyFans and Fansly** to existing **Only fans agency/platform** and **AI UGC and AI accounts** to existing **AI UGC**, preserving prior captures/research, metadata and To Review. Business/AI scope remains open where unspecified.
 - Both surfaces read back with reciprocal links and matching sync revisions; no duplicate listings, merge or archive. Catalog/Vault remain **1,375/1,375**, uniquely linked. Canvas and Notion work log updated.
 - Mapping: [AI creator/account captures](./captures/2026-10-22-ai-creators-accounts.md).
+
+## AI agency intake (2026-10-22)
+
+- Three notes → **AI Content Agency** created/published; **AI Lead Gen Agency** added to existing Marketing and Lead Gen Agency; **AI Automation Agency** added to existing AI and Automation Agency. Synced with Idea Vault, all To Review; preserved prior descriptions/research, metadata and JKD Agency reference.
+- Kept AI content service distinct from software/UGC and an ambiguous Facebook agency reference. Full readback, reciprocal links and exact sync revisions verified. Catalog/Vault **1,376/1,376**, uniquely linked. Canvas and Notion work log updated; no merge/archive.
+- Mapping: [AI agency captures](./captures/2026-10-22-ai-agencies.md).
