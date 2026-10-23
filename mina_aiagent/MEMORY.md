@@ -234,3 +234,9 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Published **Freedom Formula-inspired AI client acquisition and growth service** and synced its **To Review** Idea Vault page. Preserved raw note and official URL; source describes DWY/DFY growth services. AI implementation examples are marked suggestions, not finalized requirements; provider claims remain unverified.
 - No exact reference match on either surface; kept related generic agency, GHL agency and software/OS ideas intact. Readback verified full content, reciprocal links and matching sync revision. Catalog/Vault **1375/1375**, every slug linked uniquely; previous app listings unchanged. No merge/archive.
 - Mapping: [October 22 capture](./captures/2026-10-22-freedom-formula-ai.md).
+
+## AI creator/account follow-up (2026-10-22)
+
+- Added **AI OnlyFans and Fansly** to existing **Only fans agency/platform** and **AI UGC and AI accounts** to existing **AI UGC**, preserving prior captures/research, metadata and To Review. Business/AI scope remains open where unspecified.
+- Both surfaces read back with reciprocal links and matching sync revisions; no duplicate listings, merge or archive. Catalog/Vault remain **1,375/1,375**, uniquely linked. Canvas and Notion work log updated.
+- Mapping: [AI creator/account captures](./captures/2026-10-22-ai-creators-accounts.md).
