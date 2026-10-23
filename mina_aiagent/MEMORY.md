@@ -246,3 +246,9 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Three notes → **AI Content Agency** created/published; **AI Lead Gen Agency** added to existing Marketing and Lead Gen Agency; **AI Automation Agency** added to existing AI and Automation Agency. Synced with Idea Vault, all To Review; preserved prior descriptions/research, metadata and JKD Agency reference.
 - Kept AI content service distinct from software/UGC and an ambiguous Facebook agency reference. Full readback, reciprocal links and exact sync revisions verified. Catalog/Vault **1,376/1,376**, uniquely linked. Canvas and Notion work log updated; no merge/archive.
 - Mapping: [AI agency captures](./captures/2026-10-22-ai-agencies.md).
+
+## AI Content Agency: tools layer (2026-10-22)
+
+- Nik clarified **agency on top of tools**; checked and added **https://lgjsocial.com** (resolved www homepage) to existing AI Content Agency in Fynda Idea and Idea Vault. Updated matched summary/Description and appended note. Vendor descriptions attributed; no functionality/results tested.
+- Readback preserved prior body, other metadata and To Review; matched revision synced. Canvas and Notion work log updated. Catalog remains **1,376**, no new listing/merge/archive.
+- Mapping: [Content agency tools follow-up](./captures/2026-10-22-content-agency-tools.md).
