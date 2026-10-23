@@ -20,7 +20,15 @@ export function ResetPasswordForm() {
   useEffect(() => {
     let active = true;
     const invalidLink = new URLSearchParams(window.location.search).has("error");
-    void supabase.auth.getUser().then(({ data, error }) => {
+    const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const accessToken = hash.get("access_token");
+    const refreshToken = hash.get("refresh_token");
+    const fromHash = accessToken && refreshToken
+      ? supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken }).then(() => {
+          window.history.replaceState(null, "", window.location.pathname + window.location.search);
+        })
+      : Promise.resolve();
+    void fromHash.then(() => supabase.auth.getUser()).then(({ data, error }) => {
       if (active) setSessionState(!invalidLink && !error && data.user ? "ready" : "invalid");
     }).catch(() => { if (active) setSessionState("invalid"); });
     return () => { active = false; };

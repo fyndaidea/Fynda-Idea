@@ -1,5 +1,5 @@
 import { canUseAuthSession } from "@/lib/auth/social-login";
-import { SOCIAL_LOGIN_ADMIN_ERROR } from "@/lib/auth/social-login-policy";
+import { AUTH_SESSION_ERROR } from "@/lib/auth/social-login-policy";
 import { NextResponse } from "next/server";
 import { resolvePostAuthRedirect } from "@/lib/auth/resolve-post-auth-redirect";
 import { resolvePostLoginPath } from "@/lib/auth/post-login-path";
@@ -24,12 +24,20 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${origin}/login?reason=configure`);
   }
 
-  if (!code) {
-    return NextResponse.redirect(recoveryFailure ?? `${origin}/login?error=missing_code`);
+  const tokenHash = searchParams.get("token_hash");
+  const otpType = searchParams.get("type");
+  if (!code && !tokenHash) {
+    return NextResponse.redirect((recoveryFailure ?? (otpType === "recovery" ? `${origin}/reset-password?error=invalid_reset_link` : null)) ?? `${origin}/login?error=missing_code`);
   }
 
   const supabase = await createClient();
-  const { data: exchanged, error } = await supabase.auth.exchangeCodeForSession(code);
+  const otpTypes = ["recovery", "signup", "magiclink", "invite", "email_change", "email"] as const;
+  type OtpType = (typeof otpTypes)[number];
+  const { data: exchanged, error } = code
+    ? await supabase.auth.exchangeCodeForSession(code)
+    : otpTypes.includes(otpType as OtpType)
+      ? await supabase.auth.verifyOtp({ token_hash: tokenHash as string, type: otpType as OtpType }).then((r) => ({ data: otpType === "recovery" ? { redirectType: "recovery" } : r.data, error: r.error }))
+      : { data: null, error: { message: "Invalid link" } };
   if (error) {
     console.error("[auth/callback]", error.message);
     return NextResponse.redirect(
@@ -46,7 +54,7 @@ export async function GET(request: Request) {
 
   if (!(await canUseAuthSession(supabase, user))) {
     await supabase.auth.signOut({ scope: "local" });
-    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(SOCIAL_LOGIN_ADMIN_ERROR)}`);
+    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(AUTH_SESSION_ERROR)}`);
   }
 
   try {

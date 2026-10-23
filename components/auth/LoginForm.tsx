@@ -1,6 +1,5 @@
 "use client";
 import { useAuthCaptcha } from "@/lib/auth/use-auth-captcha";
-import { isAdminLoginPath } from "@/lib/auth/social-login-policy";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -128,12 +127,10 @@ export function LoginForm({
         </>
       ) : null}
 
-      {isAdminLoginPath(redirectNext) ? (
-        <div className={compact ? "space-y-0" : "mt-8"}>
-          <OAuthButtons next={redirectNext} disabled={busy || loading} />
-          <AuthDivider />
-        </div>
-      ) : null}
+      <div className={compact ? "space-y-0" : "mt-8"}>
+        <OAuthButtons next={redirectNext} disabled={busy || loading} />
+        <AuthDivider />
+      </div>
 
       <form className="space-y-4" onSubmit={handleSubmit}>
         <label className="space-y-1 block">

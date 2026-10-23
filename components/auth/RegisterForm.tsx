@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "@/lib/toast";
+import { AuthDivider } from "@/components/auth/AuthDivider";
+import { OAuthButtons } from "@/components/auth/OAuthButtons";
 import { useAuth } from "@/lib/auth-context";
 import { resolveClientPostLoginPath } from "@/lib/auth/resolve-client-post-login";
 
@@ -84,12 +86,15 @@ export function RegisterForm({
             Create account
           </h1>
           <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
-            Register with your email address.
+            Register with Google or email.
           </p>
         </>
       ) : null}
 
-
+      <div className={compact ? "space-y-0" : "mt-8"}>
+        <OAuthButtons next={redirectNext} disabled={busy || loading} />
+        <AuthDivider />
+      </div>
 
       <form className="space-y-4" onSubmit={handleSubmit}>
         <label className="space-y-1 block">

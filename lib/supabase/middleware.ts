@@ -1,5 +1,5 @@
 import { canUseAuthSession } from "@/lib/auth/social-login";
-import { SOCIAL_LOGIN_ADMIN_ERROR } from "@/lib/auth/social-login-policy";
+import { AUTH_SESSION_ERROR } from "@/lib/auth/social-login-policy";
 import { createServerClient } from "@supabase/ssr";
 import type { User } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
@@ -36,8 +36,8 @@ export async function updateSession(request: NextRequest): Promise<{
   if (user && !(await canUseAuthSession(supabase, user))) {
     await supabase.auth.signOut({ scope: "local" });
     const response = request.nextUrl.pathname.startsWith("/api/")
-      ? NextResponse.json({ error: SOCIAL_LOGIN_ADMIN_ERROR }, { status: 403 })
-      : NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(SOCIAL_LOGIN_ADMIN_ERROR)}`, request.url));
+      ? NextResponse.json({ error: AUTH_SESSION_ERROR }, { status: 403 })
+      : NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(AUTH_SESSION_ERROR)}`, request.url));
     supabaseResponse.cookies.getAll().forEach((cookie) => response.cookies.set(cookie));
     response.headers.set("Cache-Control", "private, no-store");
     return { response, user: null };

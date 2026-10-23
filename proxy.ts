@@ -29,6 +29,14 @@ export async function proxy(request: NextRequest) {
   // These protocol handlers validate token owners and admin roles themselves.
   if (/^\/api\/mcp\/[^/]+$/.test(path) || path === "/api/mcp/oauth/token" || path === "/api/mcp/oauth/register") return NextResponse.next();
   if (isAdminGatePublicPath(path, request.method)) return NextResponse.next();
+  // Supabase sends auth links to the Site URL when redirectTo isn't allow-listed; never show the gate for them.
+  const authParams = request.nextUrl.searchParams;
+  if (request.method === "GET" && !request.nextUrl.pathname.startsWith("/api/") && request.nextUrl.pathname !== "/auth/callback" && (authParams.has("code") || (authParams.has("token_hash") && authParams.has("type")))) {
+    const callback = new URL("/auth/callback", request.url);
+    authParams.forEach((value, key) => callback.searchParams.set(key, value));
+    if (!callback.searchParams.has("next") && authParams.get("type") === "recovery") callback.searchParams.set("next", "/reset-password");
+    return NextResponse.redirect(callback);
+  }
   // A deployment without auth configuration remains closed to the public.
   if (!isSupabaseConfigured()) return restrict(request);
 
