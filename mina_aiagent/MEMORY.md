@@ -252,3 +252,9 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Nik clarified **agency on top of tools**; checked and added **https://lgjsocial.com** (resolved www homepage) to existing AI Content Agency in Fynda Idea and Idea Vault. Updated matched summary/Description and appended note. Vendor descriptions attributed; no functionality/results tested.
 - Readback preserved prior body, other metadata and To Review; matched revision synced. Canvas and Notion work log updated. Catalog remains **1,376**, no new listing/merge/archive.
 - Mapping: [Content agency tools follow-up](./captures/2026-10-22-content-agency-tools.md).
+
+## AI CRM reaffirmation (2026-10-23)
+
+- Added Nik’s repeated **AI CRM** note to the existing **AI CRM for each industry and smaller niche** keeper on both surfaces, with no new industry/workflow inferred and no duplicate listing.
+- Readback preserved prior content, metadata and To Review; exact sync revision acknowledged. Canvas and Notion work log updated. Catalog remains **1376**; unrelated app listings unchanged. No merge/archive.
+- Mapping: [AI CRM follow-up](./captures/2026-10-23-ai-crm.md).
