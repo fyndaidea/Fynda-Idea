@@ -264,3 +264,9 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Added Nik’s **cold outreach agency** note and Reddit **1xdshds** link to existing **Marketing and Lead Gen Agency** on both surfaces. Reddit network security blocked content; preserved URL and marked methods/results unverified. No new listing; cold outreach platforms/agents remain separate.
 - Full readback preserved prior JKD Agency/AI lead-gen notes, metadata and To Review; exact sync revision acknowledged. Catalog/Vault **1376/1376**, every listing uniquely linked. Canvas and Notion work log updated; no merge/archive or outreach performed.
 - Mapping: [Cold outreach agency reference](./captures/2026-10-24-cold-outreach-agency.md).
+
+## Lower-cost indie-maker alternatives (2026-10-24)
+
+- Published **Lower-cost alternatives to indie-maker products**, synced To Review to Idea Vault. Preserved marcou/levelso raw spellings; Marc Lou/Pieter Levels identities explicitly labelled interpretations and primary portfolio URLs checked. Specific products/prices not selected or validated.
+- Existing Marc Lou/Wispr Flow idea left intact. Full readback, reciprocal links and exact sync revision verified. Catalog/Vault **1377/1377**, uniquely linked; prior app listings unchanged. Canvas and Notion work log updated. No merge/archive.
+- Mapping: [Indie-maker alternatives](./captures/2026-10-24-indie-maker-alternatives.md).
