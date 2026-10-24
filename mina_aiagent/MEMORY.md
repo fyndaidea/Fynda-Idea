@@ -282,3 +282,9 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Added influencers/creators to existing **Free business websites → upsell automations & software**: free website entry offer, then AI automation and other services. Preserved exact **https://marialatinax.pages.dev/#movieClub** reference; checked public site and recorded visible patterns without performance claims.
 - Preserved earlier SMB/paid-site/owned-builder variants, metadata and To Review; full readback, reciprocal links and exact sync revision verified. Canvas and Notion work log updated. Catalog remains **1378**; unrelated listings unchanged, no new listing/merge/archive.
 - Mapping: [Influencer website upsells](./captures/2026-10-24-influencer-websites.md).
+
+## Ring, OS suite and influencer platform (2026-10-24)
+
+- Three notes → new **AI personal-assistant ring with holographic display**; existing **AI OS — humans, robots, agents and cloud** expanded with fully autonomous PC/mobile/full-suite ambition; existing **Platform for influencers, creators and brands** expanded with connection, websites and marketing tools. LIK movie reference preserved as Nik’s inspiration; capabilities/feasibility not verified.
+- Full readback preserved prior content/metadata/statuses and original notes; exact sync revisions verified. Catalog/Vault **1379/1379**, uniquely linked. Canvas and Notion work log updated; no merge/archive.
+- Mapping: [Ring/OS/influencer captures](./captures/2026-10-24-ring-os-influencers.md).
