@@ -270,3 +270,9 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Published **Lower-cost alternatives to indie-maker products**, synced To Review to Idea Vault. Preserved marcou/levelso raw spellings; Marc Lou/Pieter Levels identities explicitly labelled interpretations and primary portfolio URLs checked. Specific products/prices not selected or validated.
 - Existing Marc Lou/Wispr Flow idea left intact. Full readback, reciprocal links and exact sync revision verified. Catalog/Vault **1377/1377**, uniquely linked; prior app listings unchanged. Canvas and Notion work log updated. No merge/archive.
 - Mapping: [Indie-maker alternatives](./captures/2026-10-24-indie-maker-alternatives.md).
+
+## Insider trading platform capture (2026-10-24)
+
+- Published **Insider trading platform**, synced To Review to Idea Vault after dedupe. Preserved raw note; product/data/workflow scope remains undefined. Related trading/portfolio/investor ideas kept intact; no return or research claims added.
+- Full readback, reciprocal links and exact sync revision verified. Catalog/Vault **1378/1378**, uniquely linked; prior app listings unchanged. Canvas and Notion work log updated; no merge/archive.
+- Mapping: [Insider trading platform](./captures/2026-10-24-insider-trading-platform.md).
