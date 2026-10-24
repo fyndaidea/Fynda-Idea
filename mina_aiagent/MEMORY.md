@@ -258,3 +258,9 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Added Nik’s repeated **AI CRM** note to the existing **AI CRM for each industry and smaller niche** keeper on both surfaces, with no new industry/workflow inferred and no duplicate listing.
 - Readback preserved prior content, metadata and To Review; exact sync revision acknowledged. Canvas and Notion work log updated. Catalog remains **1376**; unrelated app listings unchanged. No merge/archive.
 - Mapping: [AI CRM follow-up](./captures/2026-10-23-ai-crm.md).
+
+## Cold outreach agency reference (2026-10-24)
+
+- Added Nik’s **cold outreach agency** note and Reddit **1xdshds** link to existing **Marketing and Lead Gen Agency** on both surfaces. Reddit network security blocked content; preserved URL and marked methods/results unverified. No new listing; cold outreach platforms/agents remain separate.
+- Full readback preserved prior JKD Agency/AI lead-gen notes, metadata and To Review; exact sync revision acknowledged. Catalog/Vault **1376/1376**, every listing uniquely linked. Canvas and Notion work log updated; no merge/archive or outreach performed.
+- Mapping: [Cold outreach agency reference](./captures/2026-10-24-cold-outreach-agency.md).
