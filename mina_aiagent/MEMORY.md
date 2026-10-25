@@ -288,3 +288,9 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Three notes → new **AI personal-assistant ring with holographic display**; existing **AI OS — humans, robots, agents and cloud** expanded with fully autonomous PC/mobile/full-suite ambition; existing **Platform for influencers, creators and brands** expanded with connection, websites and marketing tools. LIK movie reference preserved as Nik’s inspiration; capabilities/feasibility not verified.
 - Full readback preserved prior content/metadata/statuses and original notes; exact sync revisions verified. Catalog/Vault **1379/1379**, uniquely linked. Canvas and Notion work log updated; no merge/archive.
 - Mapping: [Ring/OS/influencer captures](./captures/2026-10-24-ring-os-influencers.md).
+
+## Knock Knock: GHL ecosystem (2026-10-24)
+
+- Nik explicitly confirmed **knockknockapp.ai** for existing Knock Knock alternative; reference identity is no longer tentative. Added **Kratos can solve the need** as Nik’s view, plus the **product on top of GHL users/agencies** packaging/distribution angle. Official GHL page confirms vendor positioning; no technical/results validation.
+- Full readback preserved prior content/metadata and To Review; exact sync revision acknowledged. Canvas and Notion work log updated. Catalog remains **1379**, unrelated listings unchanged; no new listing/merge/archive.
+- Mapping: [Knock Knock/GHL follow-up](./captures/2026-10-24-knock-ghl-ecosystem.md).
