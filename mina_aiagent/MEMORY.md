@@ -300,3 +300,9 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Added **https://gtmengineering.ai/** to the existing **Newsletter business** keeper in Fynda Idea and Idea Vault. The checked official site supports a GTM engineering / AI-operator editorial angle spanning workflows, guides, architecture, skills, examples and jobs; source audience/performance claims were not treated as independently verified.
 - Preserved all earlier newsletter references, body, description, metadata and **To Review** status. Full readback, reciprocal links and exact revision acknowledgement verified. No new listing, merge or archive; catalog remains **1,379**. Canvas and capture mapping updated.
 - Mapping: [GTM Engineering newsletter reference](./captures/2026-10-25-gtm-engineering-newsletter.md).
+
+## iOS publishing developer-dashboard reference (2026-10-25)
+
+- Added Nik’s developer-tools Facebook reference to the existing **App Store Connect & Play Store onboarding web app** keeper. The short link resolves to reel `1740071660412714`; public metadata calls it an iOS app publishing dashboard and includes analytics/design/development tags. Full UI and behavior were not accessible or tested.
+- Preserved the cross-platform submission/pre-flight/asset-generation scope, prior content, metadata and **To Review** status. Full readback, reciprocal links and exact revision acknowledgement verified. No new listing, merge or archive; catalog remains **1,379**. Canvas and capture mapping updated.
+- Mapping: [iOS publishing developer dashboard](./captures/2026-10-25-ios-publishing-developer-dashboard.md).
