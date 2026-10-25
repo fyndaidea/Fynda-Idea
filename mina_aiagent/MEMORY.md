@@ -294,3 +294,9 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Nik explicitly confirmed **knockknockapp.ai** for existing Knock Knock alternative; reference identity is no longer tentative. Added **Kratos can solve the need** as Nik’s view, plus the **product on top of GHL users/agencies** packaging/distribution angle. Official GHL page confirms vendor positioning; no technical/results validation.
 - Full readback preserved prior content/metadata and To Review; exact sync revision acknowledged. Canvas and Notion work log updated. Catalog remains **1379**, unrelated listings unchanged; no new listing/merge/archive.
 - Mapping: [Knock Knock/GHL follow-up](./captures/2026-10-24-knock-ghl-ecosystem.md).
+
+## GTM Engineering newsletter reference (2026-10-25)
+
+- Added **https://gtmengineering.ai/** to the existing **Newsletter business** keeper in Fynda Idea and Idea Vault. The checked official site supports a GTM engineering / AI-operator editorial angle spanning workflows, guides, architecture, skills, examples and jobs; source audience/performance claims were not treated as independently verified.
+- Preserved all earlier newsletter references, body, description, metadata and **To Review** status. Full readback, reciprocal links and exact revision acknowledgement verified. No new listing, merge or archive; catalog remains **1,379**. Canvas and capture mapping updated.
+- Mapping: [GTM Engineering newsletter reference](./captures/2026-10-25-gtm-engineering-newsletter.md).
