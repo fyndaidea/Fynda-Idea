@@ -312,3 +312,10 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Published **FAQADA alternative — AI business OS for network marketers** and synchronized its **To Review** Idea Vault page. Official FAQADA metadata positions a Super Agent/autonomous business OS with a Sales System; public company posts add the network-marketer training, prospect, follow-up, team and business-aware-agent workflow. Vendor feature/result claims remain unverified.
 - Kept the vertical network-marketing/direct-sales alternative distinct from broad Business OS AI, niche CRM and horizontal sales-agent ideas. Full readback, reciprocal links and exact revision acknowledgement verified. Catalog/Vault now **1,380/1,380**; no merge or archive. Canvas and capture mapping updated.
 - Mapping: [FAQADA alternative](./captures/2026-10-25-faqada-alternative.md).
+
+## Medspa roll-up + GuildShore-style channel (2026-10-25)
+
+- Nik’s two-part Facebook-reel note became one new published **Medspa roll-up — acquire and scale independent clinics** idea plus a GuildShore-style, data-led short-form format added to existing **Company and sector decoding channels — podcasts and in-person interviews**.
+- The reel’s acquisition thesis covers buying independent clinics, centralizing growth/back-office functions, improving repeat-patient economics and adding locations. All market, operating and valuation figures remain attributed source claims; no acquisition/outcome is claimed, and clinical ownership/licensing/compliance/financing require validation.
+- Preserved the existing channel content, metadata and **To Review** status; the new idea is also **To Review**. Complete readback, reciprocal links and exact revision acknowledgements verified. Catalog/Vault now **1,381/1,381**; no merge/archive. Canvas and capture mapping updated.
+- Mapping: [Medspa roll-up and GuildShore-style channel](./captures/2026-10-25-medspa-rollup-guildshore-channel.md).
