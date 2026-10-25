@@ -306,3 +306,9 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Added Nik’s developer-tools Facebook reference to the existing **App Store Connect & Play Store onboarding web app** keeper. The short link resolves to reel `1740071660412714`; public metadata calls it an iOS app publishing dashboard and includes analytics/design/development tags. Full UI and behavior were not accessible or tested.
 - Preserved the cross-platform submission/pre-flight/asset-generation scope, prior content, metadata and **To Review** status. Full readback, reciprocal links and exact revision acknowledgement verified. No new listing, merge or archive; catalog remains **1,379**. Canvas and capture mapping updated.
 - Mapping: [iOS publishing developer dashboard](./captures/2026-10-25-ios-publishing-developer-dashboard.md).
+
+## FAQADA alternative (2026-10-25)
+
+- Published **FAQADA alternative — AI business OS for network marketers** and synchronized its **To Review** Idea Vault page. Official FAQADA metadata positions a Super Agent/autonomous business OS with a Sales System; public company posts add the network-marketer training, prospect, follow-up, team and business-aware-agent workflow. Vendor feature/result claims remain unverified.
+- Kept the vertical network-marketing/direct-sales alternative distinct from broad Business OS AI, niche CRM and horizontal sales-agent ideas. Full readback, reciprocal links and exact revision acknowledgement verified. Catalog/Vault now **1,380/1,380**; no merge or archive. Canvas and capture mapping updated.
+- Mapping: [FAQADA alternative](./captures/2026-10-25-faqada-alternative.md).
