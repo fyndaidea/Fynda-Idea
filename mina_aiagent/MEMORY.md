@@ -326,3 +326,9 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Normalized seven explicit app backlinks from unsupported `www.notion.so` formatting to verified `app.notion.com` targets: Knock Knock; AI ring; Insider trading; indie-maker alternatives; AI Content Agency; Freedom Formula; Bible app. Verified exact vault parents/links/types and acknowledged only each resulting revision.
 - Filled five empty legacy vault Description fields from their linked app summaries. Preserved all titles, bodies, research, statuses and other properties. Intentional app truncation, cosmetic whitespace and curated Set 1 title/summary variants remain untouched.
 - Final audit: **1,382 / 1,382**, all published; zero missing/orphan/duplicate links or slugs, zero invalid backlinks and zero pending revisions. Canvas and work log updated. Mapping: [Full sync reconciliation](./captures/2026-10-25-full-sync-reconciliation.md).
+
+## ERP and Salesforce alternative (2026-10-25)
+
+- Added Nik’s explicit **ERP and Salesforce alternative** direction to the existing **Enterprise AI operating layer (eat the SaaS stack)** keeper, whose preserved thesis already includes replacing Salesforce and SAP-style enterprise software.
+- Kept the standalone Salesforce alternative and Odoo-like AI business OS records intact as related variants. Preserved the keeper’s title, description, earlier SAP note, research, metadata and **To Review** status; complete readback and exact revision acknowledgement verified. Catalog/Vault remain **1,382/1,382**; no new listing, merge or archive.
+- Mapping: [ERP and Salesforce alternative](./captures/2026-10-25-erp-salesforce-alternative.md).
