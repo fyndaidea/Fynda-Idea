@@ -319,3 +319,10 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - The reel’s acquisition thesis covers buying independent clinics, centralizing growth/back-office functions, improving repeat-patient economics and adding locations. All market, operating and valuation figures remain attributed source claims; no acquisition/outcome is claimed, and clinical ownership/licensing/compliance/financing require validation.
 - Preserved the existing channel content, metadata and **To Review** status; the new idea is also **To Review**. Complete readback, reciprocal links and exact revision acknowledgements verified. Catalog/Vault now **1,381/1,381**; no merge/archive. Canvas and capture mapping updated.
 - Mapping: [Medspa roll-up and GuildShore-style channel](./captures/2026-10-25-medspa-rollup-guildshore-channel.md).
+
+## Full Fynda Idea ↔ Idea Vault reconciliation (2026-10-25)
+
+- Nik suspected missing records; full two-way audit confirmed **1,381 app / 1,382 vault**. Published the sole orphan, **Camila Markson - This is awesome!!! Learning my AI clone...**, from its existing To Review vault page and description, then added the reciprocal Link. Source Facebook preserved; no inferred source URL or extra research.
+- Normalized seven explicit app backlinks from unsupported `www.notion.so` formatting to verified `app.notion.com` targets: Knock Knock; AI ring; Insider trading; indie-maker alternatives; AI Content Agency; Freedom Formula; Bible app. Verified exact vault parents/links/types and acknowledged only each resulting revision.
+- Filled five empty legacy vault Description fields from their linked app summaries. Preserved all titles, bodies, research, statuses and other properties. Intentional app truncation, cosmetic whitespace and curated Set 1 title/summary variants remain untouched.
+- Final audit: **1,382 / 1,382**, all published; zero missing/orphan/duplicate links or slugs, zero invalid backlinks and zero pending revisions. Canvas and work log updated. Mapping: [Full sync reconciliation](./captures/2026-10-25-full-sync-reconciliation.md).
