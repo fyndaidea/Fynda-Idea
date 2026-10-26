@@ -332,3 +332,10 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Added Nik’s explicit **ERP and Salesforce alternative** direction to the existing **Enterprise AI operating layer (eat the SaaS stack)** keeper, whose preserved thesis already includes replacing Salesforce and SAP-style enterprise software.
 - Kept the standalone Salesforce alternative and Odoo-like AI business OS records intact as related variants. Preserved the keeper’s title, description, earlier SAP note, research, metadata and **To Review** status; complete readback and exact revision acknowledgement verified. Catalog/Vault remain **1,382/1,382**; no new listing, merge or archive.
 - Mapping: [ERP and Salesforce alternative](./captures/2026-10-25-erp-salesforce-alternative.md).
+
+## Vertical software portfolio for service businesses (2026-10-25)
+
+- Published **Vertical software portfolio for service businesses** as the portfolio-level keeper for dentist offices, law and investment firms, consultancies, hotels, restaurants, salons, contractors, HVAC companies and plumbing companies.
+- Defined a reusable core across CRM, intake, scheduling, quoting, billing, payments, communications, reporting and AI automation, with a one-vertical/one-workflow entry wedge. Existing dental, legal, HVAC, home-service and hospitality ideas remain separate variants; no merge or archive.
+- Full readback, reciprocal links, **To Review** status and exact revision acknowledgement verified. Catalog/Vault now **1,383/1,383**, with zero missing records, orphans, duplicates, drafts, invalid backlinks or pending revisions. Canvas and Notion work log updated.
+- Mapping: [Vertical software portfolio for service businesses](./captures/2026-10-25-vertical-software-service-businesses.md).
