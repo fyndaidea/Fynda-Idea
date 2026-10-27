@@ -339,3 +339,10 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Defined a reusable core across CRM, intake, scheduling, quoting, billing, payments, communications, reporting and AI automation, with a one-vertical/one-workflow entry wedge. Existing dental, legal, HVAC, home-service and hospitality ideas remain separate variants; no merge or archive.
 - Full readback, reciprocal links, **To Review** status and exact revision acknowledgement verified. Catalog/Vault now **1,383/1,383**, with zero missing records, orphans, duplicates, drafts, invalid backlinks or pending revisions. Canvas and Notion work log updated.
 - Mapping: [Vertical software portfolio for service businesses](./captures/2026-10-25-vertical-software-service-businesses.md).
+
+## AI video creator bootcamp and opportunity community (2026-10-26)
+
+- Published **AI video creator bootcamp and opportunity community**, inspired by `aivideobootcamp.com`, as a distinct vertical education-and-opportunity keeper. The captured model combines an original structured curriculum, project practice, critique, creator portfolios and a marketplace for brand/freelance opportunities.
+- Preserved the broader Nik AI Skool community and Skool/Circle platform alternative as separate ideas. Source-site membership, engagement, ranking and result figures remain attributed vendor claims; no proprietary curriculum or branding is to be copied.
+- Full readback, reciprocal links, **To Review** status and exact revision acknowledgement verified. Catalog/Vault now **1,384/1,384**, with zero missing records, orphans, duplicates, drafts, invalid backlinks or pending revisions. Canvas and Notion work log updated.
+- Mapping: [AI video creator bootcamp](./captures/2026-10-26-ai-video-bootcamp.md).
