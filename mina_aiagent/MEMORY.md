@@ -346,3 +346,10 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Preserved the broader Nik AI Skool community and Skool/Circle platform alternative as separate ideas. Source-site membership, engagement, ranking and result figures remain attributed vendor claims; no proprietary curriculum or branding is to be copied.
 - Full readback, reciprocal links, **To Review** status and exact revision acknowledgement verified. Catalog/Vault now **1,384/1,384**, with zero missing records, orphans, duplicates, drafts, invalid backlinks or pending revisions. Canvas and Notion work log updated.
 - Mapping: [AI video creator bootcamp](./captures/2026-10-26-ai-video-bootcamp.md).
+
+## GoHighLevel white-label agency + ecosystem directory (2026-10-27)
+
+- Updated the existing **GoHighLevel agency** keeper with two explicit layers: operate a branded/white-labeled GHL agency where plan and terms permit, and collect similar agencies into a structured directory/intelligence database.
+- Directory fields include niche, geography, positioning, software brand, services, public pricing model, proof signals, technology stack, fulfillment model and acquisition channels. White-label resale remains a distribution/service model rather than ownership of the underlying software; eligibility, terms, telecom and data-handling requirements remain to validate.
+- Preserved the horizontal marketing-agency directory and HighLevel-replacement products as related distinct ideas. Full readback, reciprocal links, **To Review** status and exact revision acknowledgement verified. Catalog/Vault remain **1,384/1,384**, with zero missing records, orphans, duplicates, drafts, invalid backlinks or pending revisions. Canvas and Notion work log updated.
+- Mapping: [GHL white-label agency and ecosystem directory](./captures/2026-10-27-ghl-white-label-agency-directory.md).
