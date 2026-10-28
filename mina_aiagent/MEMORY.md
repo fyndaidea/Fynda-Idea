@@ -360,3 +360,10 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Expanded **AI Virtual Staging - Good one week product** into **AI virtual staging and interior design app**, covering style variants, controlled room edits, renovation visualization, geometry preservation, before/after comparisons and listing photo/video exports. Captured the linked Toronto realtor-group post as a beta-recruitment pattern; no post or outreach was performed.
 - Preserved related generic trading, portfolio-copying, Home staging SaaS and staging-authenticity records. Full readback, reciprocal links, **To Review** statuses and exact revision acknowledgements verified. Catalog/Vault remain **1,384/1,384**, with zero missing records, orphans, bad backlinks or pending revisions. Canvas and Notion work log updated.
 - Mapping: [Crypto intelligence and virtual staging](./captures/2026-10-27-crypto-intelligence-virtual-staging.md).
+
+## GTM engineering agency + newsletter mapping (2026-10-28)
+
+- Published **GTM engineering agency for B2B SaaS**, inspired by `gtmengineeering.com`, as a distinct technical RevOps service: revenue architecture, ICP/buyer-journey operations, CRM/routing/attribution, automation, experiments, dashboards and fractional ownership. Provider claims and mixed case-study content remain unverified; no outcomes were adopted.
+- Reaffirmed that `gtmengineering.ai` is already captured under **Newsletter business** as the GTM engineering / AI-operator media model. Kept agency and media distinct; no duplicate newsletter or generic lead-gen/automation agency was created.
+- Full readback, reciprocal links, **To Review** status and exact revision acknowledgement verified. Catalog/Vault now **1,385/1,385**, with zero missing records, orphans, duplicate links/slugs, drafts, invalid backlinks or pending revisions. Canvas and Notion work log updated.
+- Mapping: [GTM engineering agency](./captures/2026-10-28-gtm-engineering-agency.md).
