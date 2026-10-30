@@ -367,3 +367,10 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Reaffirmed that `gtmengineering.ai` is already captured under **Newsletter business** as the GTM engineering / AI-operator media model. Kept agency and media distinct; no duplicate newsletter or generic lead-gen/automation agency was created.
 - Full readback, reciprocal links, **To Review** status and exact revision acknowledgement verified. Catalog/Vault now **1,385/1,385**, with zero missing records, orphans, duplicate links/slugs, drafts, invalid backlinks or pending revisions. Canvas and Notion work log updated.
 - Mapping: [GTM engineering agency](./captures/2026-10-28-gtm-engineering-agency.md).
+
+## Agentic bank + cybersecurity company mapping (2026-10-29)
+
+- Mapped Nik’s **Agentic bank** note to existing **AI-native full-service bank (AI agent)** and **Cybersecurity company** to existing **Agentic cybersecurity (defend and secure the AI)**; no duplicate listings created.
+- Appended each raw note and mapping decision to its Fynda Idea body and linked Idea Vault page while preserving prior descriptions, research, metadata and **To Review** statuses. Exact revision acknowledgements verified at `1/1` for both records.
+- Full structural audit remains **1,385 / 1,385**, with zero missing records, orphans, duplicate links/slugs, drafts, invalid explicit backlinks or pending revisions. Canvas and Notion work log updated.
+- Mapping: [Agentic bank and cybersecurity](./captures/2026-10-29-agentic-bank-cybersecurity.md).
