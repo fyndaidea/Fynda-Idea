@@ -374,3 +374,11 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 - Appended each raw note and mapping decision to its Fynda Idea body and linked Idea Vault page while preserving prior descriptions, research, metadata and **To Review** statuses. Exact revision acknowledgements verified at `1/1` for both records.
 - Full structural audit remains **1,385 / 1,385**, with zero missing records, orphans, duplicate links/slugs, drafts, invalid explicit backlinks or pending revisions. Canvas and Notion work log updated.
 - Mapping: [Agentic bank and cybersecurity](./captures/2026-10-29-agentic-bank-cybersecurity.md).
+
+## TrustMRR alternative (2026-10-30)
+
+- Published **TrustMRR alternative — verified startup revenue and acquisition marketplace** as a distinct keeper: verified/fresh revenue profiles, acquisition listings, normalized metrics, diligence rooms, benchmarks, founder activity and permissioned API/data products.
+- Preserved the existing **Directory of ideas that work** record, where TrustMRR was only a reference source. The linked founder performance figures remain attributed claims, not independently verified facts.
+- Fynda Idea and Idea Vault are synchronized at revision `2/2` with status **To Review**. Full structural audit is **1,386 / 1,386**, with no missing records, orphans, duplicate links/slugs, drafts, invalid explicit backlinks or pending revisions. Canvas and Notion work log updated.
+- Prepared an X reply, but did not post it because the in-app X session was logged out and access to the existing Vivaldi session was not approved. Posting still requires a signed-in session and final action-time confirmation.
+- Mapping: [TrustMRR alternative](./captures/2026-10-30-trustmrr-alternative.md).
