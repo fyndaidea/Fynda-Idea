@@ -14,7 +14,7 @@ import UserMenu from "./UserMenu";
 type NavLeaf = { href: string; label: string; match: (path: string) => boolean };
 
 function buildNav(v: SiteNavVisibility): NavLeaf[] {
-  const entries: NavLeaf[] = [{ href: "/store", label: "Store", match: (p) => p === "/store" || p.startsWith("/store/") }];
+  const entries: NavLeaf[] = [{ href: "/", label: "Home", match: (p) => p === "/" }];
 
   if (v.showIdeas) {
     entries.push({
@@ -30,6 +30,7 @@ function buildNav(v: SiteNavVisibility): NavLeaf[] {
       match: (p) => p === "/categories" || p.startsWith("/categories/"),
     });
   }
+  entries.push({ href: "/store", label: "Store", match: (p) => p === "/store" || p.startsWith("/store/") });
   if (v.showCollections) {
     entries.push({
       href: "/collections",

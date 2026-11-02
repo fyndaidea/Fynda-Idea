@@ -1,0 +1,13 @@
+---
+description: Commit and push finished work to main without asking
+alwaysApply: true
+---
+
+# Commit and push finished work
+
+After a requested change is done in this repo, commit it and push to `main` without asking for confirmation.
+
+- Use the existing local git identity. Do not change git config.
+- Do not commit secrets (`.env`, credentials, keys).
+- Do not force-push, skip hooks, or amend a commit that was already pushed.
+- Leave unrelated local changes unstaged.
