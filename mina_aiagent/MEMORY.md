@@ -63,6 +63,14 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Reference intake — store builders, apps, intelligence, agencies (2026-11-01)
+
+- Captured Nik’s link batch as **20 new published ideas** and notes on **13 existing keepers**, synchronized with Idea Vault. All affected records remain **To Review**. No archive or merge.
+- Appended instead of duplicating: Shopify auto-setup (AutoDS, BYS, Atlas), clip farm, Riley Brown shorts, social and TikTok intelligence, personal assistant software (Muse, Grok Bot, Dot, Instant), Mercor alternative, cold email (Emailchaser), email marketing (Sequenzy), video transcription (TransClipper), screenshot app (CleanSnap), faceless video (StoryShort), and the coding-agent hub (Symvibe).
+- New keepers include DataFast alternative, Appthetics, NotchOwl, WakeBee, useArtemis, Capacity, 1Lookup, VoiceDrop, AI Directories, ListMySaaS, BrandReply, BlogToPin, the $499 Shopify starter, the Shopify support retainer (supplied table filed as given), RankLocal, the fingertip AI pet, and the AI ads channel packaged with Skool, Fynda apps and intelligence tools.
+- Two Facebook pages and one clip-farm reel could not be opened, so those concepts were not inferred. Robby Frank’s “& more” was not expanded past the three apps named on the profile. Retainer revenue ranges stay Nik’s supplied estimates.
+- **After:** Fynda Idea / Idea Vault **1,406 / 1,406**, all listings published and every slug uniquely linked. Data-plan canvas updated, including the previously missing Zozo Fit row. [Capture](./captures/2026-11-01-reference-intake.md).
+
 ### Grok Bot and personal assistant setup agency (2026-10-20)
 
 - Published **Grok Bot and personal assistant setup agency** for business owners and individuals after checking the full app catalog and relevant Idea Vault names. Kept the dedicated setup-service concept distinct from broader consulting/automation agencies and assistant software. No merge/archive.
