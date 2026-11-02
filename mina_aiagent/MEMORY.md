@@ -63,6 +63,11 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Keyframes (2026-11-01)
+
+- The Instagram reel `DfNghnaCK73` (koen_salo) and https://getkeyframes.com are the same idea. Published **Keyframes — AI video editing packs for short-form video**. The reel announces the product; view counts stay the creator’s claims. Kept distinct from the faceless-video generator and the explainer channel. Vault status **To Review**. No merge.
+- **After:** Fynda Idea / Idea Vault **1,407 / 1,407**. [Capture](./captures/2026-11-01-keyframes.md).
+
 ### Reference intake — store builders, apps, intelligence, agencies (2026-11-01)
 
 - Captured Nik’s link batch as **20 new published ideas** and notes on **13 existing keepers**, synchronized with Idea Vault. All affected records remain **To Review**. No archive or merge.
