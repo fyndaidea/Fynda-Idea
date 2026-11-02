@@ -235,28 +235,13 @@ export function IdeasHubBrowser({
       ) : null}
 
       {totalPages > 1 ? (
-        <div className="mt-8 flex items-center justify-between gap-3">
-          <p className="text-sm text-[color:var(--muted)]">
-            Page <span className="font-semibold text-[color:var(--foreground)]">{safePage}</span> of{" "}
-            <span className="font-semibold text-[color:var(--foreground)]">{totalPages}</span>
+        <div className="ideas-pager">
+          <p>
+            Page <span>{safePage}</span> of <span>{totalPages}</span>
           </p>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              disabled={safePage <= 1 || busy}
-              onClick={() => change({ page: Math.max(1, safePage - 1) })}
-              className="inline-flex h-10 items-center justify-center rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card)] px-4 text-sm font-semibold disabled:opacity-50"
-            >
-              Prev
-            </button>
-            <button
-              type="button"
-              disabled={safePage >= totalPages || busy}
-              onClick={() => change({ page: Math.min(totalPages, safePage + 1) })}
-              className="inline-flex h-10 items-center justify-center rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card)] px-4 text-sm font-semibold disabled:opacity-50"
-            >
-              Next
-            </button>
+          <div>
+            <button type="button" disabled={safePage <= 1 || busy} onClick={() => change({ page: Math.max(1, safePage - 1) })}>Prev</button>
+            <button type="button" disabled={safePage >= totalPages || busy} onClick={() => change({ page: Math.min(totalPages, safePage + 1) })}>Next</button>
           </div>
         </div>
       ) : null}

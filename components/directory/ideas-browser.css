@@ -28,9 +28,18 @@
 .ideas-fullscreen-button { display:grid; place-items:center; width:38px; height:38px; border:1px solid var(--card-border); border-radius:11px; background:var(--card); color:var(--muted); cursor:pointer; }
 .ideas-fullscreen-button:hover,.ideas-fullscreen-button[aria-pressed=true] { color:var(--foreground); }
 .ideas-fullscreen-button:focus-visible { outline:2px solid var(--ring); outline-offset:2px; }
-.ideas-workspace:fullscreen,.ideas-workspace:-webkit-full-screen,.ideas-workspace.ideas-workspace--cover { box-sizing:border-box; display:flex; flex-direction:column; width:100%; height:100%; overflow:auto; background:var(--background); padding:16px 20px 24px; }
+.ideas-workspace:fullscreen,.ideas-workspace:-webkit-full-screen,.ideas-workspace.ideas-workspace--cover { box-sizing:border-box; display:flex; flex-direction:column; width:100%; height:100%; overflow:auto; background:var(--background); padding:12px 16px 8px; }
 .ideas-workspace.ideas-workspace--cover { position:fixed; inset:0; z-index:80; }
-.ideas-workspace:fullscreen .ideas-split,.ideas-workspace:-webkit-full-screen .ideas-split,.ideas-workspace.ideas-workspace--cover .ideas-split { height:calc(100dvh - 180px); min-height:360px; }
+.ideas-workspace:fullscreen .ideas-split,.ideas-workspace:-webkit-full-screen .ideas-split,.ideas-workspace.ideas-workspace--cover .ideas-split { height:calc(100dvh - 124px); min-height:360px; }
+.ideas-pager { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:32px; }
+.ideas-pager p { color:var(--muted); font-size:14px; }
+.ideas-pager p span { color:var(--foreground); font-weight:600; }
+.ideas-pager > div { display:flex; align-items:center; gap:8px; }
+.ideas-pager button { display:inline-flex; height:40px; align-items:center; justify-content:center; border-radius:16px; border:1px solid var(--card-border); background:var(--card); padding:0 16px; font-size:14px; font-weight:600; cursor:pointer; }
+.ideas-pager button:disabled { opacity:.5; cursor:default; }
+.ideas-workspace:fullscreen .ideas-pager,.ideas-workspace:-webkit-full-screen .ideas-pager,.ideas-workspace.ideas-workspace--cover .ideas-pager { margin-top:8px; }
+.ideas-workspace:fullscreen .ideas-pager p,.ideas-workspace:-webkit-full-screen .ideas-pager p,.ideas-workspace.ideas-workspace--cover .ideas-pager p { font-size:12px; }
+.ideas-workspace:fullscreen .ideas-pager button,.ideas-workspace:-webkit-full-screen .ideas-pager button,.ideas-workspace.ideas-workspace--cover .ideas-pager button { height:30px; padding:0 12px; border-radius:9px; font-size:12px; }
 .ideas-split-detail-actions { display:flex; align-items:center; gap:14px; margin-left:auto; }
 .ideas-edit-menu { position:relative; }
 .ideas-edit-menu > summary { list-style:none; cursor:pointer; }
