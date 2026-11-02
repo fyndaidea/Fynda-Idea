@@ -7,6 +7,9 @@ import { MarkdownBody } from "@/components/docs/markdown-body";
 import FavoriteButton from "@/components/favorites/FavoriteButton";
 import { ShimmerBlock } from "@/components/ui/Shimmer";
 import type { Idea } from "@/lib/db/ideas-db";
+import type { IdeaSectionEdit } from "@/lib/ideas/section-edit";
+import { IdeaEditMenu, IdeaSectionEditForm } from "./IdeaAdminEdit";
+import type { IdeaCategoryOption } from "./IdeaSectionEditor";
 import { IdeaStatusControl } from "./IdeaStatusControl";
 import { IdeaUpdatedMeta } from "./IdeaUpdatedMeta";
 import "./idea-detail.css";
@@ -15,15 +18,23 @@ export function IdeasSplitView({
   ideas,
   selectedSlug,
   loading,
+  canEdit = false,
+  categories = [],
   onSelect,
+  onIdeaChange,
 }: {
   ideas: Idea[];
   selectedSlug: string;
   loading: boolean;
+  canEdit?: boolean;
+  categories?: IdeaCategoryOption[];
   onSelect: (slug: string) => void;
+  onIdeaChange?: (idea: Idea) => void;
 }) {
   const listed = ideas.find((idea) => idea.slug === selectedSlug) ?? null;
   const [loaded, setLoaded] = useState<Idea | null>(listed);
+  const [saved, setSaved] = useState<Idea | null>(null);
+  const [editing, setEditing] = useState<IdeaSectionEdit["section"] | null>(null);
   const [error, setError] = useState(false);
   const [retry, setRetry] = useState(0);
 
@@ -67,7 +78,17 @@ export function IdeasSplitView({
     return () => controller.abort();
   }, [listed, selectedSlug, retry]);
 
-  const current = listed ?? loaded;
+  useEffect(() => {
+    setSaved(null);
+    setEditing(null);
+  }, [selectedSlug]);
+
+  const current = (saved && saved.slug === selectedSlug && (!listed || saved.contentRevision >= listed.contentRevision) ? saved : null) ?? listed ?? loaded;
+  const saveIdea = (next: Idea) => {
+    setSaved(next);
+    setEditing(null);
+    onIdeaChange?.(next);
+  };
   if (!loading && ideas.length === 0 && !selectedSlug) return null;
 
   return (
@@ -102,7 +123,10 @@ export function IdeasSplitView({
           <button type="button" className="ideas-split-back" onClick={() => onSelect("")}>
             <ArrowLeft size={16} aria-hidden /> Ideas
           </button>
-          {current ? <Link href={`/ideas/${current.slug}`} className="idea-text-link">Open full page <ArrowUpRight size={15} aria-hidden /></Link> : <span className="idea-eyebrow">Idea</span>}
+          <div className="ideas-split-detail-actions">
+            {canEdit && current ? <IdeaEditMenu onChoose={setEditing} /> : null}
+            {current ? <Link href={`/ideas/${current.slug}`} className="idea-text-link">Open full page <ArrowUpRight size={15} aria-hidden /></Link> : <span className="idea-eyebrow">Idea</span>}
+          </div>
         </div>
         {!selectedSlug ? (
           <div className="ideas-split-empty">
@@ -112,21 +136,26 @@ export function IdeasSplitView({
         ) : current ? (
           <>
             <div className="ideas-split-reading idea-preview-scroll">
+              {editing ? <IdeaSectionEditForm idea={current} section={editing} categories={categories} onCancel={() => setEditing(null)} onSaved={saveIdea} /> : null}
               <header className="idea-preview-heading">
                 <div className="idea-labels">
                   <span>Idea</span>
                   {current.featured ? <span>Featured</span> : null}
                   {current.categories?.map((category) => <span key={category}>{category}</span>)}
                 </div>
-                <div className="idea-preview-title-row">
-                  <h2>{current.title}</h2>
-                  <FavoriteButton itemId={current.slug} itemTitle={current.title} itemSubtitle={current.summary} />
-                </div>
-                {current.summary ? <p className="idea-lead">{current.summary}</p> : null}
+                {editing === "overview" ? null : (
+                  <div className="idea-preview-title-row">
+                    <h2>{current.title}</h2>
+                    <FavoriteButton itemId={current.slug} itemTitle={current.title} itemSubtitle={current.summary} />
+                  </div>
+                )}
+                {editing === "overview" || !current.summary ? null : <p className="idea-lead">{current.summary}</p>}
               </header>
-              <div className="idea-preview-body">
-                {current.body ? <MarkdownBody markdown={current.body} /> : <p className="idea-muted">No additional details have been added yet.</p>}
-              </div>
+              {editing === "body" ? null : (
+                <div className="idea-preview-body">
+                  {current.body ? <MarkdownBody markdown={current.body} /> : <p className="idea-muted">No additional details have been added yet.</p>}
+                </div>
+              )}
               {current.tags?.length ? <ul className="idea-tags" aria-label="Tags">{current.tags.map((tag) => <li key={tag}>{tag}</li>)}</ul> : null}
             </div>
             <footer className="idea-preview-footer">

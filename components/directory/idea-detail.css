@@ -28,7 +28,7 @@
 .idea-preview-dialog{margin:auto;border:1px solid var(--card-border);border-radius:22px;padding:0;width:min(900px,calc(100vw - 32px));max-width:none;max-height:calc(100dvh - 48px);background:var(--card);color:var(--foreground);box-shadow:0 24px 100px #0003;overscroll-behavior:contain}
 .idea-preview-dialog[open]{display:flex;flex-direction:column;animation:idea-preview-enter .18s ease-out}
 .idea-preview-dialog::backdrop{background:#18151060;backdrop-filter:blur(5px)}
-.idea-preview-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 24px;border-bottom:1px solid var(--card-border);flex-shrink:0}
+.idea-preview-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 24px;border-bottom:1px solid var(--card-border);flex-shrink:0;position:relative;z-index:2}
 .idea-preview-tools{display:flex;align-items:center;gap:20px}
 .idea-preview-scroll{overflow-y:auto;min-height:0;overscroll-behavior:contain;padding:32px 40px 36px}
 .idea-preview-heading{border-bottom:1px solid var(--card-border);padding-bottom:28px}
@@ -141,7 +141,18 @@
 .idea-document-head { padding-bottom: 20px; margin-bottom: 24px; border-bottom: 1px solid var(--card-border); }
 .idea-canvas-points { margin-top: 0; }
 .idea-canvas-content { margin-top: 30px; gap: 48px; }
+.idea-bottom-split { margin-top: 28px; }
 .idea-bottom-split .idea-detail-metadata > .idea-section-head { align-items: flex-start; flex-wrap: wrap; gap: 10px; }
+.idea-page-fields { display: grid; gap: 14px; margin-top: 18px; }
+.idea-page-fields label, .idea-page-fields legend { display: grid; gap: 7px; font-size: 11px; font-weight: 500; color: var(--muted); }
+.idea-page-fields input:not([type=checkbox]), .idea-page-fields textarea { width: 100%; min-width: 0; display: block; border: 1px solid var(--card-border); border-radius: 7px; padding: 10px 12px; background: var(--background); color: var(--foreground); font-size: 13px; line-height: 1.7; }
+.idea-page-fields textarea { resize: vertical; }
+.idea-page-fields .idea-markdown-input { font-family: var(--font-geist-mono), ui-monospace, monospace; font-size: 12px; }
+.idea-detail--editing .idea-canvas-hero .idea-page-fields label { color: #c8c4c8; }
+.idea-detail--editing .idea-canvas-hero .idea-page-fields input, .idea-detail--editing .idea-canvas-hero .idea-page-fields textarea { background: #ffffff12; color: #fff; border-color: #ffffff30; }
+.idea-page-edit-error { margin-top: 12px; color: #ff9494; font-size: 12px; line-height: 1.6; }
+.idea-page-edit-bar { display: flex; justify-content: flex-end; margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--card-border); }
+.idea-page-actions button:disabled { opacity: .5; cursor: wait; }
 .idea-bottom-split .idea-canvas-document { max-width: none; }
 .idea-bottom-panels { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 22px; align-items: start; }
 .idea-panel-main, .idea-panel-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 14px; padding: 28px; min-width: 0; }
@@ -155,7 +166,7 @@
 .idea-reading-metadata { margin-top: 36px; padding: 24px 0 0; border-top: 1px solid var(--card-border); }
 .idea-reading-metadata .idea-facts { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
 .idea-section-editor { background: var(--card); color: var(--foreground); border: 1px solid var(--accent-border); border-radius: 10px; padding: 20px; margin: 18px 0; box-shadow: 0 0 0 3px var(--accent-muted); min-width: 0; }
-.idea-detail .idea-section-editor > h3 { color: var(--foreground); font-size: 13px; font-weight: 600; margin: 0 0 16px; }
+.idea-section-editor > h3 { color: var(--foreground); font-size: 13px; font-weight: 600; margin: 0 0 16px; }
 .idea-section-editor > fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 14px; min-width: 0; }
 .idea-section-editor label, .idea-section-editor legend { display: grid; gap: 7px; font-size: 11px; font-weight: 500; color: var(--muted); }
 .idea-section-editor input:not([type=checkbox]), .idea-section-editor textarea { width: 100%; min-width: 0; display: block; border: 1px solid var(--card-border); border-radius: 7px; padding: 10px 12px; background: var(--background); color: var(--foreground); font-size: 13px; line-height: 1.7; font-weight: 400; }

@@ -1,6 +1,8 @@
 "use client";
 
+import type { Idea } from "@/lib/db/ideas-db";
 import { IdeaPreviewLink } from "./IdeaPreviewLink";
+import type { IdeaCategoryOption } from "./IdeaSectionEditor";
 import type { IdeaPreviewModel } from "./idea-preview-model";
 import FavoriteButton from "@/components/favorites/FavoriteButton";
 import { IdeaStatusControl } from "./IdeaStatusControl";
@@ -8,7 +10,7 @@ import { IdeaStatusControl } from "./IdeaStatusControl";
 /** Minimal fields for directory cards (full Idea or hub partials). */
 export type IdeaCardModel = IdeaPreviewModel;
 
-export function IdeaCard({ idea, view = "grid" }: { idea: IdeaCardModel; view?: "grid" | "list" }) {
+export function IdeaCard({ idea, view = "grid", canEdit = false, categoryOptions = [], onIdeaChange }: { idea: IdeaCardModel; view?: "grid" | "list"; canEdit?: boolean; categoryOptions?: IdeaCategoryOption[]; onIdeaChange?: (idea: Idea) => void }) {
   const categories = idea.categories ?? [];
   const highlights = idea.highlights ?? [];
   return (
@@ -22,6 +24,9 @@ export function IdeaCard({ idea, view = "grid" }: { idea: IdeaCardModel; view?: 
     >
       <IdeaPreviewLink
         idea={idea}
+        canEdit={canEdit}
+        categories={categoryOptions}
+        onIdeaChange={onIdeaChange}
         className="absolute inset-0 z-0 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)]"
         aria-label={`View ${idea.title} details`}
       />
@@ -79,6 +84,9 @@ export function IdeaCard({ idea, view = "grid" }: { idea: IdeaCardModel; view?: 
         <div className="idea-card-footer mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--card-border)] pt-4">
           <IdeaPreviewLink
             idea={idea}
+            canEdit={canEdit}
+            categories={categoryOptions}
+            onIdeaChange={onIdeaChange}
             className="pointer-events-auto relative z-10 text-sm font-semibold text-[color:var(--accent)] transition hover:text-[color:var(--accent-hover)]"
           >
             View details

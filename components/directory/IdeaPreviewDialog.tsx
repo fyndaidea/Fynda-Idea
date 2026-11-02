@@ -7,15 +7,25 @@ import { createPortal } from "react-dom";
 import { MarkdownBody } from "@/components/docs/markdown-body";
 import FavoriteButton from "@/components/favorites/FavoriteButton";
 import { ShimmerBlock } from "@/components/ui/Shimmer";
+import type { Idea } from "@/lib/db/ideas-db";
+import type { IdeaSectionEdit } from "@/lib/ideas/section-edit";
+import { IdeaEditMenu, IdeaSectionEditForm } from "./IdeaAdminEdit";
+import type { IdeaCategoryOption } from "./IdeaSectionEditor";
 import type { IdeaPreviewModel } from "./idea-preview-model";
 import { IdeaUpdatedMeta } from "./IdeaUpdatedMeta";
 import { IdeaStatusControl } from "./IdeaStatusControl";
 import "./idea-detail.css";
 
-export function IdeaPreviewDialog({ idea, onClose }: { idea: IdeaPreviewModel; onClose: () => void }) {
+function editableIdea(value: IdeaPreviewModel | Idea | null): Idea | null {
+  if (!value || !value.id || !("contentRevision" in value) || typeof value.contentRevision !== "number" || !("categoryIds" in value) || !Array.isArray(value.categoryIds)) return null;
+  return value;
+}
+
+export function IdeaPreviewDialog({ idea, canEdit = false, categories = [], onIdeaChange, onClose }: { idea: IdeaPreviewModel; canEdit?: boolean; categories?: IdeaCategoryOption[]; onIdeaChange?: (idea: Idea) => void; onClose: () => void }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const [details, setDetails] = useState<IdeaPreviewModel | null>(() => typeof idea.body === "string" ? idea : null);
+  const [editing, setEditing] = useState<IdeaSectionEdit["section"] | null>(null);
   const [error, setError] = useState(false);
   const [retry, setRetry] = useState(0);
 
@@ -60,7 +70,7 @@ export function IdeaPreviewDialog({ idea, onClose }: { idea: IdeaPreviewModel; o
       ref={dialogRef}
       className="idea-preview-dialog"
       aria-labelledby={titleId}
-      onCancel={(event) => { event.preventDefault(); onClose(); }}
+      onCancel={(event) => { event.preventDefault(); if (editing) { setEditing(null); return; } onClose(); }}
       onClick={(event) => {
         if (event.target !== event.currentTarget) return;
         const rect = event.currentTarget.getBoundingClientRect();
@@ -70,21 +80,25 @@ export function IdeaPreviewDialog({ idea, onClose }: { idea: IdeaPreviewModel; o
       <div className="idea-preview-bar">
         <span className="idea-eyebrow">Idea preview</span>
         <div className="idea-preview-tools">
+          {canEdit && editableIdea(details) ? <IdeaEditMenu onChoose={setEditing} /> : null}
           <Link href={`/ideas/${idea.slug}`} className="idea-text-link">Open full page <ArrowUpRight size={15} aria-hidden /></Link>
           <button type="button" onClick={onClose} className="idea-icon-button" aria-label="Close idea preview"><X size={20} aria-hidden /></button>
         </div>
       </div>
       <div className="idea-preview-scroll">
+        {editing && editableIdea(details) ? <IdeaSectionEditForm idea={editableIdea(details)!} section={editing} categories={categories} onCancel={() => setEditing(null)} onSaved={(saved) => { setDetails(saved); setEditing(null); onIdeaChange?.(saved); }} /> : null}
         <header className="idea-preview-heading">
           <div className="idea-labels"><span>Idea</span>{current.featured ? <span>Featured</span> : null}{current.categories?.map((category) => <span key={category}>{category}</span>)}</div>
-          <div className="idea-preview-title-row">
-            <h2 id={titleId}>{current.title}</h2>
-            <FavoriteButton itemId={current.slug} itemTitle={current.title} itemSubtitle={current.summary} />
-          </div>
-          <p className="idea-lead">{current.summary}</p>
+          {editing === "overview" ? <h2 id={titleId} className="sr-only">{current.title}</h2> : (
+            <div className="idea-preview-title-row">
+              <h2 id={titleId}>{current.title}</h2>
+              <FavoriteButton itemId={current.slug} itemTitle={current.title} itemSubtitle={current.summary} />
+            </div>
+          )}
+          {editing === "overview" ? null : <p className="idea-lead">{current.summary}</p>}
         </header>
         {current.highlights?.length ? <ul className="idea-highlights">{current.highlights.map((item) => <li key={item}>{item}</li>)}</ul> : null}
-        <section aria-label="Idea details" aria-busy={!details && !error} className="idea-preview-body">
+        {editing === "body" ? null : <section aria-label="Idea details" aria-busy={!details && !error} className="idea-preview-body">
           {details ? details.body ? <MarkdownBody markdown={details.body} /> : <p className="idea-muted">No additional details have been added yet.</p> : error ? (
             <div role="alert" className="idea-preview-error"><p>Couldn’t load the details. Your place in the list is saved.</p><button type="button" className="idea-text-link" onClick={() => { setError(false); setRetry((value) => value + 1); }}>Try again</button></div>
           ) : (
@@ -94,7 +108,7 @@ export function IdeaPreviewDialog({ idea, onClose }: { idea: IdeaPreviewModel; o
               <ShimmerBlock className="mt-6 h-32 w-full" rounded="rounded-xl" />
             </div>
           )}
-        </section>
+        </section>}
         {current.tags?.length ? <ul className="idea-tags" aria-label="Tags">{current.tags.map((tag) => <li key={tag}>{tag}</li>)}</ul> : null}
       </div>
       <footer className="idea-preview-footer">

@@ -7,7 +7,6 @@ import { notFound } from "next/navigation";
 import IdeaDetailPage from "@/components/directory/IdeaDetailPage";
 import { effectiveIdeaStages } from "@/lib/ideas/effective-stages";
 import { listCategories } from "@/lib/db/categories-db";
-import { parseIdeaBodyLayout } from "@/components/directory/idea-layouts";
 import { getIdeaBySlug } from "@/lib/db/ideas-db";
 import { absoluteUrl, breadcrumbJsonLd, collectionPageJsonLd } from "@/lib/seo/json-ld";
 import { buildIdeaMetaDescription } from "@/lib/seo/metadata";
@@ -15,7 +14,7 @@ import { buildIdeaMetaDescription } from "@/lib/seo/metadata";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ body?: string | string[] }> };
+type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -41,8 +40,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function IdeaSlugPage({ params, searchParams }: Props) {
-  const [{ slug }, sp] = await Promise.all([params, searchParams]);
+export default async function IdeaSlugPage({ params }: Props) {
+  const { slug } = await params;
   const idea = await getIdeaBySlug(slug).catch(() => null);
   if (!idea) notFound();
 
@@ -79,7 +78,7 @@ export default async function IdeaSlugPage({ params, searchParams }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(pageLd) }}
       />
       <div className="mx-auto w-full max-w-[1280px] px-4 pb-10 pt-3 sm:pb-12 sm:pt-5">
-        <IdeaDetailPage key={idea.slug} idea={idea} canEdit={canEdit} categories={categories.map((category) => ({ id: String(category.id), name: category.name }))} initialBodyLayout={parseIdeaBodyLayout(sp.body)} initialProgress={auth && progress && !progress.errors[idea.id] ? { userId: auth.userId, status: progress.statuses[idea.id] ?? null, scope: progress.scope, revision: progress.revision } : undefined} />
+        <IdeaDetailPage key={idea.slug} idea={idea} canEdit={canEdit} categories={categories.map((category) => ({ id: String(category.id), name: category.name }))} initialProgress={auth && progress && !progress.errors[idea.id] ? { userId: auth.userId, status: progress.statuses[idea.id] ?? null, scope: progress.scope, revision: progress.revision } : undefined} />
       </div>
     </main>
   );

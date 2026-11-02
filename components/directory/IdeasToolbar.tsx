@@ -1,11 +1,11 @@
 "use client";
 
-import { ArrowDownWideNarrow, Check, Columns2, LayoutGrid, List, SlidersHorizontal, Table2, X } from "lucide-react";
+import { ArrowDownWideNarrow, Check, Columns2, LayoutGrid, List, Maximize2, Minimize2, SlidersHorizontal, Table2, X } from "lucide-react";
 import { useEffect, useId, useRef } from "react";
 import { IDEA_PROGRESS_GROUPS } from "@/lib/ideas/progress";
 import { IDEA_SORTS, type DirectoryOptions } from "@/lib/ideas/directory-options";
 
-export function IdeasToolbar({ options, total, signedIn, onChange }: { options: DirectoryOptions; total: number; signedIn: boolean; onChange: (patch: Partial<DirectoryOptions>) => void }) {
+export function IdeasToolbar({ options, total, signedIn, fullscreen, onToggleFullscreen, onChange }: { options: DirectoryOptions; total: number; signedIn: boolean; fullscreen: boolean; onToggleFullscreen: () => void; onChange: (patch: Partial<DirectoryOptions>) => void }) {
   const root = useRef<HTMLDivElement>(null);
   const group = useId();
   const count = Number(Boolean(options.stage)) + Number(options.saved) + Number(options.featured);
@@ -48,6 +48,9 @@ export function IdeasToolbar({ options, total, signedIn, onChange }: { options: 
       <button type="button" aria-label="Table view" title="Table view" aria-pressed={options.view === "table"} onClick={() => onChange({ view: "table" })}><Table2 size={17} aria-hidden /></button>
       <button type="button" aria-label="Split view" title="Split view" aria-pressed={options.view === "split"} onClick={() => onChange({ view: "split" })}><Columns2 size={17} aria-hidden /></button>
     </div>
+    <button type="button" className="ideas-fullscreen-button" aria-label={fullscreen ? "Exit full screen" : "Full screen"} title={fullscreen ? "Exit full screen" : "Full screen"} aria-pressed={fullscreen} onClick={onToggleFullscreen}>
+      {fullscreen ? <Minimize2 size={16} aria-hidden /> : <Maximize2 size={16} aria-hidden />}
+    </button>
     {count ? <button type="button" className="ideas-clear-filters" aria-label="Clear filters" title="Clear filters" onClick={() => onChange({ stage: "", saved: false, featured: false })}><X size={16} aria-hidden /></button> : null}
   </div>;
 }

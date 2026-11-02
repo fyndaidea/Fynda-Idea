@@ -3,6 +3,7 @@
 import type { Idea } from "@/lib/db/ideas-db";
 import FavoriteButton from "@/components/favorites/FavoriteButton";
 import { ShimmerBlock } from "@/components/ui/Shimmer";
+import type { IdeaCategoryOption } from "./IdeaSectionEditor";
 import { IdeaPreviewLink } from "./IdeaPreviewLink";
 import { ideaUpdatedDateFormat } from "./IdeaUpdatedMeta";
 import { IdeaStatusControl } from "./IdeaStatusControl";
@@ -12,7 +13,7 @@ function updatedDate(value: Date | string) {
   return Number.isNaN(date.getTime()) ? "—" : ideaUpdatedDateFormat.format(date);
 }
 
-export function IdeasTable({ ideas, loading = false }: { ideas: Idea[]; loading?: boolean }) {
+export function IdeasTable({ ideas, loading = false, canEdit = false, categories = [], onIdeaChange }: { ideas: Idea[]; loading?: boolean; canEdit?: boolean; categories?: IdeaCategoryOption[]; onIdeaChange?: (idea: Idea) => void }) {
   return <div className="ideas-table-wrap" role="region" aria-label="Ideas table" tabIndex={0}>
     <table className="ideas-table">
       <caption className="sr-only">Ideas with categories, status, last update and favorites. Open an idea title to preview its details.</caption>
@@ -23,7 +24,7 @@ export function IdeasTable({ ideas, loading = false }: { ideas: Idea[]; loading?
           <td><ShimmerBlock className="h-3 w-20" /></td><td><ShimmerBlock className="h-8 w-36" rounded="rounded-lg" /></td>
           <td><ShimmerBlock className="h-3 w-20" /></td><td><ShimmerBlock className="ml-auto h-8 w-8" rounded="rounded-full" /></td>
         </tr>) : ideas.map(idea => <tr key={idea.id} data-idea-id={idea.id}>
-          <td className="ideas-table-main"><IdeaPreviewLink idea={idea} className="ideas-table-link">
+          <td className="ideas-table-main"><IdeaPreviewLink idea={idea} className="ideas-table-link" canEdit={canEdit} categories={categories} onIdeaChange={onIdeaChange}>
             <span className="ideas-table-title">{idea.title}</span>
             <span className="ideas-table-summary">{idea.summary}</span>
           </IdeaPreviewLink>{idea.featured ? <span className="ideas-table-featured">Featured</span> : null}</td>

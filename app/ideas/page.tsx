@@ -1,10 +1,12 @@
 import { IdeasHubBrowser } from "@/components/directory/IdeasHubBrowser";
+import { FavoritesProvider } from "@/components/favorites/FavoritesProvider";
+import { getApiUser } from "@/lib/auth/get-api-user";
+import { listCategories } from "@/lib/db/categories-db";
+import { getProfileById } from "@/lib/db/profile";
 import { ideasDirectory } from "@/lib/ideas/directory";
 import { parseDirectoryOptions } from "@/lib/ideas/directory-options";
 import { pageDescClass, pageTitleClass } from "@/lib/ui-classes";
 import { headers } from "next/headers";
-import { getApiUser } from "@/lib/auth/get-api-user";
-import { FavoritesProvider } from "@/components/favorites/FavoritesProvider";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -23,7 +25,12 @@ export default async function IdeasPage({
   const params = new URLSearchParams(Object.entries(sp).flatMap(([key, value]) => typeof value === "string" ? [[key, value]] : []));
   const options = parseDirectoryOptions(params);
   const auth = await getApiUser(new Request("http://localhost/ideas", { headers: await headers() }));
-  const result = await ideasDirectory(options, auth?.userId).catch(() => ({ ideas: [], total: 0, page: 1, favorites: [], stages: undefined, stageError: undefined, error: "Could not load ideas. Please try again." }));
+  const profile = auth ? await getProfileById(auth.userId) : null;
+  const canEdit = profile?.role === "admin";
+  const [result, categories] = await Promise.all([
+    ideasDirectory(options, auth?.userId).catch(() => ({ ideas: [], total: 0, page: 1, favorites: [], stages: undefined, stageError: undefined, error: "Could not load ideas. Please try again." })),
+    canEdit ? listCategories({ includeUnpublished: true }) : Promise.resolve([]),
+  ]);
   const error = "error" in result ? result.error : undefined;
 
   return (
@@ -45,6 +52,8 @@ export default async function IdeasPage({
             initialUserId={auth?.userId ?? null}
             initialStages={result.stages}
             initialError={error}
+            canEdit={canEdit}
+            categories={categories.map((category) => ({ id: String(category.id), name: category.name }))}
           />
         </FavoritesProvider>
       </div>

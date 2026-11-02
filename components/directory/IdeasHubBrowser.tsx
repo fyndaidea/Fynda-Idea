@@ -7,6 +7,7 @@ import { IdeaCard, IdeaCardSkeleton } from "@/components/directory/IdeaCard";
 import { useSearchParams } from "next/navigation";
 import { parseDirectoryOptions, compareDirectoryIdeas, type DirectoryOptions } from "@/lib/ideas/directory-options";
 import type { StageSnapshot } from "@/lib/ideas/effective-stages";
+import type { IdeaCategoryOption } from "./IdeaSectionEditor";
 import { IdeasSplitView } from "./IdeasSplitView";
 import { IdeasTable } from "./IdeasTable";
 import { IdeasToolbar } from "./IdeasToolbar";
@@ -24,6 +25,8 @@ export function IdeasHubBrowser({
   initialUserId = null,
   initialStages,
   initialError,
+  canEdit = false,
+  categories = [],
 }: {
   initialIdeas: Idea[];
   initialTotal: number;
@@ -32,6 +35,8 @@ export function IdeasHubBrowser({
   initialUserId?: string | null;
   initialStages?: StageSnapshot;
   initialError?: string;
+  canEdit?: boolean;
+  categories?: IdeaCategoryOption[];
 }) {
   const searchParams = useSearchParams();
   const options = parseDirectoryOptions(new URLSearchParams(searchParams.toString()));
@@ -66,12 +71,53 @@ export function IdeasHubBrowser({
   const requestKey = JSON.stringify([query, safePage, userId, sort, stage, saved, featured]);
   const navigationPending = requestKey !== loadedKey;
   const gridRef = useRef<HTMLDivElement>(null);
+  const workspaceRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
+  const [fullscreen, setFullscreen] = useState(false);
+  const [covered, setCovered] = useState(false);
   const positions = useRef(new Map<string, { x: number; y: number }>());
   const visibleIdeas = useMemo(() => [...ideas].sort((a, b) =>
     Number(isFavorite(b.slug)) - Number(isFavorite(a.slug)) ||
     compareDirectoryIdeas(a, b, sort)
   ), [ideas, isFavorite, sort]);
+
+  useEffect(() => {
+    const sync = () => setFullscreen(document.fullscreenElement === workspaceRef.current);
+    document.addEventListener("fullscreenchange", sync);
+    return () => document.removeEventListener("fullscreenchange", sync);
+  }, []);
+
+  useEffect(() => {
+    if (!covered) return;
+    const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") setCovered(false); };
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = previous;
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [covered]);
+
+  const toggleFullscreen = () => {
+    const node = workspaceRef.current;
+    if (!node) return;
+    if (document.fullscreenElement === node) {
+      void document.exitFullscreen();
+      return;
+    }
+    if (covered) {
+      setCovered(false);
+      return;
+    }
+    if (typeof node.requestFullscreen === "function") {
+      void node.requestFullscreen().catch(() => setCovered(true));
+      return;
+    }
+    setCovered(true);
+  };
+
+  const replaceIdea = (next: Idea) => setIdeas((current) => current.map((item) => item.id === next.id ? next : item));
 
   useEffect(() => {
     const update = (event: Event) => { if ((event as CustomEvent).detail?.userId === userId) setStageRevision(value => value + 1); };
@@ -148,7 +194,7 @@ export function IdeasHubBrowser({
 
   return (
     <IdeaStageSeedContext.Provider value={stages.userId === userId && userId && stages.data ? { userId, revision: stages.data.revision, scope: stages.data.scope, statuses: stages.data.statuses } : null}>
-    <div>
+    <div ref={workspaceRef} className={covered ? "ideas-workspace ideas-workspace--cover" : "ideas-workspace"}>
       <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-sm">
           <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-[color:var(--muted)]">
@@ -165,13 +211,13 @@ export function IdeasHubBrowser({
           {query ? <button type="button" className="ideas-clear-search" aria-label="Clear search" title="Clear search"
             onClick={() => { change({ q: "" }); searchRef.current?.focus(); }}><X size={15} aria-hidden /></button> : null}
         </div>
-        <IdeasToolbar options={options} total={total} signedIn={Boolean(userId)} onChange={change} />
+        <IdeasToolbar options={options} total={total} signedIn={Boolean(userId)} fullscreen={fullscreen || covered} onToggleFullscreen={toggleFullscreen} onChange={change} />
       </div>
 
       <div ref={gridRef} aria-busy={busy} aria-label={view === "split" ? undefined : "Ideas"} className={view === "split" ? "relative" : view === "table" ? "relative" : view === "list" ? "relative ideas-results--list" : "relative grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"}>
-        {view === "split" ? <IdeasSplitView ideas={visibleIdeas} selectedSlug={idea} loading={showSkeleton} onSelect={(slug) => change({ idea: slug })} /> : view === "table" ? <IdeasTable ideas={visibleIdeas} loading={showSkeleton} /> : showSkeleton
+        {view === "split" ? <IdeasSplitView ideas={visibleIdeas} selectedSlug={idea} loading={showSkeleton} canEdit={canEdit} categories={categories} onIdeaChange={replaceIdea} onSelect={(slug) => change({ idea: slug })} /> : view === "table" ? <IdeasTable ideas={visibleIdeas} loading={showSkeleton} canEdit={canEdit} categories={categories} onIdeaChange={replaceIdea} /> : showSkeleton
           ? Array.from({ length: 6 }).map((_, i) => <IdeaCardSkeleton key={`sk-${i}`} />)
-          : visibleIdeas.map((item) => <div key={item.id} data-idea-id={item.id}><IdeaCard idea={item} view={view} /></div>)}
+          : visibleIdeas.map((item) => <div key={item.id} data-idea-id={item.id}><IdeaCard idea={item} view={view} canEdit={canEdit} categoryOptions={categories} onIdeaChange={replaceIdea} /></div>)}
       </div>
 
       {error ? (
