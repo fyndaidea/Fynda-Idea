@@ -7,6 +7,7 @@ import { IdeaCard, IdeaCardSkeleton } from "@/components/directory/IdeaCard";
 import { useSearchParams } from "next/navigation";
 import { parseDirectoryOptions, compareDirectoryIdeas, type DirectoryOptions } from "@/lib/ideas/directory-options";
 import type { StageSnapshot } from "@/lib/ideas/effective-stages";
+import { IdeasSplitView } from "./IdeasSplitView";
 import { IdeasTable } from "./IdeasTable";
 import { IdeasToolbar } from "./IdeasToolbar";
 import { IdeaStageSeedContext } from "./IdeaStatusControl";
@@ -34,9 +35,12 @@ export function IdeasHubBrowser({
 }) {
   const searchParams = useSearchParams();
   const options = parseDirectoryOptions(new URLSearchParams(searchParams.toString()));
-  const { q: query, page, sort, stage, saved, featured, view } = options;
+  const { q: query, page, sort, stage, saved, featured, view, idea } = options;
   const change = (patch: Partial<DirectoryOptions>) => {
-    const next = { ...options, ...patch, page: patch.page ?? (Object.keys(patch).every(key => key === "view") ? page : 1) };
+    const next = { ...options, ...patch };
+    const keepsPage = Object.keys(patch).every(key => key === "view" || key === "idea" || key === "page");
+    if (patch.page == null) next.page = keepsPage ? page : 1;
+    if (next.view !== "split" || !keepsPage) next.idea = next.view === "split" && patch.idea ? patch.idea : "";
     const params = new URLSearchParams(searchParams.toString());
     for (const [key, value] of Object.entries(next)) {
       if (value === "" || value === false || (key === "page" && value === 1) || (key === "view" && value === "grid") || (key === "sort" && value === "updated")) params.delete(key);
@@ -164,10 +168,10 @@ export function IdeasHubBrowser({
         <IdeasToolbar options={options} total={total} signedIn={Boolean(userId)} onChange={change} />
       </div>
 
-      <div ref={gridRef} aria-busy={busy} aria-label="Ideas" className={view === "table" ? "relative" : view === "list" ? "relative ideas-results--list" : "relative grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"}>
-        {view === "table" ? <IdeasTable ideas={visibleIdeas} loading={showSkeleton} /> : showSkeleton
+      <div ref={gridRef} aria-busy={busy} aria-label={view === "split" ? undefined : "Ideas"} className={view === "split" ? "relative" : view === "table" ? "relative" : view === "list" ? "relative ideas-results--list" : "relative grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"}>
+        {view === "split" ? <IdeasSplitView ideas={visibleIdeas} selectedSlug={idea} loading={showSkeleton} onSelect={(slug) => change({ idea: slug })} /> : view === "table" ? <IdeasTable ideas={visibleIdeas} loading={showSkeleton} /> : showSkeleton
           ? Array.from({ length: 6 }).map((_, i) => <IdeaCardSkeleton key={`sk-${i}`} />)
-          : visibleIdeas.map((idea) => <div key={idea.id} data-idea-id={idea.id}><IdeaCard idea={idea} view={view} /></div>)}
+          : visibleIdeas.map((item) => <div key={item.id} data-idea-id={item.id}><IdeaCard idea={item} view={view} /></div>)}
       </div>
 
       {error ? (

@@ -9,9 +9,17 @@ export const IDEA_SORTS = [
 ] as const;
 export type IdeaSort = (typeof IDEA_SORTS)[number]["value"];
 export type DirectoryOptions = ReturnType<typeof parseDirectoryOptions>;
+export type DirectoryView = "grid" | "list" | "table" | "split";
+
+function directoryIdeaSlug(value: string | null) {
+  const slug = (value ?? "").trim().toLowerCase();
+  return /^[a-z0-9-]{1,240}$/.test(slug) ? slug : "";
+}
+
 export function parseDirectoryOptions(params: URLSearchParams) {
   const sort = params.get("sort");
   const stage = params.get("stage");
+  const view = params.get("view");
   return {
     q: params.get("q") ?? "",
     page: Math.min(100000, Math.max(1, Math.floor(Number(params.get("page")) || 1))),
@@ -19,7 +27,8 @@ export function parseDirectoryOptions(params: URLSearchParams) {
     stage: (isIdeaProgressStatus(stage) || stage === "none" ? stage : "") as IdeaProgressStatus | "none" | "",
     saved: params.get("saved") === "1",
     featured: params.get("featured") === "1",
-    view: (params.get("view") === "table" ? "table" : params.get("view") === "list" ? "list" : "grid") as "grid" | "list" | "table",
+    view: (view === "table" || view === "list" || view === "split" ? view : "grid") as DirectoryView,
+    idea: directoryIdeaSlug(params.get("idea")),
   };
 }
 export function compareDirectoryIdeas(a: { id: string; title: string; score: number; updatedAt: Date | string; createdAt: Date | string }, b: typeof a, sort: IdeaSort) {

@@ -3,9 +3,13 @@ import { test } from "node:test";
 import { parseDirectoryOptions, compareDirectoryIdeas } from "../lib/ideas/directory-options";
 
 test("directory URLs validate controls and preserve typed search spaces", () => {
-  assert.deepEqual(parseDirectoryOptions(new URLSearchParams("q=AI+&page=-2&sort=sql&stage=admin&view=unknown")), { q: "AI ", page: 1, sort: "updated", stage: "", view: "grid", featured: false, saved: false });
+  assert.deepEqual(parseDirectoryOptions(new URLSearchParams("q=AI+&page=-2&sort=sql&stage=admin&view=unknown")), { q: "AI ", page: 1, sort: "updated", stage: "", view: "grid", featured: false, saved: false, idea: "" });
   const selected = parseDirectoryOptions(new URLSearchParams("page=2.5&sort=oldest&stage=To+Review&view=list&featured=1&saved=1"));
   assert.equal(parseDirectoryOptions(new URLSearchParams("view=table&q=Roblox")).view, "table");
+  const split = parseDirectoryOptions(new URLSearchParams("view=split&idea=Keyframes-AI"));
+  assert.equal(split.view, "split");
+  assert.equal(split.idea, "keyframes-ai");
+  assert.equal(parseDirectoryOptions(new URLSearchParams("view=split&idea=not a slug")).idea, "");
   assert.equal(selected.page, 2); assert.equal(selected.stage, "To Review"); assert.equal(selected.view, "list"); assert.ok(selected.saved && selected.featured);
   assert.equal(parseDirectoryOptions(new URLSearchParams("page=Infinity")).page, 100000);
 });

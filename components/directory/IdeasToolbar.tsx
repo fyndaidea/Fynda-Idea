@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDownWideNarrow, Check, LayoutGrid, List, SlidersHorizontal, Table2, X } from "lucide-react";
+import { ArrowDownWideNarrow, Check, Columns2, LayoutGrid, List, SlidersHorizontal, Table2, X } from "lucide-react";
 import { useEffect, useId, useRef } from "react";
 import { IDEA_PROGRESS_GROUPS } from "@/lib/ideas/progress";
 import { IDEA_SORTS, type DirectoryOptions } from "@/lib/ideas/directory-options";
@@ -46,6 +46,7 @@ export function IdeasToolbar({ options, total, signedIn, onChange }: { options: 
       <button type="button" aria-label="Grid view" title="Grid view" aria-pressed={options.view === "grid"} onClick={() => onChange({ view: "grid" })}><LayoutGrid size={17} aria-hidden /></button>
       <button type="button" aria-label="List view" title="List view" aria-pressed={options.view === "list"} onClick={() => onChange({ view: "list" })}><List size={18} aria-hidden /></button>
       <button type="button" aria-label="Table view" title="Table view" aria-pressed={options.view === "table"} onClick={() => onChange({ view: "table" })}><Table2 size={17} aria-hidden /></button>
+      <button type="button" aria-label="Split view" title="Split view" aria-pressed={options.view === "split"} onClick={() => onChange({ view: "split" })}><Columns2 size={17} aria-hidden /></button>
     </div>
     {count ? <button type="button" className="ideas-clear-filters" aria-label="Clear filters" title="Clear filters" onClick={() => onChange({ stage: "", saved: false, featured: false })}><X size={16} aria-hidden /></button> : null}
   </div>;
