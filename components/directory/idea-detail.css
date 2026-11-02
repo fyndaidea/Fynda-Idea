@@ -152,6 +152,13 @@
 .idea-detail--editing .idea-canvas-hero .idea-page-fields input, .idea-detail--editing .idea-canvas-hero .idea-page-fields textarea { background: #ffffff12; color: #fff; border-color: #ffffff30; }
 .idea-page-edit-error { margin-top: 12px; color: #ff9494; font-size: 12px; line-height: 1.6; }
 .idea-page-edit-bar { display: flex; justify-content: flex-end; margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--card-border); }
+.idea-inline-editor { display: flex; flex-direction: column; min-height: 0; flex: 1; height: 100%; }
+.idea-preview-dialog > .idea-inline-editor { max-height: calc(100dvh - 48px); }
+.idea-inline-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-shrink: 0; padding: 12px 18px; border-bottom: 1px solid var(--card-border); }
+.idea-inline-bar > span { font-size: 12px; font-weight: 650; color: var(--muted); }
+.idea-inline-bar > div { display: flex; align-items: center; gap: 8px; }
+.idea-inline-fields { overflow: auto; margin: 0; padding: 20px 24px 28px; }
+.idea-inline-fields > p[role=alert] { color: #bc2525; font-size: 12px; line-height: 1.6; }
 .idea-page-actions button:disabled { opacity: .5; cursor: wait; }
 .idea-bottom-split .idea-canvas-document { max-width: none; }
 .idea-bottom-panels { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 22px; align-items: start; }
