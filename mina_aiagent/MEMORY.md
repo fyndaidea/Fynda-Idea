@@ -63,6 +63,13 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Idea intake (2026-11-11)
+
+- Captured **13 supplied notes → 5 new published ideas + 7 existing keepers updated**, synchronized with Idea Vault. Combined the two motion-designer notes into one keeper. New: AI motion designer/product-launch videos; breathing app plus short-form distribution; Nik Unfiltered channels; teleprompter app; family financial-protection business reference.
+- Updated voice agents (Ask Benny), niche CRM (WhatsApp clinic dashboard), cartoon animations (Islandboy Juju), SEO/ASO (ASO Scout), app-publishing tools, software development agency (Finnovate), and product-building Skool community (Vibe Coding Pro Club at the supplied automation-academy URL).
+- Preserved original notes, prior descriptions/research/metadata and **To Review** statuses. Source performance/revenue claims remain unverified; Facebook identification is based on public captions rather than full video viewing. No archive/merge, social posting, business launch or financial service performed.
+- **After:** Fynda Idea / Idea Vault **1,412 / 1,412**, with unique nonempty vault links. Readback and exact-revision synchronization verified. The configured external Cursor data-plan canvas is missing on this machine; complete mapping is preserved in [the capture log](./captures/2026-11-11-idea-intake.md). Notion work log updated.
+
 ### Keyframes (2026-11-01)
 
 - The Instagram reel `DfNghnaCK73` (koen_salo) and https://getkeyframes.com are the same idea. Published **Keyframes — AI video editing packs for short-form video**. The reel announces the product; view counts stay the creator’s claims. Kept distinct from the faceless-video generator and the explainer channel. Vault status **To Review**. No merge.
