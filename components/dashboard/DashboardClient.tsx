@@ -12,6 +12,7 @@ import {
   resolveDashboardSection,
   type DashboardSection,
 } from "@/components/dashboard/DashboardNav";
+import { PurchasesSection } from "@/components/dashboard/PurchasesSection";
 import {
   DashboardOverview,
   DashboardSavedSection,
@@ -29,6 +30,8 @@ function sectionCopy(active: DashboardSection): string | undefined {
       return "Track ideas you’re considering, from review through build and launch.";
     case "saved":
       return "Ideas you’ve starred across the site.";
+    case "purchases":
+      return "Products you’ve bought, ready when you are.";
     case "preferences":
       return "Update your display name and profile.";
     case "api":
@@ -40,6 +43,7 @@ function mastheadTitle(active: DashboardSection, name: string): string {
   if (active === "overview") return greetingTitle(name);
   if (active === "ideas") return "Idea tracker";
   if (active === "saved") return "Saved";
+  if (active === "purchases") return "Purchases";
   if (active === "api") return "API & MCP";
   return "Preferences";
 }
@@ -79,6 +83,8 @@ function DashboardBody() {
           <IdeaTracker />
         ) : active === "saved" ? (
           <DashboardSavedSection />
+        ) : active === "purchases" ? (
+          <PurchasesSection key={user?.id} />
         ) : (
           <DashboardOverview />
         )}

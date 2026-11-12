@@ -34,9 +34,9 @@ export default async function IdeasPage({
   const error = "error" in result ? result.error : undefined;
 
   return (
-    <main className="bg-[color:var(--background)]">
-      <div className="mx-auto w-full max-w-[1280px] px-4 pb-12 pt-6 sm:pt-8">
-        <div className="mb-8">
+    <main className="ideas-page bg-[color:var(--background)]">
+      <div className="ideas-page-content mx-auto w-full max-w-[1280px] px-4 pb-4 pt-6 sm:pt-8">
+        <div className="mb-6 shrink-0">
           <h1 className={pageTitleClass}>Ideas</h1>
           <p className={`${pageDescClass} max-w-2xl text-[15px] leading-6`}>
             Search and browse curated startup and product ideas — discover, save, and build.

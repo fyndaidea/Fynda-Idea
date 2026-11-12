@@ -12,6 +12,6 @@ Apply `data/sql/40_digital_store.sql` after the existing profile migrations to c
 
 Administrators manage products at `/admin/store`. Private uploads use a signed token for a single immutable object and transfer directly to Storage. The server verifies the file and its size before publishing. Preserve files attached to existing purchases.
 
-`/store` provides the catalog and product details. `/store/purchases` retains the library for existing purchases. Download access still requires an owned, paid order; no route grants paid access or creates new purchases while payments are deferred.
+`/store` uses the Spotlight catalog layout without a heading area or store tabs. Purchased products and private downloads live in the client dashboard at `/dashboard?section=purchases`; `/store/purchases` redirects there for existing links. Download access still requires an owned, paid order; no route grants paid access or creates new purchases while payments are deferred.
 
 Run `npm run test:store` and the app’s TypeScript/build checks after changes.

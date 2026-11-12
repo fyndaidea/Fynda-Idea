@@ -7,7 +7,7 @@ import {
 } from "@/lib/auth/subscription-paths";
 import { ShimmerBlock } from "@/components/ui/Shimmer";
 
-export type DashboardSection = "overview" | "saved" | "ideas" | "preferences" | "api";
+export type DashboardSection = "overview" | "saved" | "ideas" | "purchases" | "preferences" | "api";
 
 export function resolveDashboardSection(
   group: string | null,
@@ -18,6 +18,7 @@ export function resolveDashboardSection(
   if (group === "settings" && tab === "preferences") return "preferences";
   if (section === "ideas") return "ideas";
   if (section === "saved") return "saved";
+  if (section === "purchases") return "purchases";
   if (section === "preferences") return "preferences";
   if (section === "api") return "api";
   if (tab === "preferences") return "preferences";
@@ -29,6 +30,7 @@ const NAV: Array<{ id: DashboardSection; href: string; label: string }> = [
   { id: "overview", href: "/dashboard", label: "Home" },
   { id: "ideas", href: "/dashboard?section=ideas", label: "Idea tracker" },
   { id: "saved", href: "/dashboard?section=saved", label: "Saved" },
+  { id: "purchases", href: "/dashboard?section=purchases", label: "Purchases" },
   { id: "preferences", href: `/dashboard?${PREFERENCES_DASHBOARD_QUERY}`, label: "Preferences" },
   { id: "api", href: `/dashboard?${API_KEYS_DASHBOARD_QUERY}`, label: "API & MCP" },
 ];
@@ -92,8 +94,7 @@ export function DashboardMasthead({
               </Link>
             );
           })}
-        <Link href="/store/purchases" className="dash-nav-link shrink-0 px-3.5 pb-3.5 pt-1 text-sm font-semibold">My purchases</Link>
-    </nav>
+        </nav>
       </div>
     </header>
   );

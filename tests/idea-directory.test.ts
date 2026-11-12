@@ -3,7 +3,9 @@ import { test } from "node:test";
 import { parseDirectoryOptions, compareDirectoryIdeas } from "../lib/ideas/directory-options";
 
 test("directory URLs validate controls and preserve typed search spaces", () => {
-  assert.deepEqual(parseDirectoryOptions(new URLSearchParams("q=AI+&page=-2&sort=sql&stage=admin&view=unknown")), { q: "AI ", page: 1, sort: "updated", stage: "", view: "grid", featured: false, saved: false, idea: "" });
+  assert.deepEqual(parseDirectoryOptions(new URLSearchParams("q=AI+&page=-2&sort=sql&stage=admin&view=unknown")), { q: "AI ", page: 1, sort: "updated", stage: "", view: "split", featured: false, saved: false, idea: "" });
+  assert.equal(parseDirectoryOptions(new URLSearchParams()).view, "split");
+  assert.equal(parseDirectoryOptions(new URLSearchParams("view=grid")).view, "grid");
   const selected = parseDirectoryOptions(new URLSearchParams("page=2.5&sort=oldest&stage=To+Review&view=list&featured=1&saved=1"));
   assert.equal(parseDirectoryOptions(new URLSearchParams("view=table&q=Roblox")).view, "table");
   const split = parseDirectoryOptions(new URLSearchParams("view=split&idea=Keyframes-AI"));

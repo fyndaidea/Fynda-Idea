@@ -43,10 +43,10 @@ export function IdeasToolbar({ options, total, signedIn, fullscreen, onToggleFul
       </label>)}<p className="ideas-filter-help">Favorites appear first in every sort.</p></fieldset>
     </details>
     <div className="ideas-view-switch" role="group" aria-label="Idea view">
+      <button type="button" aria-label="Split view" title="Split view" aria-pressed={options.view === "split"} onClick={() => onChange({ view: "split" })}><Columns2 size={17} aria-hidden /></button>
       <button type="button" aria-label="Grid view" title="Grid view" aria-pressed={options.view === "grid"} onClick={() => onChange({ view: "grid" })}><LayoutGrid size={17} aria-hidden /></button>
       <button type="button" aria-label="List view" title="List view" aria-pressed={options.view === "list"} onClick={() => onChange({ view: "list" })}><List size={18} aria-hidden /></button>
       <button type="button" aria-label="Table view" title="Table view" aria-pressed={options.view === "table"} onClick={() => onChange({ view: "table" })}><Table2 size={17} aria-hidden /></button>
-      <button type="button" aria-label="Split view" title="Split view" aria-pressed={options.view === "split"} onClick={() => onChange({ view: "split" })}><Columns2 size={17} aria-hidden /></button>
     </div>
     <button type="button" className="ideas-fullscreen-button" aria-label={fullscreen ? "Exit full screen" : "Full screen"} title={fullscreen ? "Exit full screen" : "Full screen"} aria-pressed={fullscreen} onClick={onToggleFullscreen}>
       {fullscreen ? <Minimize2 size={16} aria-hidden /> : <Maximize2 size={16} aria-hidden />}

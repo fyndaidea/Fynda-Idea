@@ -48,7 +48,7 @@ export function IdeasHubBrowser({
     if (next.view !== "split" || !keepsPage) next.idea = next.view === "split" && patch.idea ? patch.idea : "";
     const params = new URLSearchParams(searchParams.toString());
     for (const [key, value] of Object.entries(next)) {
-      if (value === "" || value === false || (key === "page" && value === 1) || (key === "view" && value === "grid") || (key === "sort" && value === "updated")) params.delete(key);
+      if (value === "" || value === false || (key === "page" && value === 1) || (key === "view" && value === "split") || (key === "sort" && value === "updated")) params.delete(key);
       else params.set(key, value === true ? "1" : String(value));
     }
     window.history.replaceState(null, "", `${window.location.pathname}${params.size ? `?${params}` : ""}`);
@@ -71,6 +71,7 @@ export function IdeasHubBrowser({
   const requestKey = JSON.stringify([query, safePage, userId, sort, stage, saved, featured]);
   const navigationPending = requestKey !== loadedKey;
   const gridRef = useRef<HTMLDivElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
   const workspaceRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const [fullscreen, setFullscreen] = useState(false);
@@ -118,6 +119,11 @@ export function IdeasHubBrowser({
   };
 
   const replaceIdea = (next: Idea) => setIdeas((current) => current.map((item) => item.id === next.id ? next : item));
+
+  useEffect(() => {
+    resultsRef.current?.scrollTo(0, 0);
+    gridRef.current?.querySelector<HTMLElement>(".ideas-table-wrap, .ideas-split-list")?.scrollTo(0, 0);
+  }, [loadedKey]);
 
   useEffect(() => {
     const update = (event: Event) => { if ((event as CustomEvent).detail?.userId === userId) setStageRevision(value => value + 1); };
@@ -191,11 +197,12 @@ export function IdeasHubBrowser({
 
   const busy = fetching || isPending || (navigationPending && !error);
   const showSkeleton = navigationPending && !error;
+  const noResults = !busy && !error && ideas.length === 0 && !(view === "split" && idea);
 
   return (
     <IdeaStageSeedContext.Provider value={stages.userId === userId && userId && stages.data ? { userId, revision: stages.data.revision, scope: stages.data.scope, statuses: stages.data.statuses } : null}>
     <div ref={workspaceRef} className={covered ? "ideas-workspace ideas-workspace--cover" : "ideas-workspace"}>
-      <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="ideas-workspace-toolbar mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-sm">
           <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-[color:var(--muted)]">
             <Search className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
@@ -214,10 +221,19 @@ export function IdeasHubBrowser({
         <IdeasToolbar options={options} total={total} signedIn={Boolean(userId)} fullscreen={fullscreen || covered} onToggleFullscreen={toggleFullscreen} onChange={change} />
       </div>
 
-      <div ref={gridRef} aria-busy={busy} aria-label={view === "split" ? undefined : "Ideas"} className={view === "split" ? "relative" : view === "table" ? "relative" : view === "list" ? "relative ideas-results--list" : "relative grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"}>
+      <div ref={resultsRef} className={`ideas-results-viewport ideas-results-viewport--${view}`}>
+      {!noResults ? <div ref={gridRef} aria-busy={busy} aria-label={view === "split" ? undefined : "Ideas"} className={view === "split" || view === "table" ? "ideas-results-fill relative" : view === "list" ? "relative ideas-results--list" : "relative grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"}>
         {view === "split" ? <IdeasSplitView ideas={visibleIdeas} selectedSlug={idea} loading={showSkeleton} canEdit={canEdit} categories={categories} onIdeaChange={replaceIdea} onSelect={(slug) => change({ idea: slug })} /> : view === "table" ? <IdeasTable ideas={visibleIdeas} loading={showSkeleton} canEdit={canEdit} categories={categories} onIdeaChange={replaceIdea} /> : showSkeleton
           ? Array.from({ length: 6 }).map((_, i) => <IdeaCardSkeleton key={`sk-${i}`} />)
           : visibleIdeas.map((item) => <div key={item.id} data-idea-id={item.id}><IdeaCard idea={item} view={view} canEdit={canEdit} categoryOptions={categories} onIdeaChange={replaceIdea} /></div>)}
+      </div> : null}
+
+      {noResults ? (
+        <div className="rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card)] px-6 py-12 text-center">
+          <p className="text-base font-semibold text-[color:var(--foreground)]">No ideas match</p>
+          <p className="mt-2 text-sm text-[color:var(--muted)]">Try a different search or clear your filters.</p>
+        </div>
+      ) : null}
       </div>
 
       {error ? (
@@ -227,12 +243,6 @@ export function IdeasHubBrowser({
         </div>
       ) : null}
       <p role="status" className="sr-only">{busy ? "Updating ideas" : "Ideas loaded"}</p>
-      {!busy && !error && ideas.length === 0 ? (
-        <div className="mt-6 rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card)] px-6 py-12 text-center">
-          <p className="text-base font-semibold text-[color:var(--foreground)]">No ideas match</p>
-          <p className="mt-2 text-sm text-[color:var(--muted)]">Try a different search or clear your filters.</p>
-        </div>
-      ) : null}
 
       {totalPages > 1 ? (
         <div className="ideas-pager">

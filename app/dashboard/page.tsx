@@ -6,7 +6,7 @@ export const runtime = "nodejs";
 
 export const metadata = {
   title: "Dashboard",
-  description: "Your Fynda account — saved ideas, preferences, and MCP API keys.",
+  description: "Your Fynda account — saved ideas, purchased products, preferences, and MCP API keys.",
 };
 
 type Props = {

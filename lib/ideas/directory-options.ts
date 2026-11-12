@@ -27,7 +27,7 @@ export function parseDirectoryOptions(params: URLSearchParams) {
     stage: (isIdeaProgressStatus(stage) || stage === "none" ? stage : "") as IdeaProgressStatus | "none" | "",
     saved: params.get("saved") === "1",
     featured: params.get("featured") === "1",
-    view: (view === "table" || view === "list" || view === "split" ? view : "grid") as DirectoryView,
+    view: (view === "table" || view === "list" || view === "grid" ? view : "split") as DirectoryView,
     idea: directoryIdeaSlug(params.get("idea")),
   };
 }
