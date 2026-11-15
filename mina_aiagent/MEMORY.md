@@ -63,6 +63,11 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Vibe-coded products without AI slop (2026-11-15)
+
+- Mapped Nik's “Create vibe coded products without AI Slop” note to the existing keeper **Vibe coding platform — design, architecture, security and compliance moat** and appended it on both surfaces. The security layer, agency and education records stay separate. No new listing, merge or archive. Status stays **To Review**. Sync revision 2/2 acknowledged, with 0 pending syncs.
+- **After:** Fynda Idea / Idea Vault **1,412 / 1,412**. The Notion work log was skipped (AI Agents page not shared). [Capture](./captures/2026-11-15-vibe-coding-without-ai-slop.md).
+
 ### Digital products creator (2026-11-15)
 
 - Mapped Nik's “Digital products creator” note to the existing keeper **AI platform for generating digital products** and appended it on both surfaces. No new listing, merge or archive. Status stays **To Review**. Sync revision 1/1 acknowledged, with 0 pending syncs.
