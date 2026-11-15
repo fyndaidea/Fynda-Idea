@@ -63,6 +63,11 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Digital products creator (2026-11-15)
+
+- Mapped Nik's “Digital products creator” note to the existing keeper **AI platform for generating digital products** and appended it on both surfaces. No new listing, merge or archive. Status stays **To Review**. Sync revision 1/1 acknowledged, with 0 pending syncs.
+- **After:** Fynda Idea / Idea Vault **1,412 / 1,412**. The Notion work log was skipped because the AI Agents page is not shared with the integration. [Capture](./captures/2026-11-15-digital-products-creator.md).
+
 ### Idea intake (2026-11-11)
 
 - Captured **13 supplied notes → 5 new published ideas + 7 existing keepers updated**, synchronized with Idea Vault. Combined the two motion-designer notes into one keeper. New: AI motion designer/product-launch videos; breathing app plus short-form distribution; Nik Unfiltered channels; teleprompter app; family financial-protection business reference.
