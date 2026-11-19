@@ -197,33 +197,49 @@ export function IdeasHubBrowser({
 
   const busy = fetching || isPending || (navigationPending && !error);
   const showSkeleton = navigationPending && !error;
-  const noResults = !busy && !error && ideas.length === 0 && !(view === "split" && idea);
+  const noResults = !busy && !error && ideas.length === 0 && view !== "split";
+
+  const searchBox = (className: string) => (
+    <div className={`relative ${className}`}>
+      <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-[color:var(--muted)]">
+        <Search className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+      </span>
+      <input
+        ref={searchRef}
+        value={query}
+        aria-label="Search ideas"
+        onChange={(e) => change({ q: e.target.value })}
+        placeholder="Search ideas…"
+        className="h-11 w-full rounded-xl border border-[color:var(--card-border)] bg-[color:var(--card)] pl-10 pr-10 text-sm text-[color:var(--foreground)] outline-none ring-[color:var(--ring)] placeholder:text-[color:var(--muted)] focus:ring-2"
+      />
+      {query ? <button type="button" className="ideas-clear-search" aria-label="Clear search" title="Clear search"
+        onClick={() => { change({ q: "" }); searchRef.current?.focus(); }}><X size={15} aria-hidden /></button> : null}
+    </div>
+  );
+
+  const pager = (className = "ideas-pager") => totalPages > 1 ? (
+    <div className={className}>
+      <p>
+        Page <span>{safePage}</span> of <span>{totalPages}</span>
+      </p>
+      <div>
+        <button type="button" disabled={safePage <= 1 || busy} onClick={() => change({ page: Math.max(1, safePage - 1) })}>Prev</button>
+        <button type="button" disabled={safePage >= totalPages || busy} onClick={() => change({ page: Math.min(totalPages, safePage + 1) })}>Next</button>
+      </div>
+    </div>
+  ) : null;
 
   return (
     <IdeaStageSeedContext.Provider value={stages.userId === userId && userId && stages.data ? { userId, revision: stages.data.revision, scope: stages.data.scope, statuses: stages.data.statuses } : null}>
     <div ref={workspaceRef} className={covered ? "ideas-workspace ideas-workspace--cover" : "ideas-workspace"}>
       <div className="ideas-workspace-toolbar mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="relative w-full sm:max-w-sm">
-          <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-[color:var(--muted)]">
-            <Search className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
-          </span>
-          <input
-            ref={searchRef}
-            value={query}
-            aria-label="Search ideas"
-            onChange={(e) => change({ q: e.target.value })}
-            placeholder="Search ideas…"
-            className="h-11 w-full rounded-xl border border-[color:var(--card-border)] bg-[color:var(--card)] pl-10 pr-10 text-sm text-[color:var(--foreground)] outline-none ring-[color:var(--ring)] placeholder:text-[color:var(--muted)] focus:ring-2"
-          />
-          {query ? <button type="button" className="ideas-clear-search" aria-label="Clear search" title="Clear search"
-            onClick={() => { change({ q: "" }); searchRef.current?.focus(); }}><X size={15} aria-hidden /></button> : null}
-        </div>
+        {view === "split" ? <span className="hidden sm:block" aria-hidden /> : searchBox("w-full sm:max-w-sm")}
         <IdeasToolbar options={options} total={total} signedIn={Boolean(userId)} fullscreen={fullscreen || covered} onToggleFullscreen={toggleFullscreen} onChange={change} />
       </div>
 
       <div ref={resultsRef} className={`ideas-results-viewport ideas-results-viewport--${view}`}>
       {!noResults ? <div ref={gridRef} aria-busy={busy} aria-label={view === "split" ? undefined : "Ideas"} className={view === "split" || view === "table" ? "ideas-results-fill relative" : view === "list" ? "relative ideas-results--list" : "relative grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"}>
-        {view === "split" ? <IdeasSplitView ideas={visibleIdeas} selectedSlug={idea} loading={showSkeleton} canEdit={canEdit} categories={categories} onIdeaChange={replaceIdea} onSelect={(slug) => change({ idea: slug })} /> : view === "table" ? <IdeasTable ideas={visibleIdeas} loading={showSkeleton} canEdit={canEdit} categories={categories} onIdeaChange={replaceIdea} /> : showSkeleton
+        {view === "split" ? <IdeasSplitView ideas={visibleIdeas} selectedSlug={idea} loading={showSkeleton} canEdit={canEdit} categories={categories} onIdeaChange={replaceIdea} onSelect={(slug) => change({ idea: slug })} listHeader={searchBox("w-full")} listFooter={pager("ideas-pager ideas-pager--panel")} /> : view === "table" ? <IdeasTable ideas={visibleIdeas} loading={showSkeleton} canEdit={canEdit} categories={categories} onIdeaChange={replaceIdea} /> : showSkeleton
           ? Array.from({ length: 6 }).map((_, i) => <IdeaCardSkeleton key={`sk-${i}`} />)
           : visibleIdeas.map((item) => <div key={item.id} data-idea-id={item.id}><IdeaCard idea={item} view={view} canEdit={canEdit} categoryOptions={categories} onIdeaChange={replaceIdea} /></div>)}
       </div> : null}
@@ -244,17 +260,7 @@ export function IdeasHubBrowser({
       ) : null}
       <p role="status" className="sr-only">{busy ? "Updating ideas" : "Ideas loaded"}</p>
 
-      {totalPages > 1 ? (
-        <div className="ideas-pager">
-          <p>
-            Page <span>{safePage}</span> of <span>{totalPages}</span>
-          </p>
-          <div>
-            <button type="button" disabled={safePage <= 1 || busy} onClick={() => change({ page: Math.max(1, safePage - 1) })}>Prev</button>
-            <button type="button" disabled={safePage >= totalPages || busy} onClick={() => change({ page: Math.min(totalPages, safePage + 1) })}>Next</button>
-          </div>
-        </div>
-      ) : null}
+      {view === "split" ? null : pager()}
     </div>
     </IdeaStageSeedContext.Provider>
   );

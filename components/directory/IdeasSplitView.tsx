@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeft } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { MarkdownBody } from "@/components/docs/markdown-body";
 import FavoriteButton from "@/components/favorites/FavoriteButton";
 import { ShimmerBlock } from "@/components/ui/Shimmer";
@@ -9,7 +9,7 @@ import type { Idea } from "@/lib/db/ideas-db";
 import { IdeaEditButton, IdeaInlineEditor } from "./IdeaAdminEdit";
 import type { IdeaCategoryOption } from "./IdeaSectionEditor";
 import { IdeaStatusControl } from "./IdeaStatusControl";
-import { IdeaUpdatedMeta } from "./IdeaUpdatedMeta";
+import { ideaUpdatedDateFormat } from "./IdeaUpdatedMeta";
 import "./idea-detail.css";
 
 export function IdeasSplitView({
@@ -20,6 +20,8 @@ export function IdeasSplitView({
   categories = [],
   onSelect,
   onIdeaChange,
+  listHeader,
+  listFooter,
 }: {
   ideas: Idea[];
   selectedSlug: string;
@@ -28,6 +30,10 @@ export function IdeasSplitView({
   categories?: IdeaCategoryOption[];
   onSelect: (slug: string) => void;
   onIdeaChange?: (idea: Idea) => void;
+  /** Search box pinned above the list in the left panel. */
+  listHeader?: ReactNode;
+  /** Pager pinned below the list in the left panel. */
+  listFooter?: ReactNode;
 }) {
   const listed = ideas.find((idea) => idea.slug === selectedSlug) ?? null;
   const [loaded, setLoaded] = useState<Idea | null>(listed);
@@ -87,17 +93,23 @@ export function IdeasSplitView({
     setEditing(false);
     onIdeaChange?.(next);
   };
-  if (!loading && ideas.length === 0 && !selectedSlug) return null;
 
   return (
     <div className={`ideas-split${selectedSlug ? " ideas-split--open" : ""}`}>
+      <div className="ideas-split-list-panel">
+      {listHeader ? <div className="ideas-split-search">{listHeader}</div> : null}
       <div className="ideas-split-list" role="listbox" aria-label="Ideas" aria-busy={loading}>
         {loading ? Array.from({ length: 8 }, (_, index) => (
           <div key={index} className="ideas-split-item" aria-hidden="true">
             <ShimmerBlock className="h-4 w-4/5" />
             <ShimmerBlock className="mt-2 h-3 w-full" />
           </div>
-        )) : ideas.map((idea) => {
+        )) : ideas.length === 0 ? (
+          <div className="ideas-split-list-empty" role="status">
+            <p>No ideas match</p>
+            <p>Try a different search or clear your filters.</p>
+          </div>
+        ) : ideas.map((idea) => {
           const selected = idea.slug === selectedSlug;
           return (
             <button
@@ -116,6 +128,9 @@ export function IdeasSplitView({
           );
         })}
       </div>
+      {listFooter}
+      </div>
+      <div className="ideas-split-main">
       <section className={`ideas-split-detail${current || selectedSlug ? "" : " is-empty"}`} aria-label="Idea details" aria-busy={Boolean(selectedSlug) && !current && !error}>
         {editing && current ? <IdeaInlineEditor idea={current} categories={categories} onCancel={() => setEditing(false)} onSaved={saveIdea} /> : <>
         <div className="ideas-split-detail-bar">
@@ -150,12 +165,7 @@ export function IdeasSplitView({
               <div className="idea-preview-body">
                 {current.body ? <MarkdownBody markdown={current.body} /> : <p className="idea-muted">No additional details have been added yet.</p>}
               </div>
-              {current.tags?.length ? <ul className="idea-tags" aria-label="Tags">{current.tags.map((tag) => <li key={tag}>{tag}</li>)}</ul> : null}
             </div>
-            <footer className="idea-preview-footer">
-              <IdeaUpdatedMeta idea={current} />
-              {current.id ? <IdeaStatusControl ideaId={current.id} compact /> : null}
-            </footer>
           </>
         ) : error ? (
           <div role="alert" className="idea-preview-error ideas-split-message">
@@ -172,6 +182,63 @@ export function IdeasSplitView({
         )}
         </>}
       </section>
+      <IdeaMoreDetails idea={selectedSlug ? current : null} canEdit={canEdit} />
+      </div>
     </div>
+  );
+}
+
+function formatDate(value: Date | string | null | undefined) {
+  const date = value ? new Date(value) : null;
+  return date && Number.isFinite(date.getTime()) ? ideaUpdatedDateFormat.format(date) : "Not recorded";
+}
+
+/** Right panel: personal stage, facts, key points and tags for the open idea. */
+function IdeaMoreDetails({ idea, canEdit }: { idea: Idea | null; canEdit: boolean }) {
+  if (!idea) {
+    return (
+      <aside className="ideas-split-aside is-empty" aria-label="More details">
+        <p>More details</p>
+        <p>Stage, facts and key points show here.</p>
+      </aside>
+    );
+  }
+  const syncPending = idea.contentRevision > idea.notionSyncedRevision;
+  const facts = [
+    { label: "Category", value: idea.categories?.join(" / ") || "Uncategorized" },
+    { label: "Added by", value: idea.authorName?.trim() || "Not recorded" },
+    { label: "Last updated", value: formatDate(idea.updatedAt) },
+    { label: "Created", value: formatDate(idea.createdAt) },
+  ];
+  return (
+    <aside className="ideas-split-aside" aria-label="More details">
+      {idea.id ? (
+        <div className="ideas-aside-block">
+          <h3>Your stage</h3>
+          <IdeaStatusControl key={idea.id} ideaId={idea.id} />
+        </div>
+      ) : null}
+      <div className="ideas-aside-block">
+        <h3>Details</h3>
+        <dl className="ideas-aside-facts">
+          {facts.map((fact) => <div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}
+        </dl>
+        {canEdit ? (
+          <p role="status" className={`idea-sync-status${syncPending ? " idea-sync-status--pending" : ""}`}>
+            {syncPending ? <><span className="idea-sync-dot" aria-hidden />Updated — pending Notion sync</> : "No pending Notion changes"}
+          </p>
+        ) : null}
+      </div>
+      <div className="ideas-aside-block">
+        <h3>Key points</h3>
+        {idea.highlights?.length ? <ul className="ideas-aside-points">{idea.highlights.map((item, index) => <li key={`${index}-${item}`}>{item}</li>)}</ul> : <p className="idea-muted">No key points added yet.</p>}
+      </div>
+      {idea.tags?.length ? (
+        <div className="ideas-aside-block">
+          <h3>Tags</h3>
+          <ul className="idea-tags" aria-label="Tags">{idea.tags.map((tag) => <li key={tag}>{tag}</li>)}</ul>
+        </div>
+      ) : null}
+    </aside>
   );
 }
