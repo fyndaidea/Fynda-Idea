@@ -1,10 +1,16 @@
 "use client";
 
 import { Pencil } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useState, type FormEvent } from "react";
 import type { Idea } from "@/lib/db/ideas-db";
 import type { IdeaSectionEdit } from "@/lib/ideas/section-edit";
 import type { IdeaCategoryOption } from "./IdeaSectionEditor";
+
+const IdeaRichEditor = dynamic(() => import("./IdeaRichEditor"), {
+  ssr: false,
+  loading: () => <div className="idea-rich-loading" role="status">Loading editor…</div>,
+});
 
 function splitList(value: string, separator: string) {
   return value.split(separator).map((item) => item.trim()).filter(Boolean);
@@ -100,7 +106,10 @@ export function IdeaInlineEditor({
         <label>Title<input autoFocus required maxLength={500} value={title} onChange={(event) => setTitle(event.target.value)} /></label>
         <label>Summary<textarea rows={3} maxLength={10000} value={summary} onChange={(event) => setSummary(event.target.value)} /></label>
         <label>Key points (one per line)<textarea rows={5} value={highlights} onChange={(event) => setHighlights(event.target.value)} /></label>
-        <label>Details (Markdown)<textarea className="idea-markdown-input" rows={12} maxLength={1000000} value={body} onChange={(event) => setBody(event.target.value)} /></label>
+        <div className="idea-rich-field">
+          <span aria-hidden>Details</span>
+          <IdeaRichEditor initialMarkdown={idea.body} onChange={setBody} />
+        </div>
         <label>Added by<input maxLength={500} value={author} onChange={(event) => setAuthor(event.target.value)} /></label>
         <label>Tags (comma-separated)<input value={tags} onChange={(event) => setTags(event.target.value)} /></label>
         <fieldset>

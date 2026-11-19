@@ -172,3 +172,25 @@
 @media (min-width:1536px) { .ideas-workspace--split .ideas-split { grid-template-columns:360px minmax(0,1fr) 380px; } }
 /* The ideas page fills the viewport, so it has no site footer. */
 [data-site-scroll]:has(.ideas-page) > div > footer { display:none; }
+
+/* Center reading column: comfortable measure, calmer headings. */
+.ideas-split-reading.idea-preview-scroll { padding:36px 48px 56px; }
+.ideas-split-reading > * { max-width:760px; margin-left:auto; margin-right:auto; }
+.ideas-split-reading .idea-preview-heading { padding-bottom:24px; }
+.ideas-split-heading-title { margin-top:14px; color:var(--foreground); font-size:28px; font-weight:650; line-height:1.22; letter-spacing:-.02em; text-wrap:balance; overflow-wrap:anywhere; }
+.ideas-split-reading .idea-lead { margin-top:10px; color:var(--muted); font-size:16px; line-height:1.65; }
+.ideas-split-reading .idea-preview-body { padding-top:8px; }
+.ideas-split-reading .docs-markdown { color:color-mix(in srgb, var(--foreground) 80%, transparent); font-size:15px; line-height:1.75; }
+.ideas-split-reading .docs-markdown > * + * { margin-top:.9em; }
+.ideas-split-reading .docs-markdown h2 { margin-top:2.2em; padding-bottom:8px; color:var(--foreground); font-size:18px; font-weight:650; line-height:1.35; letter-spacing:-.01em; }
+.ideas-split-reading .docs-markdown h3 { margin-top:1.6em; color:var(--foreground); font-size:15px; font-weight:650; }
+.ideas-split-reading .docs-markdown h4 { margin-top:1.4em; color:var(--muted); font-size:13px; font-weight:650; text-transform:uppercase; letter-spacing:.04em; }
+.ideas-split-reading .docs-markdown strong { color:var(--foreground); font-weight:600; }
+.ideas-split-reading .docs-markdown li + li { margin-top:.3em; }
+.ideas-split-reading .docs-markdown hr { margin:2.4em 0; }
+@media (max-width:640px) { .ideas-split-reading.idea-preview-scroll { padding:24px 18px 40px; } .ideas-split-heading-title { font-size:23px; } }
+
+/* Favorite and Edit live at the top of the right panel; the center bar only carries the mobile back button. */
+.ideas-aside-actions { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+@media (min-width:801px) { .ideas-split-detail-bar { display:none; } }
+.ideas-aside-actions + .ideas-aside-block { margin-top:18px; padding-top:18px; border-top:1px solid var(--card-border); }

@@ -137,10 +137,6 @@ export function IdeasSplitView({
           <button type="button" className="ideas-split-back" onClick={() => onSelect("")}>
             <ArrowLeft size={16} aria-hidden /> Ideas
           </button>
-          <div className="ideas-split-detail-actions">
-            {canEdit && current ? <IdeaEditButton onClick={() => setEditing(true)} /> : null}
-            {current ? null : <span className="idea-eyebrow">Idea</span>}
-          </div>
         </div>
         {!selectedSlug ? (
           <div className="ideas-split-empty">
@@ -156,10 +152,7 @@ export function IdeasSplitView({
                   {current.featured ? <span>Featured</span> : null}
                   {current.categories?.map((category) => <span key={category}>{category}</span>)}
                 </div>
-                <div className="idea-preview-title-row">
-                  <h2>{current.title}</h2>
-                  <FavoriteButton itemId={current.slug} itemTitle={current.title} itemSubtitle={current.summary} />
-                </div>
+                <h2 className="ideas-split-heading-title">{current.title}</h2>
                 {current.summary ? <p className="idea-lead">{current.summary}</p> : null}
               </header>
               <div className="idea-preview-body">
@@ -182,7 +175,7 @@ export function IdeasSplitView({
         )}
         </>}
       </section>
-      <IdeaMoreDetails idea={selectedSlug ? current : null} canEdit={canEdit} />
+      <IdeaMoreDetails idea={selectedSlug ? current : null} canEdit={canEdit} editing={editing} onEdit={() => setEditing(true)} />
       </div>
     </div>
   );
@@ -194,7 +187,7 @@ function formatDate(value: Date | string | null | undefined) {
 }
 
 /** Right panel: personal stage, facts, key points and tags for the open idea. */
-function IdeaMoreDetails({ idea, canEdit }: { idea: Idea | null; canEdit: boolean }) {
+function IdeaMoreDetails({ idea, canEdit, editing, onEdit }: { idea: Idea | null; canEdit: boolean; editing: boolean; onEdit: () => void }) {
   if (!idea) {
     return (
       <aside className="ideas-split-aside is-empty" aria-label="More details">
@@ -212,6 +205,13 @@ function IdeaMoreDetails({ idea, canEdit }: { idea: Idea | null; canEdit: boolea
   ];
   return (
     <aside className="ideas-split-aside" aria-label="More details">
+      <div className="ideas-aside-actions">
+        <div className="idea-save">
+          <FavoriteButton itemId={idea.slug} itemTitle={idea.title} itemSubtitle={idea.summary} />
+          <span>Save idea</span>
+        </div>
+        {canEdit && !editing ? <IdeaEditButton onClick={onEdit} /> : null}
+      </div>
       {idea.id ? (
         <div className="ideas-aside-block">
           <h3>Your stage</h3>
