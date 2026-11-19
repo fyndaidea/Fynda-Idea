@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeft } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import FavoriteButton from "@/components/favorites/FavoriteButton";
 import { ShimmerBlock } from "@/components/ui/Shimmer";
 import type { Idea } from "@/lib/db/ideas-db";
@@ -41,6 +41,8 @@ export function IdeasSplitView({
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState(false);
   const [retry, setRetry] = useState(0);
+  const loadedRef = useRef(loaded);
+  useEffect(() => { loadedRef.current = loaded; }, [loaded]);
 
   useEffect(() => {
     if (!selectedSlug) return;
@@ -61,6 +63,8 @@ export function IdeasSplitView({
       setError(false);
       return;
     }
+    // Paging away from the open idea's page removes it from the list; keep showing what is already loaded.
+    if (loadedRef.current?.slug === selectedSlug) return;
     const controller = new AbortController();
     setLoaded(null);
     setError(false);
