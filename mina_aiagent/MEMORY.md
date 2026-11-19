@@ -63,6 +63,11 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Growth Hacking Lab — Thousif A (2026-11-18)
+
+- Mapped Nik's “do like thousaf @ growth hacking lab” note to the existing keeper **Growth hacking lab–style membership**. The operator is Thousif A on skool.com/growth-lab. Member counts and prices are attributed vendor figures. The AI, Ads & Apps channel idea stays separate. No new listing, merge or archive. Status stays **To Review**. Sync revision 1/1 acknowledged, with 0 pending syncs.
+- **After:** Fynda Idea / Idea Vault **1,412 / 1,412**. The Notion work log was skipped (AI Agents page not shared). [Capture](./captures/2026-11-18-growth-hacking-lab-thousif.md).
+
 ### Vibe-coded products without AI slop (2026-11-15)
 
 - Mapped Nik's “Create vibe coded products without AI Slop” note to the existing keeper **Vibe coding platform — design, architecture, security and compliance moat** and appended it on both surfaces. The security layer, agency and education records stay separate. No new listing, merge or archive. Status stays **To Review**. Sync revision 2/2 acknowledged, with 0 pending syncs.
