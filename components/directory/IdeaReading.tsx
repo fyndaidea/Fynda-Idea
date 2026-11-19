@@ -21,7 +21,7 @@ const isStyle = (value: unknown): value is ReadingStyle => READING_STYLES.some((
 
 /** Remembered per browser; storage can be unavailable, so every access is guarded. */
 export function useReadingStyle() {
-  const [style, setStyle] = useState<ReadingStyle>("plain");
+  const [style, setStyle] = useState<ReadingStyle>("focus");
   useEffect(() => {
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
