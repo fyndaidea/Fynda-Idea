@@ -173,6 +173,7 @@
 /* The ideas page fills the viewport, so it has no site footer. */
 [data-site-scroll]:has(.ideas-page) > div > footer { display:none; }
 
-/* Favorite and Edit live at the top of the right panel; the center bar carries the reading-style switcher (and Back on mobile). */
+/* Favorite and Edit live at the top of the right panel; the center bar only carries the mobile back button. */
+@media (min-width:801px) { .ideas-split-detail-bar { display:none; } }
 .ideas-aside-actions { display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .ideas-aside-actions + .ideas-aside-block { margin-top:18px; padding-top:18px; border-top:1px solid var(--card-border); }

@@ -7,7 +7,7 @@ import { ShimmerBlock } from "@/components/ui/Shimmer";
 import type { Idea } from "@/lib/db/ideas-db";
 import { IdeaEditButton, IdeaInlineEditor } from "./IdeaAdminEdit";
 import type { IdeaCategoryOption } from "./IdeaSectionEditor";
-import { IdeaReading, ReadingStyleSwitcher, useReadingStyle } from "./IdeaReading";
+import { IdeaReading } from "./IdeaReading";
 import { IdeaStatusControl } from "./IdeaStatusControl";
 import { ideaUpdatedDateFormat } from "./IdeaUpdatedMeta";
 import "./idea-detail.css";
@@ -41,7 +41,6 @@ export function IdeasSplitView({
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState(false);
   const [retry, setRetry] = useState(0);
-  const [readingStyle, setReadingStyle] = useReadingStyle();
 
   useEffect(() => {
     if (!selectedSlug) return;
@@ -138,7 +137,6 @@ export function IdeasSplitView({
           <button type="button" className="ideas-split-back" onClick={() => onSelect("")}>
             <ArrowLeft size={16} aria-hidden /> Ideas
           </button>
-          {current ? <ReadingStyleSwitcher value={readingStyle} onChange={setReadingStyle} /> : null}
         </div>
         {!selectedSlug ? (
           <div className="ideas-split-empty">
@@ -148,7 +146,7 @@ export function IdeasSplitView({
         ) : current ? (
           <>
             <div className="ideas-split-reading idea-preview-scroll">
-              <IdeaReading idea={current} style={readingStyle} />
+              <IdeaReading idea={current} />
             </div>
           </>
         ) : error ? (
