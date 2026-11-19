@@ -63,6 +63,11 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Teamily (2026-11-19)
+
+- Mapped Nik's teamily.ai link to the existing keeper **Slack for AI agents** and appended it on both surfaces as a human-plus-agent messenger reference. Site claims stay attributed, and no prices are published. No new listing, merge or archive. Status stays **To Review**. Sync revision 2/2 acknowledged, with 0 pending syncs.
+- **After:** Fynda Idea / Idea Vault **1,412 / 1,412**. The Notion work log was skipped (AI Agents page not shared). [Capture](./captures/2026-11-19-teamily.md).
+
 ### Growth Hacking Lab — Thousif A (2026-11-18)
 
 - Mapped Nik's “do like thousaf @ growth hacking lab” note to the existing keeper **Growth hacking lab–style membership**. The operator is Thousif A on skool.com/growth-lab. Member counts and prices are attributed vendor figures. The AI, Ads & Apps channel idea stays separate. No new listing, merge or archive. Status stays **To Review**. Sync revision 1/1 acknowledged, with 0 pending syncs.
