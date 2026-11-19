@@ -2,12 +2,12 @@
 
 import { ArrowLeft } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
-import { MarkdownBody } from "@/components/docs/markdown-body";
 import FavoriteButton from "@/components/favorites/FavoriteButton";
 import { ShimmerBlock } from "@/components/ui/Shimmer";
 import type { Idea } from "@/lib/db/ideas-db";
 import { IdeaEditButton, IdeaInlineEditor } from "./IdeaAdminEdit";
 import type { IdeaCategoryOption } from "./IdeaSectionEditor";
+import { IdeaReading, ReadingStyleSwitcher, useReadingStyle } from "./IdeaReading";
 import { IdeaStatusControl } from "./IdeaStatusControl";
 import { ideaUpdatedDateFormat } from "./IdeaUpdatedMeta";
 import "./idea-detail.css";
@@ -41,6 +41,7 @@ export function IdeasSplitView({
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState(false);
   const [retry, setRetry] = useState(0);
+  const [readingStyle, setReadingStyle] = useReadingStyle();
 
   useEffect(() => {
     if (!selectedSlug) return;
@@ -137,6 +138,7 @@ export function IdeasSplitView({
           <button type="button" className="ideas-split-back" onClick={() => onSelect("")}>
             <ArrowLeft size={16} aria-hidden /> Ideas
           </button>
+          {current ? <ReadingStyleSwitcher value={readingStyle} onChange={setReadingStyle} /> : null}
         </div>
         {!selectedSlug ? (
           <div className="ideas-split-empty">
@@ -146,20 +148,7 @@ export function IdeasSplitView({
         ) : current ? (
           <>
             <div className="ideas-split-reading idea-preview-scroll">
-              <article className="ideas-split-sheet">
-              <header className="idea-preview-heading">
-                <div className="idea-labels">
-                  <span>Idea</span>
-                  {current.featured ? <span>Featured</span> : null}
-                  {current.categories?.map((category) => <span key={category}>{category}</span>)}
-                </div>
-                <h2 className="ideas-split-heading-title">{current.title}</h2>
-                {current.summary ? <p className="idea-lead">{current.summary}</p> : null}
-              </header>
-              <div className="idea-preview-body">
-                {current.body ? <MarkdownBody markdown={current.body} /> : <p className="idea-muted">No additional details have been added yet.</p>}
-              </div>
-              </article>
+              <IdeaReading idea={current} style={readingStyle} />
             </div>
           </>
         ) : error ? (
