@@ -41,7 +41,7 @@ export default function IdeaRichEditor({
   return (
     <div className="idea-rich-editor">
       {editor ? <Toolbar editor={editor} /> : <div className="idea-rich-toolbar" aria-hidden />}
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor} className="idea-rich-scroll" />
     </div>
   );
 }

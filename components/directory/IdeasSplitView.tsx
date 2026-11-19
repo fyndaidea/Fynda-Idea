@@ -146,6 +146,7 @@ export function IdeasSplitView({
         ) : current ? (
           <>
             <div className="ideas-split-reading idea-preview-scroll">
+              <article className="ideas-split-sheet">
               <header className="idea-preview-heading">
                 <div className="idea-labels">
                   <span>Idea</span>
@@ -158,6 +159,7 @@ export function IdeasSplitView({
               <div className="idea-preview-body">
                 {current.body ? <MarkdownBody markdown={current.body} /> : <p className="idea-muted">No additional details have been added yet.</p>}
               </div>
+              </article>
             </div>
           </>
         ) : error ? (
