@@ -170,3 +170,5 @@
   .ideas-workspace--split .ideas-split-aside { border-top:0; border-left:1px solid var(--card-border); }
 }
 @media (min-width:1536px) { .ideas-workspace--split .ideas-split { grid-template-columns:360px minmax(0,1fr) 380px; } }
+/* The ideas page fills the viewport, so it has no site footer. */
+[data-site-scroll]:has(.ideas-page) > div > footer { display:none; }
