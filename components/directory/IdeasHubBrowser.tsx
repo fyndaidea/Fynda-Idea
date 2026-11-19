@@ -231,9 +231,9 @@ export function IdeasHubBrowser({
 
   return (
     <IdeaStageSeedContext.Provider value={stages.userId === userId && userId && stages.data ? { userId, revision: stages.data.revision, scope: stages.data.scope, statuses: stages.data.statuses } : null}>
-    <div ref={workspaceRef} className={covered ? "ideas-workspace ideas-workspace--cover" : "ideas-workspace"}>
+    <div ref={workspaceRef} className={`ideas-workspace${view === "split" ? " ideas-workspace--split" : ""}${covered ? " ideas-workspace--cover" : ""}`}>
       <div className="ideas-workspace-toolbar mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        {view === "split" ? <span className="hidden sm:block" aria-hidden /> : searchBox("w-full sm:max-w-sm")}
+        {view === "split" ? <p className="ideas-split-heading">Ideas</p> : searchBox("w-full sm:max-w-sm")}
         <IdeasToolbar options={options} total={total} signedIn={Boolean(userId)} fullscreen={fullscreen || covered} onToggleFullscreen={toggleFullscreen} onChange={change} />
       </div>
 
