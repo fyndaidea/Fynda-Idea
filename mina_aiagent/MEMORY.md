@@ -63,6 +63,11 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Free products like an invoice generator (2026-11-22)
+
+- Mapped Nik's “free products like invoice generator etc” note to the existing keeper **Free tools → leads** and appended it on both surfaces. The utility-hub, invoicing-portal and content-lead-capture records stay separate. No new listing, merge or archive. Status stays **To Review**. Sync revision 1/1 acknowledged, with 0 pending syncs.
+- **After:** Fynda Idea **1,412**. [Capture](./captures/2026-11-22-free-products-invoice-generator.md).
+
 ### Teamily (2026-11-19)
 
 - Mapped Nik's teamily.ai link to the existing keeper **Slack for AI agents** and appended it on both surfaces as a human-plus-agent messenger reference. Site claims stay attributed, and no prices are published. No new listing, merge or archive. Status stays **To Review**. Sync revision 2/2 acknowledged, with 0 pending syncs.
