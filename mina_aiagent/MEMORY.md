@@ -63,6 +63,11 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### ZoomInfo alternative (2026-11-23)
+
+- Mapped Nik's “zoominfo alternative” note to the existing keeper **Directory of companies — firmographics, people, products & signals**, which already lists ZoomInfo as a competitor, and appended it on both surfaces. GTM tools, GenSales, the 1Lookup-style verification API and the people directory stay separate. No new listing, merge or archive. Status stays **To Review**. Sync revision 1/1 acknowledged, with 0 pending syncs.
+- **After:** Fynda Idea **1,412**. [Capture](./captures/2026-11-23-zoominfo-alternative.md).
+
 ### Free products like an invoice generator (2026-11-22)
 
 - Mapped Nik's “free products like invoice generator etc” note to the existing keeper **Free tools → leads** and appended it on both surfaces. The utility-hub, invoicing-portal and content-lead-capture records stay separate. No new listing, merge or archive. Status stays **To Review**. Sync revision 1/1 acknowledged, with 0 pending syncs.
