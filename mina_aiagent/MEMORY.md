@@ -63,6 +63,11 @@ _Do not capture / keep these as active Ideas unless the user overrides._
 
 ## Last pass
 
+### Health product placeholder (2026-11-25)
+
+- Published **Health product (details to follow)** from Nik's “Health product which Praveen mentioned” note after a search found no match. The public listing omits the person's name. Details are still needed from Nik; update or fold into a keeper when they arrive. Status **To Review**. Sync revision 2/2 acknowledged, with 0 pending syncs.
+- **After:** Fynda Idea **1,413**. [Capture](./captures/2026-11-25-health-product-placeholder.md).
+
 ### ZoomInfo alternative (2026-11-23)
 
 - Mapped Nik's “zoominfo alternative” note to the existing keeper **Directory of companies — firmographics, people, products & signals**, which already lists ZoomInfo as a competitor, and appended it on both surfaces. GTM tools, GenSales, the 1Lookup-style verification API and the people directory stay separate. No new listing, merge or archive. Status stays **To Review**. Sync revision 1/1 acknowledged, with 0 pending syncs.
